@@ -1,25 +1,102 @@
+---
+import moonIcon from "../assets/moon.svg";
+import sunIcon from "../assets/sun.svg";
+---
+
 <nav class="w-full border-b border-(--border) bg-(--surface)">
-  <ul
-    class="mx-auto flex w-full max-w-4xl items-center justify-evenly px-4 py-4"
-  >
-    <li><a href="/" class="nav-link-hover text-base font-semibold">Home</a></li>
-    <li>
-      <a href="/about" class="nav-link-hover text-base font-semibold">About</a>
-    </li>
-    <li>
-      <a href="/research" class="nav-link-hover text-base font-semibold"
-        >Research</a
-      >
-    </li>
-    <li>
-      <a href="/experience" class="nav-link-hover text-base font-semibold"
-        >Experience</a
-      >
-    </li>
-    <li>
-      <a href="/contact" class="nav-link-hover text-base font-semibold"
-        >Contact</a
-      >
-    </li>
-  </ul>
+  <div class="mx-auto flex w-full max-w-5xl items-center gap-4 px-4 py-4">
+    <ul class="flex flex-1 items-center justify-evenly">
+      <li>
+        <a href="/" class="nav-link-hover text-base font-semibold">Home</a>
+      </li>
+      <li>
+        <a href="/about" class="nav-link-hover text-base font-semibold">About</a
+        >
+      </li>
+      <li>
+        <a href="/research" class="nav-link-hover text-base font-semibold"
+          >Research</a
+        >
+      </li>
+      <li>
+        <a href="/experience" class="nav-link-hover text-base font-semibold"
+          >Experience</a
+        >
+      </li>
+    </ul>
+    <button
+      id="theme-toggle"
+      type="button"
+      class="theme-toggle ml-auto"
+      aria-label="Toggle color theme"
+      aria-pressed="false"
+    >
+      <img
+        id="theme-icon-sun"
+        src={sunIcon.src}
+        alt=""
+        aria-hidden="true"
+        class="theme-toggle-icon hidden"
+      />
+      <img
+        id="theme-icon-moon"
+        src={moonIcon.src}
+        alt=""
+        aria-hidden="true"
+        class="theme-toggle-icon hidden"
+      />
+    </button>
+  </div>
 </nav>
+
+<script>
+  const storageKey = "theme";
+  const root = document.documentElement;
+  const themeToggle = document.querySelector("#theme-toggle");
+  const sunIconEl = document.querySelector("#theme-icon-sun");
+  const moonIconEl = document.querySelector("#theme-icon-moon");
+
+  const isDarkTheme = () => {
+    const explicit = root.dataset.theme;
+    if (explicit === "dark") return true;
+    if (explicit === "light") return false;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  };
+
+  const applyTheme = (theme: "light" | "dark" | null) => {
+    if (theme === "dark" || theme === "light") {
+      root.dataset.theme = theme;
+    } else {
+      delete root.dataset.theme;
+    }
+
+    const darkMode = isDarkTheme();
+
+    if (themeToggle instanceof HTMLButtonElement) {
+      themeToggle.setAttribute("aria-pressed", String(darkMode));
+      themeToggle.setAttribute(
+        "aria-label",
+        darkMode ? "Switch to light mode" : "Switch to dark mode",
+      );
+    }
+
+    if (sunIconEl instanceof HTMLImageElement) {
+      sunIconEl.classList.toggle("hidden", !darkMode);
+    }
+
+    if (moonIconEl instanceof HTMLImageElement) {
+      moonIconEl.classList.toggle("hidden", darkMode);
+    }
+  };
+
+  const savedTheme = localStorage.getItem(storageKey);
+  applyTheme(
+    savedTheme === "light" || savedTheme === "dark" ? savedTheme : null,
+  );
+
+  themeToggle?.addEventListener("click", () => {
+    const nextTheme = isDarkTheme() ? "light" : "dark";
+    localStorage.setItem(storageKey, nextTheme);
+    applyTheme(nextTheme);
+  });
+</script>

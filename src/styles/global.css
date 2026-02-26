@@ -27,6 +27,30 @@
   }
 }
 
+:root[data-theme="light"] {
+  --bg: #d6d6d6;
+  --surface: #d6d6d6;
+  --text: #111111;
+  --muted: #262626;
+  --border: #11111144;
+  --accent: #9a3f00;
+  --accent-hover: #7a3200;
+  --link: var(--accent);
+  --link-hover: var(--accent-hover);
+}
+
+:root[data-theme="dark"] {
+  --bg: #161616;
+  --surface: #161616;
+  --text: #f5f5f5;
+  --muted: #d6d6d6;
+  --border: #ffffff44;
+  --accent: #ff9f3f;
+  --accent-hover: #ffb76b;
+  --link: var(--accent);
+  --link-hover: var(--accent-hover);
+}
+
 html {
   font-family: "Inconsolata", monospace;
 }
@@ -82,5 +106,31 @@ a:hover {
   .nav-link-hover:focus-visible::before,
   .nav-link-hover:focus-visible::after {
     width: 50%;
+  }
+
+  .theme-toggle {
+    border: 1px solid var(--border);
+    border-radius: 0.35rem;
+    background: transparent;
+    color: var(--text);
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0.5rem 0.7rem;
+    transition:
+      border-color 180ms ease,
+      color 180ms ease;
+  }
+
+  .theme-toggle:hover,
+  .theme-toggle:focus-visible {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .theme-toggle-icon {
+    display: block;
+    width: 1rem;
+    height: 1rem;
   }
 }
