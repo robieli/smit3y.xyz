@@ -1,0 +1,86 @@
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap");
+@import "tailwindcss";
+
+:root {
+  --bg: #d6d6d6;
+  --surface: #d6d6d6;
+  --text: #111111;
+  --muted: #262626;
+  --border: #11111144;
+  --accent: #9a3f00;
+  --accent-hover: #7a3200;
+  --link: var(--accent);
+  --link-hover: var(--accent-hover);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161616;
+    --surface: #161616;
+    --text: #f5f5f5;
+    --muted: #d6d6d6;
+    --border: #ffffff44;
+    --accent: #ff9f3f;
+    --accent-hover: #ffb76b;
+    --link: var(--accent);
+    --link-hover: var(--accent-hover);
+  }
+}
+
+html {
+  font-family: "Inconsolata", monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--link);
+  /*text-decoration: underline;*/
+  text-decoration-color: var(--link);
+  text-underline-offset: 0.15em;
+}
+
+a:hover {
+  color: var(--link-hover);
+  text-decoration-color: var(--link-hover);
+}
+
+@layer components {
+  .nav-link-hover {
+    position: relative;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 200ms ease-in-out;
+  }
+
+  .nav-link-hover::before,
+  .nav-link-hover::after {
+    content: "";
+    position: absolute;
+    bottom: -0.15em;
+    height: 1px;
+    width: 0;
+    background: currentColor;
+    transition: width 260ms ease-out;
+  }
+
+  .nav-link-hover::before {
+    left: 50%;
+  }
+
+  .nav-link-hover::after {
+    right: 50%;
+  }
+
+  .nav-link-hover:hover::before,
+  .nav-link-hover:hover::after,
+  .nav-link-hover:focus-visible::before,
+  .nav-link-hover:focus-visible::after {
+    width: 50%;
+  }
+}
