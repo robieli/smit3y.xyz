@@ -1,10 +1,46 @@
 ---
+import headshot from "../assets/smit3y.jpg";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="About | smit3y.xyz">
-  <section class="space-y-3">
+  <section class="space-y-4">
     <h1 class="text-3xl font-bold">About</h1>
-    <p class="text-(--muted)">About page scaffold.</p>
+    <div class="about-copy text-(--muted)">
+      <figure class="about-portrait">
+        <img src={headshot.src} alt="Sam Smit portrait" loading="eager" />
+      </figure>
+      <p>Whatup chat its ya boy smit</p>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis consequat
+        lobortis mi, vel mattis urna dictum ut. Nunc ornare cursus ligula ac
+        pretium. Nullam eu ligula vulputate, vestibulum ipsum ut, condimentum
+        risus. Integer tincidunt placerat commodo. Aenean et elementum tellus,
+        sit amet tristique sapien. Donec blandit ut dolor et maximus. Donec
+        placerat augue quis libero eleifend, in maximus eros vestibulum.
+        Maecenas orci purus, ornare vitae dapibus eu, cursus nec ligula.
+        Praesent ullamcorper, nunc eu scelerisque dapibus, nisl nisi volutpat
+        purus, ut tristique enim mauris et tellus. Suspendisse auctor diam ac
+        viverra dictum. Praesent lacus nulla, sodales blandit ante et, varius
+        ornare sapien. Praesent auctor quis augue id ultricies.
+      </p>
+      <p>
+        In leo lorem, consequat nec vehicula at, ultricies nec sem. Curabitur
+        sollicitudin feugiat magna ac venenatis. Aliquam ex nunc, posuere nec
+        feugiat in, vulputate id libero. Curabitur venenatis nibh velit. Etiam
+        sed sollicitudin dolor. Mauris tempus rutrum tortor. Aliquam sed
+        elementum ipsum, sed semper felis. In lacinia est ac orci accumsan,
+        vitae mattis nisl sagittis. Vivamus ultricies venenatis ligula.
+      </p>
+      <p>
+        Maecenas vulputate diam justo, sit amet vulputate quam sollicitudin nec.
+        Aenean ac accumsan urna. Nulla laoreet nunc lacus, id tincidunt massa
+        faucibus in. Praesent molestie lacus ut augue vulputate, id ornare
+        mauris tristique. Sed sapien nunc, fermentum eu rhoncus at, dictum nec
+        felis. Proin at gravida ipsum, ac efficitur elit. Suspendisse quam
+        sapien, hendrerit sed euismod convallis, placerat condimentum nulla.
+        Duis sit amet luctus odio. Nunc nec ipsum vel sem mollis congue.
+      </p>
+    </div>
   </section>
 </BaseLayout>
