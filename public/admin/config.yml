@@ -2,3 +2,27 @@ backend:
   name: github
   repo: robieli/smit3y.xyz
   branch: main
+
+media_folder: "public/research"
+public_folder: "/research"
+
+collections:
+  - name: "research"
+    label: "Research"
+    folder: "content/research"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - {
+          label: "Upload Date",
+          name: "date",
+          widget: "datetime",
+          format: "YYYY-MM-DD",
+          date_format: "YYYY-MM-DD",
+          time_format: false,
+        }
+      - { label: "PDF", name: "pdf", widget: "file" }
+      - { label: "Summary", name: "summary", widget: "text", required: false }
