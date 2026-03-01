@@ -1,8 +1,39 @@
+---
+import githubDarkIcon from "../assets/github-mark-white.png";
+import githubLightIcon from "../assets/github-mark.png";
+import linkedInDarkIcon from "../assets/InBug-White.png";
+import linkedInLightIcon from "../assets/InBug-Black.png";
+---
+
 <footer class="mt-auto w-full border-t border-(--border) bg-(--surface)">
-  <div class="mx-auto w-full max-w-4xl px-6 py-6 text-sm text-(--muted)">
-    Contact Me:
-    <a href="mailto:ssamsmit@umich.edu" class="font-semibold"
-      >ssamsmit@umich.edu</a
+  <div
+    class="mx-auto flex w-full max-w-4xl flex-wrap items-center justify-between gap-4 px-6 py-6 text-sm text-(--muted)"
+  >
+    <p>
+      Contact Me:
+      <a href="mailto:ssamsmit@umich.edu" class="font-semibold nav-link-hover"
+        >ssamsmit@umich.edu</a
+      >
+    </p>
+    <a
+      href="https://www.linkedin.com/in/ssam-smith/"
+      target="_blank"
+      rel="noopener noreferrer me"
+      aria-label="LinkedIn profile"
+      class="social-link"
     >
+      <img
+        src={linkedInLightIcon.src}
+        alt=""
+        aria-hidden="true"
+        class="social-icon social-icon-light"
+      />
+      <img
+        src={linkedInDarkIcon.src}
+        alt=""
+        aria-hidden="true"
+        class="social-icon social-icon-dark"
+      />
+    </a>
   </div>
 </footer>
