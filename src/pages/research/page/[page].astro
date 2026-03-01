@@ -1,0 +1,109 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import {
+  RESEARCH_PAGE_SIZE,
+  getResearchPage,
+  loadResearchEntries,
+} from "../../../lib/research";
+
+type PageProps = {
+  pageEntries: ReturnType<typeof loadResearchEntries>;
+  currentPage: number;
+  totalPages: number;
+};
+
+const pageHref = (page: number) =>
+  page === 1 ? "/research" : `/research/page/${page}`;
+
+export function getStaticPaths() {
+  const entries = loadResearchEntries();
+  const totalPages = Math.max(
+    1,
+    Math.ceil(entries.length / RESEARCH_PAGE_SIZE),
+  );
+
+  return Array.from({ length: Math.max(totalPages - 1, 0) }, (_, idx) => {
+    const page = idx + 2;
+    const { pageEntries, currentPage } = getResearchPage(entries, page);
+
+    return {
+      params: { page: String(page) },
+      props: {
+        pageEntries,
+        currentPage,
+        totalPages,
+      },
+    };
+  });
+}
+
+const { pageEntries, currentPage, totalPages } = Astro.props as PageProps;
+const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
+---
+
+<BaseLayout title={`Research | Page ${currentPage} | smit3y.xyz`}>
+  <section class="space-y-6">
+    <h1 class="text-3xl font-bold">Research</h1>
+    <ul class="space-y-4">
+      {
+        pageEntries.map((entry) => (
+          <li class="space-y-1 border-b border-(--border) pb-4">
+            <h2 class="text-xl font-semibold">
+              <a href={`/research/${entry.slug}`} class="nav-link-hover">
+                {entry.title}
+              </a>
+            </h2>
+            <p class="text-sm text-(--muted)">
+              {entry.date
+                ? new Date(entry.date).toLocaleDateString("en-US")
+                : "No upload date"}
+            </p>
+            {entry.summary && <p class="text-(--muted)">{entry.summary}</p>}
+          </li>
+        ))
+      }
+    </ul>
+
+    <nav
+      class="flex flex-wrap items-center justify-center gap-2 pt-2"
+      aria-label="Research pagination"
+    >
+      {
+        currentPage > 1 && (
+          <a
+            href={pageHref(currentPage - 1)}
+            class="rounded border border-(--border) px-3 py-1 text-sm text-(--text) hover:border-(--accent) hover:text-(--accent)"
+          >
+            Prev
+          </a>
+        )
+      }
+      {
+        pageNumbers.map((page) => (
+          <a
+            href={pageHref(page)}
+            class:list={[
+              "rounded border px-3 py-1 text-sm",
+              page === currentPage
+                ? "border-(--accent) text-(--accent)"
+                : "border-(--border) text-(--text) hover:border-(--accent) hover:text-(--accent)",
+            ]}
+            aria-current={page === currentPage ? "page" : undefined}
+          >
+            {page}
+          </a>
+        ))
+      }
+      {
+        currentPage < totalPages && (
+          <a
+            href={pageHref(currentPage + 1)}
+            class="rounded border border-(--border) px-3 py-1 text-sm text-(--text) hover:border-(--accent) hover:text-(--accent)"
+          >
+            Next
+          </a>
+        )
+      }
+    </nav>
+  </section>
+</BaseLayout>

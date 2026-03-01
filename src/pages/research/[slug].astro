@@ -1,0 +1,92 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+type ResearchModule = {
+  frontmatter?: {
+    title?: string;
+    date?: string;
+    pdf?: string;
+    summary?: string;
+  };
+};
+
+type ResearchEntry = {
+  slug: string;
+  title: string;
+  date: string;
+  pdf: string;
+  summary?: string;
+};
+
+export function getStaticPaths() {
+  const researchModules = import.meta.glob<ResearchModule>(
+    "../../../content/research/*.md",
+    { eager: true },
+  );
+
+  return Object.entries(researchModules).map(([filePath, mod]) => {
+    const slug = filePath.split("/").pop()?.replace(/\.md$/, "") ?? "";
+    const fm = mod.frontmatter ?? {};
+    const entry: ResearchEntry = {
+      slug,
+      title: fm.title?.trim() || slug,
+      date: fm.date?.trim() || "",
+      pdf: fm.pdf?.trim() || "",
+      summary: fm.summary?.trim() || "",
+    };
+
+    return {
+      params: { slug: entry.slug },
+      props: { entry },
+    };
+  });
+}
+
+const { entry } = Astro.props as { entry: ResearchEntry };
+---
+
+<BaseLayout title={`${entry.title} | Research | smit3y.xyz`}>
+  <article class="space-y-6">
+    <header class="space-y-2">
+      <p class="text-sm text-(--muted)">
+        <a href="/research" class="nav-link-hover">Research</a>
+        <span aria-hidden="true"> / </span>
+        <span>{entry.slug}</span>
+      </p>
+      <h1 class="text-3xl font-bold">{entry.title}</h1>
+      {
+        entry.date && (
+          <p class="text-sm text-(--muted)">
+            Uploaded on {new Date(entry.date).toLocaleDateString("en-US")}
+          </p>
+        )
+      }
+      {entry.summary && <p class="text-(--muted)">{entry.summary}</p>}
+    </header>
+
+    {
+      entry.pdf ? (
+        <section class="space-y-3">
+          <div class="h-[75vh] min-h-136 w-full overflow-hidden rounded-md border border-(--border)">
+            <iframe
+              src={entry.pdf}
+              title={`${entry.title} PDF`}
+              class="h-full w-full"
+            />
+          </div>
+          <p class="text-sm text-(--muted)">
+            If the PDF does not load in your browser,{" "}
+            <a href={entry.pdf} target="_blank" rel="noopener noreferrer">
+              open it in a new tab
+            </a>
+            .
+          </p>
+        </section>
+      ) : (
+        <p class="text-sm text-(--muted)">
+          No PDF path is set for this entry yet.
+        </p>
+      )
+    }
+  </article>
+</BaseLayout>
