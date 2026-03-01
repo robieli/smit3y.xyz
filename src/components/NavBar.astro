@@ -36,14 +36,18 @@ import sunIcon from "../assets/sun.svg";
         src={sunIcon.src}
         alt=""
         aria-hidden="true"
-        class="theme-toggle-icon hidden"
+        width="16"
+        height="16"
+        class="theme-toggle-icon is-hidden"
       />
       <img
         id="theme-icon-moon"
         src={moonIcon.src}
         alt=""
         aria-hidden="true"
-        class="theme-toggle-icon hidden"
+        width="16"
+        height="16"
+        class="theme-toggle-icon is-hidden"
       />
     </button>
   </div>
@@ -81,11 +85,11 @@ import sunIcon from "../assets/sun.svg";
     }
 
     if (sunIconEl instanceof HTMLImageElement) {
-      sunIconEl.classList.toggle("hidden", !darkMode);
+      sunIconEl.classList.toggle("is-hidden", !darkMode);
     }
 
     if (moonIconEl instanceof HTMLImageElement) {
-      moonIconEl.classList.toggle("hidden", darkMode);
+      moonIconEl.classList.toggle("is-hidden", darkMode);
     }
   };
 
