@@ -1,0 +1,4 @@
+backend:
+  name: github
+  repo: robieli/smit3y.xyz
+  branch: main
