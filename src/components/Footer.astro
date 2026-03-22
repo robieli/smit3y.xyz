@@ -3,6 +3,8 @@ import githubDarkIcon from "../assets/github-mark-white.png";
 import githubLightIcon from "../assets/github-mark.png";
 import linkedInDarkIcon from "../assets/InBug-White.png";
 import linkedInLightIcon from "../assets/InBug-Black.png";
+
+const emailAddress = "ssamsmit@umich.edu";
 ---
 
 <footer class="mt-auto w-full border-t border-(--border) bg-(--surface)">
@@ -11,9 +13,14 @@ import linkedInLightIcon from "../assets/InBug-Black.png";
   >
     <p>
       Contact Me:
-      <a href="mailto:ssamsmit@umich.edu" class="font-semibold nav-link-hover"
-        >ssamsmit@umich.edu</a
+      <button
+        type="button"
+        class="copy-email-button font-semibold nav-link-hover"
+        data-email={emailAddress}
+        aria-label={`Copy ${emailAddress} to clipboard`}
       >
+        {emailAddress}
+      </button>
     </p>
     <a
       href="https://www.linkedin.com/in/ssam-smith/"
@@ -36,4 +43,36 @@ import linkedInLightIcon from "../assets/InBug-Black.png";
       />
     </a>
   </div>
+  <div class="copy-toast" role="status" aria-live="polite" aria-atomic="true">
+    Email copied
+  </div>
 </footer>
+
+<script>
+  const copyButton = document.querySelector(".copy-email-button");
+  const copyToast = document.querySelector(".copy-toast");
+  let toastTimeout;
+
+  const showToast = (message) => {
+    if (!copyToast) return;
+    copyToast.textContent = message;
+    copyToast.classList.add("is-visible");
+
+    window.clearTimeout(toastTimeout);
+    toastTimeout = window.setTimeout(() => {
+      copyToast.classList.remove("is-visible");
+    }, 1800);
+  };
+
+  copyButton?.addEventListener("click", async () => {
+    const email = copyButton.getAttribute("data-email");
+    if (!email) return;
+
+    try {
+      await navigator.clipboard.writeText(email);
+      showToast("Email copied");
+    } catch {
+      showToast("Copy failed");
+    }
+  });
+</script>
