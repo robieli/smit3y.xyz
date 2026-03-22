@@ -47,18 +47,19 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
     <ul class="space-y-4">
       {
         pageEntries.map((entry) => (
-          <li class="space-y-1 border-b border-(--border) pb-4">
-            <h2 class="text-xl font-semibold">
-              <a href={`/research/${entry.slug}`} class="nav-link-hover">
-                {entry.title}
-              </a>
-            </h2>
-            <p class="text-sm text-(--muted)">
-              {entry.date
-                ? new Date(entry.date).toLocaleDateString("en-US")
-                : "No upload date"}
-            </p>
-            {entry.summary && <p class="text-(--muted)">{entry.summary}</p>}
+          <li>
+            <a
+              href={`/research/${entry.slug}`}
+              class="research-entry-card block space-y-1 text-(--text) no-underline hover:text-(--text)"
+            >
+              <h2 class="text-xl font-semibold">{entry.title}</h2>
+              <p class="text-sm text-(--muted)">
+                {entry.date
+                  ? new Date(entry.date).toLocaleDateString("en-US")
+                  : "No upload date"}
+              </p>
+              {entry.summary && <p class="text-(--muted)">{entry.summary}</p>}
+            </a>
           </li>
         ))
       }
