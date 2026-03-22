@@ -108,6 +108,42 @@ a:hover {
     width: 50%;
   }
 
+  .copy-email-button {
+    border: 0;
+    background: transparent;
+    color: var(--link);
+    font: inherit;
+    padding: 0;
+  }
+
+  .copy-email-button:hover,
+  .copy-email-button:focus-visible {
+    color: var(--link-hover);
+  }
+
+  .copy-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 1.5rem;
+    transform: translate(-50%, 0.6rem);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--surface) 92%, transparent);
+    color: var(--text);
+    padding: 0.55rem 0.9rem;
+    font-size: 0.9rem;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease;
+  }
+
+  .copy-toast.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
   .theme-toggle {
     position: relative;
     display: inline-flex;
@@ -218,6 +254,23 @@ a:hover {
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  .research-entry-card {
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    background: color-mix(in oklab, var(--surface) 92%, transparent);
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease;
+  }
+
+  .research-entry-card:hover,
+  .research-entry-card:focus-within,
+  .research-entry-card:focus-visible {
+    transform: scale(1.015);
+    border-color: var(--accent);
   }
 
   @media (max-width: 640px) {

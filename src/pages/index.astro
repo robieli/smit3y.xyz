@@ -1,10 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import StockSplash from "../components/StockSplash";
 ---
 
-<BaseLayout title="smit3y.xyz">
-  <section class="space-y-3">
-    <h1 class="text-4xl font-bold">smit3y.xyz</h1>
-    <p class="text-lg text-(--muted)">Welcome to the site scaffold.</p>
-  </section>
+<BaseLayout title="smit3y.xyz" fullBleed={true}>
+  <StockSplash client:load />
 </BaseLayout>
