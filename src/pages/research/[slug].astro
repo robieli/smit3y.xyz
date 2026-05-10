@@ -4,6 +4,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 type ResearchModule = {
   frontmatter?: {
     title?: string;
+    stockLabel?: string;
     date?: string;
     pdf?: string;
     summary?: string;
@@ -12,6 +13,7 @@ type ResearchModule = {
 
 type ResearchEntry = {
   slug: string;
+  stockLabel: string;
   title: string;
   date: string;
   pdf: string;
@@ -29,6 +31,7 @@ export function getStaticPaths() {
     const fm = mod.frontmatter ?? {};
     const entry: ResearchEntry = {
       slug,
+      stockLabel: fm.stockLabel?.trim() || "",
       title: fm.title?.trim() || slug,
       date: fm.date?.trim() || "",
       pdf: fm.pdf?.trim() || "",
@@ -45,37 +48,40 @@ export function getStaticPaths() {
 const { entry } = Astro.props as { entry: ResearchEntry };
 ---
 
-<BaseLayout title={`${entry.title} | Research | smit3y.xyz`}>
-  <article class="space-y-6">
-    <header class="space-y-2">
-      <p class="text-sm text-(--muted)">
-        <a href="/research" class="nav-link-hover">Research</a>
+<BaseLayout title={`${entry.title} | Research | smit3y.xyz`} fullBleed={true}>
+  <article class="research-detail-page">
+    <header class="research-detail-header">
+      <p class="research-eyebrow">
+        <a href="/#research">Research</a>
         <span aria-hidden="true"> / </span>
         <span>{entry.slug}</span>
       </p>
-      <h1 class="text-3xl font-bold">{entry.title}</h1>
+      {entry.stockLabel && <p class="research-label">{entry.stockLabel}</p>}
+      <h1>{entry.title}</h1>
       {
         entry.date && (
-          <p class="text-sm text-(--muted)">
-            Uploaded on {new Date(entry.date).toLocaleDateString("en-US")}
+          <p class="research-date">
+            {new Date(entry.date).toLocaleDateString("en-US", {
+              month: "long",
+              year: "numeric",
+            })}
           </p>
         )
       }
-      {entry.summary && <p class="text-(--muted)">{entry.summary}</p>}
+      {entry.summary && <p class="research-summary">{entry.summary}</p>}
     </header>
 
     {
       entry.pdf ? (
-        <section class="space-y-3">
-          <div class="h-[75vh] min-h-136 w-full overflow-hidden rounded-md border border-(--border)">
+        <section class="pdf-section">
+          <div class="pdf-frame">
             <iframe
               src={entry.pdf}
               title={`${entry.title} PDF`}
-              class="h-full w-full"
             />
           </div>
-          <p class="text-sm text-(--muted)">
-            If the PDF does not load in your browser,{" "}
+          <p class="pdf-fallback">
+            If the PDF does not load,{" "}
             <a href={entry.pdf} target="_blank" rel="noopener noreferrer">
               open it in a new tab
             </a>
@@ -83,10 +89,121 @@ const { entry } = Astro.props as { entry: ResearchEntry };
           </p>
         </section>
       ) : (
-        <p class="text-sm text-(--muted)">
-          No PDF path is set for this entry yet.
-        </p>
+        <p class="pdf-fallback">No PDF path is set for this entry yet.</p>
       )
     }
   </article>
 </BaseLayout>
+
+<style>
+  :global(body) {
+    background: #000;
+  }
+
+  .research-detail-page {
+    min-height: 100svh;
+    background:
+      radial-gradient(circle at 86% 10%, rgba(139, 92, 246, 0.08), transparent 30rem),
+      #000;
+    color: #d7d5df;
+    padding: clamp(4rem, 8vw, 6rem) 0;
+  }
+
+  .research-detail-header,
+  .pdf-section {
+    width: var(--site-column);
+    margin: 0 auto;
+  }
+
+  .research-eyebrow {
+    margin: 0;
+    color: #6f6a80;
+    font-size: clamp(0.88rem, 1.2vw, 1rem);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .research-eyebrow a,
+  .pdf-fallback a {
+    color: #8b5cf6;
+    text-decoration: none;
+  }
+
+  .research-eyebrow a:hover,
+  .research-eyebrow a:focus-visible,
+  .pdf-fallback a:hover,
+  .pdf-fallback a:focus-visible {
+    color: #c4b5fd;
+  }
+
+  .research-label {
+    margin: clamp(2rem, 4vw, 3rem) 0 0;
+    color: #a78bfa;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .research-detail-header h1 {
+    max-width: 58rem;
+    margin: 1rem 0 0;
+    color: #dedce7;
+    font-size: clamp(3rem, 8vw, 5.8rem);
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 0.95;
+  }
+
+  .research-date {
+    margin: clamp(1.3rem, 2.4vw, 1.8rem) 0 0;
+    color: #5c586c;
+    font-size: clamp(0.95rem, 1.3vw, 1.08rem);
+    font-weight: 700;
+  }
+
+  .research-summary {
+    max-width: 48rem;
+    margin: clamp(1.2rem, 2.5vw, 1.8rem) 0 0;
+    color: #817c91;
+    font-size: clamp(1rem, 1.6vw, 1.22rem);
+    font-weight: 600;
+    line-height: 1.55;
+  }
+
+  .pdf-section {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .pdf-frame {
+    height: min(76svh, 58rem);
+    min-height: 36rem;
+    overflow: hidden;
+    border: 1px solid #17152d;
+    border-radius: 8px;
+    background: #080816;
+  }
+
+  .pdf-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .pdf-fallback {
+    margin: 1rem 0 0;
+    color: #6f6a80;
+    font-size: 0.96rem;
+    font-weight: 700;
+  }
+
+  @media (max-width: 700px) {
+    .research-detail-page {
+      padding: 3rem 0;
+    }
+
+    .pdf-frame {
+      min-height: 30rem;
+    }
+  }
+</style>

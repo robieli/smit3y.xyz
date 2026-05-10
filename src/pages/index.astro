@@ -1,8 +1,775 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import StockSplash from "../components/StockSplash";
+import { loadResearchEntries } from "../lib/research";
+
+const researchEntries = loadResearchEntries();
 ---
 
 <BaseLayout title="smit3y.xyz" fullBleed={true}>
-  <StockSplash client:load />
+  <section class="landing-screen" aria-label="Smit3y landing page">
+    <div class="landing-content">
+      <h1 class="landing-title">SMIT3Y</h1>
+      <div class="landing-rule" aria-hidden="true"></div>
+      <p class="landing-primary">
+        EQUITY RESEARCH <span aria-hidden="true">·</span> CRYPTO INFRASTRUCTURE
+        <span aria-hidden="true">·</span> FINANCIAL ANALYSIS
+      </p>
+      <p class="landing-secondary">
+        UNIVERSITY OF MICHIGAN <span aria-hidden="true">·</span> ECONOMICS &
+        PSYCHOLOGY
+      </p>
+      <p class="landing-domain">SMIT3Y.XYZ</p>
+      <button class="landing-enter" type="button" aria-label="Enter smit3y.xyz">
+        ENTER <span aria-hidden="true">→</span>
+      </button>
+    </div>
+  </section>
+  <section id="home" class="home-section" aria-label="Home">
+    <canvas class="hero-particles" aria-hidden="true"></canvas>
+    <div class="hero-content">
+      <p class="hero-kicker">
+        EQUITY RESEARCH <span aria-hidden="true">·</span> CRYPTO INFRASTRUCTURE
+      </p>
+      <h1 class="hero-title">SMIT3Y</h1>
+      <p class="hero-subtitle">
+        FINANCIAL ANALYSIS <span aria-hidden="true">·</span> UNIVERSITY OF
+        MICHIGAN
+      </p>
+      <div class="hero-actions" aria-label="Featured actions">
+        <a class="hero-action hero-action-primary" href="#research">
+          VIEW RESEARCH <span aria-hidden="true">→</span>
+        </a>
+        <a class="hero-action hero-action-secondary" href="#about">ABOUT ME</a>
+      </div>
+    </div>
+    <a class="scroll-cue" href="#about" aria-label="Scroll to about section">
+      <span>SCROLL TO EXPLORE</span>
+      <span aria-hidden="true">⌄</span>
+    </a>
+  </section>
+  <section id="about" class="content-section" aria-label="About">
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus finibus
+      justo vel neque luctus, a facilisis sem interdum.
+    </p>
+  </section>
+  <section id="research" class="research-section" aria-label="Research">
+    <div class="research-header">
+      <p class="section-kicker">// RESEARCH</p>
+      <h2>Investment Theses</h2>
+      <p>
+        Deep-dive fundamental analysis on publicly traded companies across
+        crypto infrastructure, technology, and financial services.
+      </p>
+    </div>
+    <div class="research-grid">
+      {
+        researchEntries.map((entry) => (
+          <a class="research-card" href={`/research/${entry.slug}`}>
+            <span class="research-card-label">
+              {entry.stockLabel || entry.title.split(" ")[0]}
+            </span>
+            <span class="research-card-title">{entry.title}</span>
+            {entry.summary && (
+              <span class="research-card-summary">{entry.summary}</span>
+            )}
+            <span class="research-card-arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+  <section id="experience" class="content-section" aria-label="Experience">
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer aliquet
+      sapien vitae lorem dictum, et dignissim augue elementum.
+    </p>
+  </section>
+  <section id="sny" class="content-section" aria-label="S and Y">
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean laoreet
+      tellus a nibh dignissim, eu feugiat neque suscipit.
+    </p>
+  </section>
+
+  <script>
+    const enterButton = document.querySelector(".landing-enter");
+    const landingScreen = document.querySelector(".landing-screen");
+    const body = document.body;
+
+    const enterSite = () => {
+      body.classList.add("site-entered");
+      window.setTimeout(() => {
+        landingScreen?.setAttribute("hidden", "");
+      }, 700);
+    };
+
+    enterButton?.addEventListener("click", enterSite);
+
+    const particleCanvas =
+      document.querySelector<HTMLCanvasElement>(".hero-particles");
+    const heroSection = document.querySelector<HTMLElement>(".home-section");
+    const particleContext = particleCanvas?.getContext("2d");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const particleCount = 62;
+    const particles = Array.from({ length: particleCount }, (_, index) => ({
+      angle: (Math.PI * 2 * ((index * 37) % particleCount)) / particleCount,
+      radius: 0.28 + ((index * 41) % 100) / 100,
+      size: 18 + ((index * 23) % 46),
+      phase: ((index * 29) % 100) / 100,
+    }));
+
+    let canvasWidth = 0;
+    let canvasHeight = 0;
+    let deviceScale = 1;
+    let particleAnimationFrame = 0;
+
+    const clamp = (value: number, min: number, max: number) =>
+      Math.min(Math.max(value, min), max);
+
+    const getHeroScrollProgress = () => {
+      if (!heroSection) return 0;
+
+      const rect = heroSection.getBoundingClientRect();
+      const progress = -rect.top / Math.max(rect.height - window.innerHeight, 1);
+      return clamp(progress, 0, 1);
+    };
+
+    const resizeParticleCanvas = () => {
+      if (!particleCanvas || !particleContext) return;
+
+      const rect = particleCanvas.getBoundingClientRect();
+      deviceScale = Math.min(window.devicePixelRatio || 1, 2);
+      canvasWidth = rect.width;
+      canvasHeight = rect.height;
+      particleCanvas.width = Math.floor(canvasWidth * deviceScale);
+      particleCanvas.height = Math.floor(canvasHeight * deviceScale);
+      particleContext.setTransform(deviceScale, 0, 0, deviceScale, 0, 0);
+    };
+
+    const drawParticles = (time: number) => {
+      if (!particleCanvas || !particleContext || reduceMotion.matches) return;
+
+      const progress = getHeroScrollProgress();
+      const centerX = canvasWidth / 2;
+      const centerY = canvasHeight * 0.47;
+      const baseRadius = Math.min(canvasWidth, canvasHeight) * 0.16;
+      const expansion = 1 + progress * 1.45;
+      const rotation = time * 0.00035;
+
+      particleContext.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      const fieldGradient = particleContext.createRadialGradient(
+        centerX,
+        centerY,
+        baseRadius * 0.2,
+        centerX,
+        centerY,
+        baseRadius * (2.35 + progress * 1.1),
+      );
+      fieldGradient.addColorStop(0, "rgba(255, 255, 255, 0.34)");
+      fieldGradient.addColorStop(0.28, "rgba(210, 209, 223, 0.24)");
+      fieldGradient.addColorStop(0.64, "rgba(128, 124, 145, 0.15)");
+      fieldGradient.addColorStop(1, "rgba(8, 9, 19, 0)");
+
+      particleContext.fillStyle = fieldGradient;
+      particleContext.beginPath();
+      particleContext.ellipse(
+        centerX,
+        centerY,
+        baseRadius * (3.2 + progress * 1.1),
+        baseRadius * (1.72 + progress * 0.42),
+        0,
+        0,
+        Math.PI * 2,
+      );
+      particleContext.fill();
+
+      particleContext.save();
+      particleContext.globalCompositeOperation = "screen";
+      particleContext.filter = `blur(${Math.max(18, baseRadius * 0.18)}px)`;
+
+      for (const particle of particles) {
+        const wobble = Math.sin(time * 0.00018 + particle.phase * Math.PI * 2);
+        const angle = particle.angle + wobble * 0.08;
+        const radius =
+          baseRadius * (0.55 + particle.radius * 2.25) * expansion;
+        const x = centerX + Math.cos(angle) * radius;
+        const y = centerY + Math.sin(angle) * radius * 0.52;
+        const alpha = clamp(0.08 + particle.phase * 0.08 - progress * 0.02, 0.05, 0.16);
+        const glow = particleContext.createRadialGradient(
+          x,
+          y,
+          0,
+          x,
+          y,
+          particle.size,
+        );
+
+        glow.addColorStop(0, `rgba(255, 255, 255, ${alpha})`);
+        glow.addColorStop(0.45, `rgba(160, 155, 178, ${alpha * 0.66})`);
+        glow.addColorStop(1, "rgba(160, 155, 178, 0)");
+
+        particleContext.beginPath();
+        particleContext.fillStyle = glow;
+        particleContext.arc(x, y, particle.size, 0, Math.PI * 2);
+        particleContext.fill();
+      }
+
+      particleContext.restore();
+
+      const sphereRadius = baseRadius * 0.42;
+      const sphereX = centerX + Math.cos(rotation) * sphereRadius * 0.11;
+      const sphereY = centerY + Math.sin(rotation * 1.3) * sphereRadius * 0.08;
+      const sphereGradient = particleContext.createRadialGradient(
+        sphereX - sphereRadius * 0.32,
+        sphereY - sphereRadius * 0.32,
+        sphereRadius * 0.08,
+        sphereX,
+        sphereY,
+        sphereRadius,
+      );
+
+      sphereGradient.addColorStop(0, "rgba(255, 255, 255, 0.38)");
+      sphereGradient.addColorStop(0.38, "rgba(180, 178, 196, 0.22)");
+      sphereGradient.addColorStop(0.72, "rgba(92, 88, 112, 0.16)");
+      sphereGradient.addColorStop(1, "rgba(20, 18, 32, 0)");
+
+      particleContext.fillStyle = sphereGradient;
+      particleContext.beginPath();
+      particleContext.arc(sphereX, sphereY, sphereRadius, 0, Math.PI * 2);
+      particleContext.fill();
+
+      particleAnimationFrame = window.requestAnimationFrame(drawParticles);
+    };
+
+    if (particleCanvas && particleContext) {
+      resizeParticleCanvas();
+      window.addEventListener("resize", resizeParticleCanvas);
+
+      if (!reduceMotion.matches) {
+        particleAnimationFrame = window.requestAnimationFrame(drawParticles);
+      }
+
+      reduceMotion.addEventListener("change", () => {
+        window.cancelAnimationFrame(particleAnimationFrame);
+        particleContext.clearRect(0, 0, canvasWidth, canvasHeight);
+
+        if (!reduceMotion.matches) {
+          particleAnimationFrame = window.requestAnimationFrame(drawParticles);
+        }
+      });
+    }
+  </script>
 </BaseLayout>
+
+<style>
+  :global(body) {
+    background: #000;
+  }
+
+  :global(body:not(.site-entered)) {
+    overflow: hidden;
+  }
+
+  :global(body:not(.site-entered) .site-chrome),
+  :global(body:not(.site-entered) .site-footer),
+  :global(body:not(.site-entered) .section-dots),
+  :global(body:not(.site-entered) .home-section),
+  :global(body:not(.site-entered) .research-section),
+  :global(body:not(.site-entered) .content-section) {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  :global(body.site-entered .site-chrome),
+  :global(body.site-entered .site-footer),
+  :global(body.site-entered .section-dots),
+  :global(body.site-entered .home-section),
+  :global(body.site-entered .research-section),
+  :global(body.site-entered .content-section) {
+    opacity: 1;
+  }
+
+  .landing-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: #000;
+    color: #fff;
+    padding: clamp(2rem, 5vw, 4rem);
+    transition:
+      opacity 700ms ease,
+      visibility 700ms ease;
+  }
+
+  :global(body.site-entered) .landing-screen {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .landing-content {
+    display: flex;
+    width: min(100%, 58rem);
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .landing-title,
+  .landing-rule,
+  .landing-primary,
+  .landing-secondary,
+  .landing-domain,
+  .landing-enter {
+    animation: landing-reveal 900ms ease-out both;
+  }
+
+  .landing-title {
+    margin: 0;
+    color: #f8f8f8;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(3.8rem, 13vw, 8.5rem);
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: 0.78;
+  }
+
+  .landing-rule {
+    width: min(7.5rem, 28vw);
+    height: 1px;
+    margin-top: clamp(2.8rem, 6vw, 4rem);
+    background: linear-gradient(90deg, transparent, #444, transparent);
+    animation-delay: 180ms;
+  }
+
+  .landing-primary {
+    max-width: 56rem;
+    margin: clamp(2.5rem, 5.5vw, 4.2rem) 0 0;
+    color: #777;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(1rem, 1.8vw, 1.25rem);
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    line-height: 1.9;
+    text-transform: uppercase;
+    animation-delay: 320ms;
+  }
+
+  .landing-secondary {
+    margin: clamp(1.2rem, 3vw, 1.6rem) 0 0;
+    color: #515151;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.82rem, 1.35vw, 1rem);
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    line-height: 1.75;
+    text-transform: uppercase;
+    animation-delay: 460ms;
+  }
+
+  .landing-domain {
+    margin: clamp(1.4rem, 3vw, 1.9rem) 0 0;
+    color: #151515;
+    font-family: Inconsolata, monospace;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    line-height: 1;
+    animation-delay: 600ms;
+  }
+
+  .landing-enter {
+    border: 0;
+    margin-top: clamp(1.4rem, 3vw, 1.8rem);
+    background: transparent;
+    color: #8d8d8d;
+    cursor: pointer;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.88rem, 1.4vw, 1rem);
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    line-height: 1;
+    text-transform: uppercase;
+    transition:
+      color 180ms ease,
+      transform 180ms ease;
+    animation-delay: 740ms;
+  }
+
+  .home-section {
+    position: relative;
+    display: grid;
+    min-height: calc(100svh - 3rem);
+    overflow: hidden;
+    place-items: center;
+    scroll-margin-top: 0;
+    background: #000;
+    color: #5f6070;
+    padding: clamp(4rem, 8vw, 6.5rem) 0 clamp(5.5rem, 10vw, 8rem);
+    transition: opacity 700ms ease;
+  }
+
+  .hero-particles {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 11%,
+      #000 64%,
+      rgba(0, 0, 0, 0.65) 78%,
+      transparent 100%
+    );
+    opacity: 0.95;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    width: var(--site-column);
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero-kicker,
+  .hero-subtitle,
+  .hero-action,
+  .scroll-cue {
+    font-family: Inconsolata, monospace;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  .hero-kicker {
+    margin: 0;
+    color: #8b5cf6;
+    font-size: clamp(0.78rem, 1.35vw, 1.1rem);
+  }
+
+  .hero-title {
+    display: inline-block;
+    margin: clamp(1.6rem, 3.5vw, 2.4rem) 0 0;
+    background: linear-gradient(100deg, #8791ff 7%, #5ea1f2 48%, #17bfd1 92%);
+    background-clip: text;
+    color: transparent;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(5rem, 14vw, 9.2rem);
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: 0.95;
+    padding-bottom: 0.08em;
+  }
+
+  .hero-subtitle {
+    margin: clamp(2.1rem, 4vw, 3rem) 0 0;
+    color: #787789;
+    font-size: clamp(0.9rem, 1.5vw, 1.18rem);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(0.9rem, 2vw, 1.4rem);
+    margin-top: clamp(2.4rem, 5vw, 3.4rem);
+  }
+
+  .hero-action {
+    display: inline-flex;
+    min-width: min(100%, 10.8rem);
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #31294d;
+    border-radius: 4px;
+    color: #868393;
+    font-size: clamp(0.78rem, 1.15vw, 0.98rem);
+    min-height: 3rem;
+    padding: 0.88rem 1.55rem;
+    text-decoration: none;
+    transition:
+      border-color 180ms ease,
+      background-color 180ms ease,
+      color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .hero-action:hover,
+  .hero-action:focus-visible {
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  .hero-action:focus-visible,
+  .scroll-cue:focus-visible {
+    outline: 1px solid #8b5cf6;
+    outline-offset: 0.35rem;
+  }
+
+  .hero-action-primary {
+    border-color: #8b5cf6;
+    background: #8b5cf6;
+    color: #fff;
+  }
+
+  .hero-action-secondary:hover,
+  .hero-action-secondary:focus-visible {
+    border-color: #6d5f91;
+    background: #100d1b;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: clamp(1.6rem, 4vw, 2.6rem);
+    left: 50%;
+    z-index: 1;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    color: #242332;
+    font-size: clamp(0.72rem, 1vw, 0.9rem);
+    text-decoration: none;
+    transform: translateX(-50%);
+    transition: color 180ms ease;
+  }
+
+  .scroll-cue:hover,
+  .scroll-cue:focus-visible {
+    color: #5d586f;
+  }
+
+  .content-section p {
+    width: var(--site-column);
+    margin: 0;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(1rem, 1.8vw, 1.25rem);
+    line-height: 1.7;
+  }
+
+  .content-section {
+    display: grid;
+    min-height: 72svh;
+    place-items: center;
+    background: #000;
+    color: #5f6070;
+    padding: clamp(3rem, 8vw, 6rem) 0;
+    scroll-margin-top: 4rem;
+    transition: opacity 700ms ease;
+  }
+
+  .research-section {
+    min-height: 100svh;
+    background:
+      radial-gradient(circle at 92% 8%, rgba(139, 92, 246, 0.08), transparent 32rem),
+      #000;
+    color: #d7d5df;
+    padding: clamp(5rem, 9vw, 7rem) 0;
+    scroll-margin-top: 4rem;
+    transition: opacity 700ms ease;
+  }
+
+  .research-header,
+  .research-grid {
+    width: var(--site-column);
+    margin: 0 auto;
+  }
+
+  .section-kicker {
+    margin: 0;
+    color: #8b5cf6;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.9rem, 1.3vw, 1.12rem);
+    font-weight: 800;
+    letter-spacing: 0.35em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  .research-header h2 {
+    margin: clamp(1.2rem, 2.8vw, 2rem) 0 0;
+    color: #dedce7;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(3.3rem, 8vw, 5.7rem);
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 0.95;
+  }
+
+  .research-header > p:last-child {
+    max-width: 38rem;
+    margin: clamp(1.1rem, 2vw, 1.5rem) 0 0;
+    color: #7f7b90;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(1rem, 1.6vw, 1.24rem);
+    font-weight: 600;
+    line-height: 1.55;
+  }
+
+  .research-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.35rem);
+    margin-top: clamp(3rem, 6vw, 4.2rem);
+  }
+
+  .research-card {
+    position: relative;
+    display: flex;
+    min-height: 13.2rem;
+    flex-direction: column;
+    border: 1px solid #15142d;
+    border-radius: 8px;
+    background: rgba(10, 10, 28, 0.72);
+    color: inherit;
+    padding: clamp(1.7rem, 3vw, 2.15rem);
+    text-decoration: none;
+    transition:
+      border-color 180ms ease,
+      background-color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .research-card:hover,
+  .research-card:focus-visible {
+    border-color: #33265d;
+    background: rgba(15, 13, 36, 0.92);
+    transform: translateY(-2px);
+  }
+
+  .research-card:focus-visible {
+    outline: 1px solid #8b5cf6;
+    outline-offset: 0.35rem;
+  }
+
+  .research-card-label {
+    color: #a78bfa;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(1.55rem, 2.7vw, 2rem);
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+
+  .research-card-title {
+    margin-top: 1.35rem;
+    color: #d7d5df;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    font-weight: 800;
+    line-height: 1.35;
+  }
+
+  .research-card-summary {
+    margin-top: 1rem;
+    color: #7f7b90;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.95rem, 1.35vw, 1.12rem);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .research-card-arrow {
+    align-self: flex-end;
+    margin-top: auto;
+    color: #8b5cf6;
+    font-family: Inconsolata, monospace;
+    font-size: 1.1rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .landing-enter:hover,
+  .landing-enter:focus-visible {
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  .landing-enter:focus-visible {
+    outline: 1px solid #777;
+    outline-offset: 0.6rem;
+  }
+
+  @keyframes landing-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .landing-screen {
+      padding: 2rem 1.2rem;
+    }
+
+    .landing-title {
+      font-size: clamp(3.4rem, 18vw, 5.8rem);
+    }
+
+    .landing-primary,
+    .landing-secondary {
+      letter-spacing: 0.22em;
+    }
+
+    .home-section {
+      min-height: calc(100svh - 7rem);
+      padding: 3rem 0 5.5rem;
+    }
+
+    .hero-kicker,
+    .hero-subtitle,
+    .hero-action,
+    .scroll-cue {
+      letter-spacing: 0.22em;
+    }
+
+    .hero-title {
+      font-size: clamp(4rem, 19vw, 6.5rem);
+    }
+
+    .hero-actions {
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .hero-action {
+      width: min(100%, 17rem);
+    }
+
+    .research-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .research-header h2 {
+      font-size: clamp(2.8rem, 14vw, 4.2rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .landing-title,
+    .landing-rule,
+    .landing-primary,
+    .landing-secondary,
+    .landing-domain,
+    .landing-enter {
+      animation: none;
+    }
+  }
+</style>

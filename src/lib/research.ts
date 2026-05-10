@@ -1,6 +1,7 @@
 export type ResearchModule = {
   frontmatter?: {
     title?: string;
+    stockLabel?: string;
     date?: string;
     pdf?: string;
     summary?: string;
@@ -9,6 +10,7 @@ export type ResearchModule = {
 
 export type ResearchEntry = {
   slug: string;
+  stockLabel: string;
   title: string;
   date: string;
   pdf: string;
@@ -35,6 +37,7 @@ export const loadResearchEntries = (): ResearchEntry[] => {
 
       return {
         slug,
+        stockLabel: fm.stockLabel?.trim() || "",
         title: fm.title?.trim() || slug,
         date: fm.date?.trim() || "",
         pdf: fm.pdf?.trim() || "",

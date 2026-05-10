@@ -15,6 +15,7 @@ collections:
     extension: "md"
     format: "frontmatter"
     fields:
+      - { label: "Stock Label", name: "stockLabel", widget: "string" }
       - { label: "Title", name: "title", widget: "string" }
       - {
           label: "Upload Date",

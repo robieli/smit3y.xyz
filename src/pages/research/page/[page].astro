@@ -41,39 +41,52 @@ const { pageEntries, currentPage, totalPages } = Astro.props as PageProps;
 const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
 ---
 
-<BaseLayout title={`Research | Page ${currentPage} | smit3y.xyz`}>
-  <section class="space-y-6">
-    <h1 class="text-3xl font-bold">Research</h1>
-    <ul class="space-y-4">
+<BaseLayout title={`Research | Page ${currentPage} | smit3y.xyz`} fullBleed={true}>
+  <section class="research-list-page">
+    <header class="research-list-header">
+      <p class="section-kicker">// RESEARCH</p>
+      <h1>Investment Theses</h1>
+      <p>
+        Deep-dive fundamental analysis on publicly traded companies across
+        crypto infrastructure, technology, and financial services.
+      </p>
+    </header>
+
+    <div class="research-list-grid">
       {
         pageEntries.map((entry) => (
-          <li>
-            <a
-              href={`/research/${entry.slug}`}
-              class="research-entry-card block space-y-1 text-(--text) no-underline hover:text-(--text)"
-            >
-              <h2 class="text-xl font-semibold">{entry.title}</h2>
-              <p class="text-sm text-(--muted)">
-                {entry.date
-                  ? new Date(entry.date).toLocaleDateString("en-US")
-                  : "No upload date"}
-              </p>
-              {entry.summary && <p class="text-(--muted)">{entry.summary}</p>}
-            </a>
-          </li>
+          <a class="research-list-card" href={`/research/${entry.slug}`}>
+            <span class="research-card-label">
+              {entry.stockLabel || entry.title.split(" ")[0]}
+            </span>
+            <span class="research-card-title">{entry.title}</span>
+            {entry.summary && (
+              <span class="research-card-summary">{entry.summary}</span>
+            )}
+            <span class="research-card-date">
+              {entry.date
+                ? new Date(entry.date).toLocaleDateString("en-US", {
+                    month: "long",
+                    year: "numeric",
+                  })
+                : "No upload date"}
+            </span>
+            <span class="research-card-arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
         ))
       }
-    </ul>
+    </div>
 
     <nav
-      class="flex flex-wrap items-center justify-center gap-2 pt-2"
+      class="research-pagination"
       aria-label="Research pagination"
     >
       {
         currentPage > 1 && (
           <a
             href={pageHref(currentPage - 1)}
-            class="rounded border border-(--border) px-3 py-1 text-sm text-(--text) hover:border-(--accent) hover:text-(--accent)"
           >
             Prev
           </a>
@@ -83,12 +96,7 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
         pageNumbers.map((page) => (
           <a
             href={pageHref(page)}
-            class:list={[
-              "rounded border px-3 py-1 text-sm",
-              page === currentPage
-                ? "border-(--accent) text-(--accent)"
-                : "border-(--border) text-(--text) hover:border-(--accent) hover:text-(--accent)",
-            ]}
+            class:list={[page === currentPage && "is-active"]}
             aria-current={page === currentPage ? "page" : undefined}
           >
             {page}
@@ -99,7 +107,6 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
         currentPage < totalPages && (
           <a
             href={pageHref(currentPage + 1)}
-            class="rounded border border-(--border) px-3 py-1 text-sm text-(--text) hover:border-(--accent) hover:text-(--accent)"
           >
             Next
           </a>
@@ -108,3 +115,160 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
     </nav>
   </section>
 </BaseLayout>
+
+<style>
+  :global(body) {
+    background: #000;
+  }
+
+  .research-list-page {
+    min-height: 100svh;
+    background:
+      radial-gradient(circle at 92% 8%, rgba(139, 92, 246, 0.08), transparent 32rem),
+      #000;
+    color: #d7d5df;
+    padding: clamp(5rem, 9vw, 7rem) 0;
+  }
+
+  .research-list-header,
+  .research-list-grid,
+  .research-pagination {
+    width: var(--site-column);
+    margin: 0 auto;
+  }
+
+  .section-kicker {
+    margin: 0;
+    color: #8b5cf6;
+    font-size: clamp(0.9rem, 1.3vw, 1.12rem);
+    font-weight: 800;
+    letter-spacing: 0.35em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  .research-list-header h1 {
+    margin: clamp(1.2rem, 2.8vw, 2rem) 0 0;
+    color: #dedce7;
+    font-size: clamp(3.3rem, 8vw, 5.7rem);
+    font-weight: 800;
+    line-height: 0.95;
+  }
+
+  .research-list-header > p:last-child {
+    max-width: 38rem;
+    margin: clamp(1.1rem, 2vw, 1.5rem) 0 0;
+    color: #7f7b90;
+    font-size: clamp(1rem, 1.6vw, 1.24rem);
+    font-weight: 600;
+    line-height: 1.55;
+  }
+
+  .research-list-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.35rem);
+    margin-top: clamp(3rem, 6vw, 4.2rem);
+  }
+
+  .research-list-card {
+    display: flex;
+    min-height: 14rem;
+    flex-direction: column;
+    border: 1px solid #15142d;
+    border-radius: 8px;
+    background: rgba(10, 10, 28, 0.72);
+    color: inherit;
+    padding: clamp(1.7rem, 3vw, 2.15rem);
+    text-decoration: none;
+    transition:
+      border-color 180ms ease,
+      background-color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .research-list-card:hover,
+  .research-list-card:focus-visible {
+    border-color: #33265d;
+    background: rgba(15, 13, 36, 0.92);
+    transform: translateY(-2px);
+  }
+
+  .research-list-card:focus-visible {
+    outline: 1px solid #8b5cf6;
+    outline-offset: 0.35rem;
+  }
+
+  .research-card-label {
+    color: #a78bfa;
+    font-size: clamp(1.55rem, 2.7vw, 2rem);
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .research-card-title {
+    margin-top: 1.35rem;
+    color: #d7d5df;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    font-weight: 800;
+    line-height: 1.35;
+  }
+
+  .research-card-summary {
+    margin-top: 1rem;
+    color: #7f7b90;
+    font-size: clamp(0.95rem, 1.35vw, 1.12rem);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .research-card-date {
+    margin-top: 1.5rem;
+    color: #555164;
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+
+  .research-card-arrow {
+    align-self: flex-end;
+    margin-top: auto;
+    color: #8b5cf6;
+    font-size: 1.1rem;
+    font-weight: 900;
+  }
+
+  .research-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.65rem;
+    margin-top: 2rem;
+  }
+
+  .research-pagination a {
+    border: 1px solid #201a3b;
+    border-radius: 4px;
+    color: #8d879b;
+    font-size: 0.95rem;
+    font-weight: 800;
+    padding: 0.52rem 0.72rem;
+    text-decoration: none;
+  }
+
+  .research-pagination a:hover,
+  .research-pagination a:focus-visible,
+  .research-pagination a.is-active {
+    border-color: #8b5cf6;
+    color: #a78bfa;
+  }
+
+  @media (max-width: 700px) {
+    .research-list-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .research-list-header h1 {
+      font-size: clamp(2.8rem, 14vw, 4.2rem);
+    }
+  }
+</style>

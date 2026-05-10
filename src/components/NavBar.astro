@@ -1,109 +1,121 @@
 ---
-import moonIcon from "../assets/moon.svg";
-import sunIcon from "../assets/sun.svg";
+const tickerItems = [
+  { symbol: "AVAX", price: "$9.93", change: "+3.7%" },
+  { symbol: "LINK", price: "$10.47", change: "+5.6%" },
+  { symbol: "BTC", price: "$80,330.00", change: "+0.2%" },
+  { symbol: "ETH", price: "$2,133.85", change: "+1.0%" },
+  { symbol: "SOL", price: "$93.58", change: "+5.6%" },
+  { symbol: "DOGE", price: "$0.1097", change: "+2.2%" },
+  { symbol: "HYPE", price: "$12.85", change: "+8.3%" },
+  { symbol: "BNB", price: "$650.21", change: "+1.6%" },
+  { symbol: "XRP", price: "$1.42", change: "+2.3%" },
+  { symbol: "ADA", price: "$0.59", change: "+1.9%" },
+];
 ---
 
-<nav class="w-full border-b border-(--border) bg-(--surface)">
-  <div class="mx-auto flex w-full max-w-5xl items-center gap-4 px-4 py-4">
-    <ul class="flex flex-1 items-center justify-evenly">
-      <li>
-        <a href="/" class="nav-link-hover text-base font-semibold">Home</a>
-      </li>
-      <li>
-        <a href="/about" class="nav-link-hover text-base font-semibold">About</a
-        >
-      </li>
-      <li>
-        <a href="/research" class="nav-link-hover text-base font-semibold"
-          >Research</a
-        >
-      </li>
-      <li>
-        <a href="/experience" class="nav-link-hover text-base font-semibold"
-          >Experience</a
-        >
-      </li>
-      <li>
-        <a href="/sny" class="nav-link-hover text-base font-semibold">S&Y</a>
-      </li>
-    </ul>
-    <button
-      id="theme-toggle"
-      type="button"
-      class="theme-toggle ml-auto"
-      aria-label="Toggle color theme"
-      aria-pressed="false"
-    >
-      <img
-        id="theme-icon-sun"
-        src={sunIcon.src}
-        alt=""
-        aria-hidden="true"
-        width="16"
-        height="16"
-        class="theme-toggle-icon is-hidden"
-      />
-      <img
-        id="theme-icon-moon"
-        src={moonIcon.src}
-        alt=""
-        aria-hidden="true"
-        width="16"
-        height="16"
-        class="theme-toggle-icon is-hidden"
-      />
-    </button>
+<div class="site-chrome">
+  <header class="site-header" aria-label="Site header">
+    <a class="brand-mark" href="#home" aria-label="smit3y.xyz home">
+      <span class="brand-icon" aria-hidden="true">S3</span>
+      <span>smit3y.xyz</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a class="is-active" href="#home" aria-current="page">Home</a>
+      <a href="#about">About</a>
+      <a href="#research">Research</a>
+      <a href="#experience">Experience</a>
+      <a href="#sny">S&amp;Y</a>
+    </nav>
+  </header>
+  <div class="market-ticker" aria-label="Market ticker">
+    <div class="market-ticker-track">
+      {
+        [...tickerItems, ...tickerItems].map((item) => (
+          <span class="market-ticker-item">
+            <span class="market-symbol">{item.symbol}</span>
+            <span class="market-price">{item.price}</span>
+            <span class="market-change">{item.change}</span>
+          </span>
+        ))
+      }
+    </div>
   </div>
+</div>
+<nav class="section-dots" aria-label="Section progress">
+  <a class="is-active" href="#home" aria-label="Home" aria-current="page"></a>
+  <a href="#about" aria-label="About"></a>
+  <a href="#research" aria-label="Research"></a>
+  <a href="#experience" aria-label="Experience"></a>
+  <a href="#sny" aria-label="S and Y"></a>
 </nav>
 
 <script>
-  const storageKey = "theme";
-  const root = document.documentElement;
-  const themeToggle = document.querySelector("#theme-toggle");
-  const sunIconEl = document.querySelector("#theme-icon-sun");
-  const moonIconEl = document.querySelector("#theme-icon-moon");
+  const navLinks = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>(".site-nav a[href^='#']"),
+  );
+  const dotLinks = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>(".section-dots a[href^='#']"),
+  );
+  const sectionLinks = [...navLinks, ...dotLinks];
 
-  const isDarkTheme = () => {
-    const explicit = root.dataset.theme;
-    if (explicit === "dark") return true;
-    if (explicit === "light") return false;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
-  };
+  const setActiveSection = (id: string) => {
+    for (const link of sectionLinks) {
+      const isActive = link.hash === `#${id}`;
+      link.classList.toggle("is-active", isActive);
 
-  const applyTheme = (theme: "light" | "dark" | null) => {
-    if (theme === "dark" || theme === "light") {
-      root.dataset.theme = theme;
-    } else {
-      delete root.dataset.theme;
-    }
-
-    const darkMode = isDarkTheme();
-
-    if (themeToggle instanceof HTMLButtonElement) {
-      themeToggle.setAttribute("aria-pressed", String(darkMode));
-      themeToggle.setAttribute(
-        "aria-label",
-        darkMode ? "Switch to light mode" : "Switch to dark mode",
-      );
-    }
-
-    if (sunIconEl instanceof HTMLImageElement) {
-      sunIconEl.classList.toggle("is-hidden", !darkMode);
-    }
-
-    if (moonIconEl instanceof HTMLImageElement) {
-      moonIconEl.classList.toggle("is-hidden", darkMode);
+      if (isActive) {
+        link.setAttribute("aria-current", "page");
+      } else {
+        link.removeAttribute("aria-current");
+      }
     }
   };
 
-  const savedTheme = localStorage.getItem(storageKey);
-  applyTheme(
-    savedTheme === "light" || savedTheme === "dark" ? savedTheme : null,
+  for (const link of sectionLinks) {
+    link.addEventListener("click", () => {
+      const id = link.hash.slice(1);
+      if (id) setActiveSection(id);
+    });
+  }
+
+  const sectionTargets = navLinks
+    .map((link) => document.querySelector<HTMLElement>(link.hash))
+    .filter((section): section is HTMLElement => section !== null);
+
+  const updateActiveSectionFromScroll = () => {
+    if (sectionTargets.length === 0) return;
+
+    const marker = window.innerHeight * 0.42;
+    let activeSection = sectionTargets[0];
+
+    for (let index = sectionTargets.length - 1; index >= 0; index -= 1) {
+      const section = sectionTargets[index];
+      const rect = section.getBoundingClientRect();
+
+      if (rect.top <= marker) {
+        activeSection = section;
+        break;
+      }
+    }
+
+    setActiveSection(activeSection.id);
+  };
+
+  let scrollFrame = 0;
+  window.addEventListener(
+    "scroll",
+    () => {
+      window.cancelAnimationFrame(scrollFrame);
+      scrollFrame = window.requestAnimationFrame(updateActiveSectionFromScroll);
+    },
+    { passive: true },
   );
 
-  themeToggle?.addEventListener("click", () => {
-    const nextTheme = isDarkTheme() ? "light" : "dark";
-    localStorage.setItem(storageKey, nextTheme);
-    applyTheme(nextTheme);
-  });
+  window.addEventListener("resize", updateActiveSectionFromScroll);
+
+  if ("fonts" in document) {
+    document.fonts.ready.then(updateActiveSectionFromScroll);
+  } else {
+    updateActiveSectionFromScroll();
+  }
 </script>

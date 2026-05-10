@@ -1,48 +1,26 @@
 ---
-import githubDarkIcon from "../assets/github-mark-white.png";
-import githubLightIcon from "../assets/github-mark.png";
-import linkedInDarkIcon from "../assets/InBug-White.png";
-import linkedInLightIcon from "../assets/InBug-Black.png";
-
 const emailAddress = "ssamsmit@umich.edu";
 ---
 
-<footer class="mt-auto w-full border-t border-(--border) bg-(--surface)">
-  <div
-    class="mx-auto flex w-full max-w-4xl flex-wrap items-center justify-between gap-4 px-6 py-6 text-sm text-(--muted)"
-  >
-    <p>
-      Contact Me:
-      <button
-        type="button"
-        class="copy-email-button font-semibold nav-link-hover"
-        data-email={emailAddress}
-        aria-label={`Copy ${emailAddress} to clipboard`}
-      >
-        {emailAddress}
-      </button>
-    </p>
+<footer class="site-footer" aria-label="Site footer">
+  <p>&copy; 2026 smit3y.xyz - Built by Samuel Smith</p>
+  <nav class="footer-links" aria-label="Footer links">
     <a
       href="https://www.linkedin.com/in/ssam-smith/"
       target="_blank"
       rel="noopener noreferrer me"
-      aria-label="LinkedIn profile"
-      class="social-link"
     >
-      <img
-        src={linkedInLightIcon.src}
-        alt=""
-        aria-hidden="true"
-        class="social-icon social-icon-light"
-      />
-      <img
-        src={linkedInDarkIcon.src}
-        alt=""
-        aria-hidden="true"
-        class="social-icon social-icon-dark"
-      />
+      LinkedIn
     </a>
-  </div>
+    <button
+      type="button"
+      class="copy-email-button email-link"
+      data-email={emailAddress}
+      aria-label={`Copy ${emailAddress} to clipboard`}
+    >
+      Email
+    </button>
+  </nav>
   <div class="copy-toast" role="status" aria-live="polite" aria-atomic="true">
     Email copied
   </div>
@@ -51,9 +29,9 @@ const emailAddress = "ssamsmit@umich.edu";
 <script>
   const copyButton = document.querySelector(".copy-email-button");
   const copyToast = document.querySelector(".copy-toast");
-  let toastTimeout;
+  let toastTimeout: number | undefined;
 
-  const showToast = (message) => {
+  const showToast = (message: string) => {
     if (!copyToast) return;
     copyToast.textContent = message;
     copyToast.classList.add("is-visible");
