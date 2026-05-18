@@ -1,8 +1,89 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { loadResearchEntries } from "../lib/research";
+import smit3yImage from "../assets/smit3y.jpg";
 
 const researchEntries = loadResearchEntries();
+const featuredResearchEntries = researchEntries.slice(0, 6);
+const experienceEntries = [
+  {
+    period: "SUMMER 2025",
+    role: "Wealth Management Intern",
+    organization: "Local Wealth Management Firm - San Diego, CA",
+    bullets: [
+      "Assisted in portfolio construction and client advisory across equity and fixed-income allocations",
+      "Conducted market research and financial analysis to support investment recommendations",
+      "Gained hands-on experience with institutional trading platforms and client relationship management",
+    ],
+  },
+  {
+    period: "2023 - PRESENT",
+    role: "Practice Player",
+    organization: "University of Michigan Women's Basketball",
+    bullets: [
+      "Selected as a practice player to train with Division I athletes, developing team-oriented discipline",
+      "Contributed to game preparation through simulation of opponent strategies and play execution",
+    ],
+  },
+  {
+    period: "2023 - PRESENT",
+    role: "Co-Founder",
+    organization: "S&Y Scholars - College Consulting",
+    bullets: [
+      "Co-founded a peer-to-peer college admissions consulting service helping families navigate recruitment and strategy",
+      "Provided essay editing, interview prep, and application strategy to high school students",
+      "Winner of the 2023 New York Times College Essay Challenge",
+    ],
+  },
+  {
+    period: "ONGOING",
+    role: "Independent Equity Research Analyst",
+    organization: "Self-Directed Research",
+    bullets: [
+      "Published investment theses covering crypto mining, SaaS, DeFi, and semiconductor sectors",
+      "Built financial models (DCF, comps, scenario analysis) for public equities and digital assets",
+      "Participated in the 2026 Perplexity Computer Student Stock Pitch Competition with a long thesis",
+    ],
+  },
+];
+const snyStats = [
+  { value: "37", label: "Schools Applied" },
+  { value: "75%+", label: "Success Rate" },
+  { value: "1570", label: "Combined SAT" },
+  { value: "4.7", label: "Combined GPA" },
+];
+const snyServices = [
+  {
+    title: "Interview & Resume Guidance",
+    description:
+      "Real-time consultation leveraging our personal experiences. Personalized strategy tailored to each student's aspirations.",
+    icon: "microphone",
+  },
+  {
+    title: "Essay Editing",
+    description:
+      "Refining application essays to showcase your unique strengths. We translate your voice directly onto paper.",
+    icon: "pen",
+  },
+  {
+    title: "Application Strategy",
+    description:
+      "Expert advice on school selection, timelines, and standing out. We applied to 37 schools between us.",
+    icon: "target",
+  },
+];
+const snyFounders = [
+  {
+    name: "Samuel Smith",
+    school: "University of Michigan - Economics & Psychology",
+    bio: "Junior at U of M, practice player on the Women's Basketball team, avid chess player, and winner of the 2023 New York Times College Essay Challenge. Currently interning at a local wealth management firm in San Diego.",
+  },
+  {
+    name: "Richard Yoon",
+    school: "Columbia University - Dual Degree with Sciences Po",
+    bio: "Junior at Columbia, spent first two years in Reims, France through the dual-degree program. Avid basketball player, 10+ years of robotics experience, and former Co-President of Mock Trial at La Jolla High.",
+  },
+];
 ---
 
 <BaseLayout title="smit3y.xyz" fullBleed={true}>
@@ -15,10 +96,8 @@ const researchEntries = loadResearchEntries();
         <span aria-hidden="true">·</span> FINANCIAL ANALYSIS
       </p>
       <p class="landing-secondary">
-        UNIVERSITY OF MICHIGAN <span aria-hidden="true">·</span> ECONOMICS &
-        PSYCHOLOGY
+        UNIVERSITY OF MICHIGAN <span aria-hidden="true">·</span> ECONOMICS & PSYCHOLOGY
       </p>
-      <p class="landing-domain">SMIT3Y.XYZ</p>
       <button class="landing-enter" type="button" aria-label="Enter smit3y.xyz">
         ENTER <span aria-hidden="true">→</span>
       </button>
@@ -32,8 +111,7 @@ const researchEntries = loadResearchEntries();
       </p>
       <h1 class="hero-title">SMIT3Y</h1>
       <p class="hero-subtitle">
-        FINANCIAL ANALYSIS <span aria-hidden="true">·</span> UNIVERSITY OF
-        MICHIGAN
+        FINANCIAL ANALYSIS <span aria-hidden="true">·</span> UNIVERSITY OF MICHIGAN
       </p>
       <div class="hero-actions" aria-label="Featured actions">
         <a class="hero-action hero-action-primary" href="#research">
@@ -47,24 +125,60 @@ const researchEntries = loadResearchEntries();
       <span aria-hidden="true">⌄</span>
     </a>
   </section>
-  <section id="about" class="content-section" aria-label="About">
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus finibus
-      justo vel neque luctus, a facilisis sem interdum.
-    </p>
+  <section id="about" class="about-section" aria-label="About">
+    <div class="about-shell">
+      <p class="about-kicker">// ABOUT</p>
+      <h2 class="about-title">Who I Am</h2>
+      <div class="about-content">
+        <div class="about-image-wrapper">
+          <img src={smit3yImage.src} alt="Eli Robinson" class="about-image" />
+        </div>
+        <div class="about-text">
+          <p class="about-paragraph about-paragraph-lead">
+            Samuel Andres Smith is an incoming senior at the University of
+            Michigan who writes, researches, and builds at the intersection of
+            digital assets and traditional finance. Currently a Sales, Trading,
+            and Prime Brokerage intern at Coinbase, he produces investor-focused
+            equity and tokenomic reports while mentoring peers through SNY
+            Scholars — a student-led program helping families navigate college
+            recruitment.
+          </p>
+          <p class="about-paragraph">
+            Samuel combines rigorous market analysis with a student’s
+            perspective to break down the most pivotal intersection of our
+            generation, AI and crypto. You can also catch Samuel in the gym,
+            playing basketball, or attempting to learn the electric guitar.
+          </p>
+          <div class="about-tags" aria-label="Focus areas">
+            <span>Equity Research</span>
+            <span>Bitcoin Mining</span>
+            <span>DeFi & Blockchain</span>
+            <span>SaaS Valuations</span>
+            <span>Financial Modeling</span>
+            <span>Quantitative Finance</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
   <section id="research" class="research-section" aria-label="Research">
     <div class="research-header">
       <p class="section-kicker">// RESEARCH</p>
       <h2>Investment Theses</h2>
       <p>
-        Deep-dive fundamental analysis on publicly traded companies across
-        crypto infrastructure, technology, and financial services.
+        My research portfolio spans equity analyses and tokenomic studies
+        written through an investor lens. I attempt to combine market data,
+        trends I see coming to fruition in my lifetime, and academic literature
+        to produce concise reports that inform investment decisions and
+        classroom learning — aimed at peers, funders, and practitioners seeking
+        clear, actionable analysis. I spend many nights and weekends researching
+        the next best beneficiary of our AI boom. You can find some of these
+        beneficiaries below.
       </p>
     </div>
     <div class="research-grid">
       {
-        researchEntries.map((entry) => (
+        featuredResearchEntries.map((entry) => (
           <a class="research-card" href={`/research/${entry.slug}`}>
             <span class="research-card-label">
               {entry.stockLabel || entry.title.split(" ")[0]}
@@ -80,18 +194,143 @@ const researchEntries = loadResearchEntries();
         ))
       }
     </div>
+    <div class="research-actions">
+      <a class="research-see-all" href="/research">See All</a>
+    </div>
   </section>
-  <section id="experience" class="content-section" aria-label="Experience">
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer aliquet
-      sapien vitae lorem dictum, et dignissim augue elementum.
-    </p>
+  <section id="experience" class="experience-section" aria-label="Experience">
+    <div class="experience-shell">
+      <div class="experience-header">
+        <p class="section-kicker">// EXPERIENCE</p>
+        <h2>Where I've Worked</h2>
+      </div>
+      <div class="experience-timeline">
+        {
+          experienceEntries.map((entry) => (
+            <article class="experience-item">
+              <p class="experience-period">{entry.period}</p>
+              <h3 class="experience-role">{entry.role}</h3>
+              <p class="experience-organization">{entry.organization}</p>
+              <ul class="experience-points">
+                {entry.bullets.map((point) => (
+                  <li>{point}</li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
   </section>
-  <section id="sny" class="content-section" aria-label="S and Y">
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean laoreet
-      tellus a nibh dignissim, eu feugiat neque suscipit.
-    </p>
+  <section id="sny" class="sny-section" aria-label="S and Y Scholars">
+    <div class="sny-shell">
+      <header class="sny-header">
+        <h2>S&amp;Y Scholars</h2>
+        <p>
+          Guidance from students who were in your shoes yesterday. Peer-to-peer
+          college admissions consulting.
+        </p>
+      </header>
+
+      <div class="sny-stats" aria-label="S and Y Scholars results">
+        {
+          snyStats.map((stat) => (
+            <article class="sny-stat-card">
+              <p class="sny-stat-value">{stat.value}</p>
+              <p class="sny-stat-label">{stat.label}</p>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="sny-services">
+        <p class="section-kicker">// SERVICES</p>
+        <h3>What We Offer</h3>
+        <div class="sny-services-grid">
+          {
+            snyServices.map((service) => (
+              <article class="sny-service-card">
+                <span class="sny-service-icon" aria-hidden="true">
+                  {service.icon === "microphone" && (
+                    <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                      <path
+                        d="M12 3a3 3 0 0 1 3 3v5a3 3 0 1 1-6 0V6a3 3 0 0 1 3-3Z"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                      <path
+                        d="M6.5 10.5a5.5 5.5 0 0 0 11 0M12 16v4M9 20h6"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </svg>
+                  )}
+                  {service.icon === "pen" && (
+                    <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                      <path
+                        d="m4 20 4-1 10-10-3-3L5 16l-1 4Z"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                      <path
+                        d="m13 6 3 3M4 20l4-4"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </svg>
+                  )}
+                  {service.icon === "target" && (
+                    <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="8"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                      ></circle>
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="4"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                      ></circle>
+                      <circle cx="12" cy="12" r="1.2" fill="currentColor"></circle>
+                    </svg>
+                  )}
+                </span>
+                <h4>{service.title}</h4>
+                <p>{service.description}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="sny-team">
+        <p class="section-kicker">// TEAM</p>
+        <h3>Meet the Founders</h3>
+        <div class="sny-founders-grid">
+          {
+            snyFounders.map((founder) => (
+              <article class="sny-founder-card">
+                <h4>{founder.name}</h4>
+                <p class="sny-founder-school">{founder.school}</p>
+                <p>{founder.bio}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </div>
   </section>
 
   <script>
@@ -133,7 +372,8 @@ const researchEntries = loadResearchEntries();
       if (!heroSection) return 0;
 
       const rect = heroSection.getBoundingClientRect();
-      const progress = -rect.top / Math.max(rect.height - window.innerHeight, 1);
+      const progress =
+        -rect.top / Math.max(rect.height - window.innerHeight, 1);
       return clamp(progress, 0, 1);
     };
 
@@ -194,11 +434,14 @@ const researchEntries = loadResearchEntries();
       for (const particle of particles) {
         const wobble = Math.sin(time * 0.00018 + particle.phase * Math.PI * 2);
         const angle = particle.angle + wobble * 0.08;
-        const radius =
-          baseRadius * (0.55 + particle.radius * 2.25) * expansion;
+        const radius = baseRadius * (0.55 + particle.radius * 2.25) * expansion;
         const x = centerX + Math.cos(angle) * radius;
         const y = centerY + Math.sin(angle) * radius * 0.52;
-        const alpha = clamp(0.08 + particle.phase * 0.08 - progress * 0.02, 0.05, 0.16);
+        const alpha = clamp(
+          0.08 + particle.phase * 0.08 - progress * 0.02,
+          0.05,
+          0.16,
+        );
         const glow = particleContext.createRadialGradient(
           x,
           y,
@@ -261,6 +504,44 @@ const researchEntries = loadResearchEntries();
           particleAnimationFrame = window.requestAnimationFrame(drawParticles);
         }
       });
+    }
+
+    const experienceItems = Array.from(
+      document.querySelectorAll<HTMLElement>(".experience-item"),
+    );
+
+    const revealAllExperienceItems = () => {
+      for (const item of experienceItems) {
+        item.classList.add("is-visible");
+      }
+    };
+
+    if (experienceItems.length > 0) {
+      if (reduceMotion.matches || !("IntersectionObserver" in window)) {
+        revealAllExperienceItems();
+      } else {
+        const experienceObserver = new IntersectionObserver(
+          (entries, observer) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          },
+          { threshold: 0.22, rootMargin: "0px 0px -8% 0px" },
+        );
+
+        experienceItems.forEach((item, index) => {
+          item.style.transitionDelay = `${Math.min(index * 90, 300)}ms`;
+          experienceObserver.observe(item);
+        });
+
+        reduceMotion.addEventListener("change", () => {
+          if (!reduceMotion.matches) return;
+          experienceObserver.disconnect();
+          revealAllExperienceItems();
+        });
+      }
     }
   </script>
 </BaseLayout>
@@ -326,7 +607,6 @@ const researchEntries = loadResearchEntries();
   .landing-rule,
   .landing-primary,
   .landing-secondary,
-  .landing-domain,
   .landing-enter {
     animation: landing-reveal 900ms ease-out both;
   }
@@ -559,6 +839,136 @@ const researchEntries = loadResearchEntries();
     line-height: 1.7;
   }
 
+  .about-section {
+    min-height: 100svh;
+    background:
+      radial-gradient(
+        circle at 5% 45%,
+        rgba(139, 92, 246, 0.2),
+        transparent 35rem
+      ),
+      radial-gradient(
+        circle at 95% 35%,
+        rgba(30, 90, 228, 0.12),
+        transparent 24rem
+      ),
+      #04050f;
+    color: #5f6070;
+    padding: clamp(4.5rem, 8vw, 6.8rem) 0;
+    scroll-margin-top: 4rem;
+    transition: opacity 700ms ease;
+  }
+
+  .about-shell {
+    width: var(--site-column);
+    margin: 0 auto;
+  }
+
+  .about-kicker {
+    margin: 0;
+    color: #8b5cf6;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.9rem, 1.3vw, 1.12rem);
+    font-weight: 800;
+    letter-spacing: 0.35em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  .about-content {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: clamp(2.2rem, 4.8vw, 4.4rem);
+    align-items: flex-start;
+    margin-top: clamp(2.2rem, 4vw, 3.2rem);
+  }
+
+  .about-image-wrapper {
+    position: relative;
+    width: clamp(16.5rem, 28vw, 22rem);
+    aspect-ratio: 1;
+    border: 1px solid #161837;
+    border-radius: 12px;
+    background: #05061a;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(96, 75, 167, 0.22);
+  }
+
+  .about-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 16%;
+  }
+
+  .about-text {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.2rem, 2.1vw, 1.8rem);
+  }
+
+  .about-title {
+    margin: clamp(1.2rem, 2.8vw, 2rem) 0 0;
+    color: #e7e8f1;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(3.3rem, 8vw, 5.7rem);
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 0.95;
+  }
+
+  .about-paragraph {
+    margin: 0;
+    max-width: 38rem;
+    color: #87879b;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(1rem, 1.6vw, 1.24rem);
+    font-weight: 600;
+    line-height: 1.55;
+  }
+
+  .about-paragraph-lead {
+    color: #d7d8e5;
+  }
+
+  .about-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 0.3rem;
+  }
+
+  .about-tags span {
+    border: 1px solid #1b1f44;
+    border-radius: 999px;
+    background: rgba(17, 19, 47, 0.78);
+    color: #8587a2;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+    font-weight: 600;
+    line-height: 1;
+    padding: 0.65rem 1rem;
+    cursor: default;
+    transition:
+      transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 280ms ease,
+      border-color 280ms ease,
+      background-color 280ms ease,
+      color 280ms ease;
+    will-change: transform, box-shadow;
+  }
+
+  .about-tags span:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 8px 20px rgba(0, 0, 0, 0.35),
+      0 0 0 1px rgba(139, 92, 246, 0.25),
+      0 0 16px rgba(139, 92, 246, 0.08);
+    border-color: #2a224a;
+    background: rgba(27, 19, 47, 0.88);
+    color: #c4b5fd;
+  }
+
   .content-section {
     display: grid;
     min-height: 72svh;
@@ -573,7 +983,11 @@ const researchEntries = loadResearchEntries();
   .research-section {
     min-height: 100svh;
     background:
-      radial-gradient(circle at 92% 8%, rgba(139, 92, 246, 0.08), transparent 32rem),
+      radial-gradient(
+        circle at 92% 8%,
+        rgba(139, 92, 246, 0.08),
+        transparent 32rem
+      ),
       #000;
     color: #d7d5df;
     padding: clamp(5rem, 9vw, 7rem) 0;
@@ -609,7 +1023,7 @@ const researchEntries = loadResearchEntries();
   }
 
   .research-header > p:last-child {
-    max-width: 38rem;
+    /*max-width: 58rem;*/
     margin: clamp(1.1rem, 2vw, 1.5rem) 0 0;
     color: #7f7b90;
     font-family: Inconsolata, monospace;
@@ -623,6 +1037,43 @@ const researchEntries = loadResearchEntries();
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(1rem, 2vw, 1.35rem);
     margin-top: clamp(3rem, 6vw, 4.2rem);
+  }
+
+  .research-actions {
+    width: var(--site-column);
+    margin: clamp(1.6rem, 3vw, 2.2rem) auto 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .research-see-all {
+    border: 1px solid #201a3b;
+    border-radius: 4px;
+    color: #8d879b;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.95rem, 1.25vw, 1.02rem);
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    line-height: 1;
+    padding: 0.8rem 1.35rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      border-color 180ms ease,
+      color 180ms ease,
+      background-color 180ms ease;
+  }
+
+  .research-see-all:hover,
+  .research-see-all:focus-visible {
+    border-color: #8b5cf6;
+    background: rgba(28, 22, 52, 0.72);
+    color: #c4b5fd;
+  }
+
+  .research-see-all:focus-visible {
+    outline: 1px solid #8b5cf6;
+    outline-offset: 0.35rem;
   }
 
   .research-card {
@@ -691,6 +1142,347 @@ const researchEntries = loadResearchEntries();
     line-height: 1;
   }
 
+  .experience-section {
+    min-height: 100svh;
+    background:
+      radial-gradient(
+        circle at 8% 46%,
+        rgba(139, 92, 246, 0.16),
+        transparent 34rem
+      ),
+      radial-gradient(
+        circle at 94% 55%,
+        rgba(35, 137, 255, 0.1),
+        transparent 30rem
+      ),
+      #04050f;
+    color: #d7d5df;
+    padding: clamp(5rem, 9vw, 7rem) 0;
+    scroll-margin-top: 4rem;
+    transition: opacity 700ms ease;
+  }
+
+  .experience-shell {
+    width: var(--site-column);
+    margin: 0 auto;
+  }
+
+  .experience-header h2 {
+    margin: clamp(1.2rem, 2.8vw, 2rem) 0 0;
+    color: #dedce7;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(3.3rem, 8vw, 5.7rem);
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 0.95;
+  }
+
+  .experience-timeline {
+    position: relative;
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.4rem);
+    margin-top: clamp(2.8rem, 5vw, 3.7rem);
+    padding-left: clamp(1.2rem, 2.1vw, 1.55rem);
+  }
+
+  .experience-timeline::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      rgba(139, 92, 246, 0.95) 0%,
+      rgba(35, 137, 255, 0.9) 48%,
+      rgba(12, 17, 44, 0.18) 100%
+    );
+  }
+
+  .experience-item {
+    position: relative;
+    border: 1px solid #15142d;
+    border-radius: 8px;
+    background: rgba(10, 10, 28, 0.72);
+    padding: clamp(1.4rem, 2.4vw, 1.85rem);
+    opacity: 0;
+    transform: translateX(-3.2rem);
+    transition:
+      opacity 620ms ease,
+      transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .experience-item::before {
+    content: "";
+    position: absolute;
+    top: clamp(1.35rem, 2.5vw, 1.8rem);
+    left: calc(clamp(1.2rem, 2.1vw, 1.55rem) * -1 - 0.32rem);
+    width: 0.45rem;
+    aspect-ratio: 1;
+    border: 1px solid #8b5cf6;
+    border-radius: 999px;
+    background: #8b5cf6;
+    box-shadow: 0 0 0 6px rgba(11, 12, 29, 0.95);
+  }
+
+  .experience-item.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .experience-period {
+    margin: 0;
+    color: #525675;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.86rem, 1.1vw, 1rem);
+    font-weight: 800;
+    letter-spacing: 0.23em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .experience-role {
+    margin: 0.8rem 0 0;
+    color: #dcdeea;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(1.25rem, 2vw, 1.55rem);
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .experience-organization {
+    margin: 0.45rem 0 0;
+    color: #8b5cf6;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(1rem, 1.55vw, 1.22rem);
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .experience-points {
+    display: grid;
+    gap: 0.52rem;
+    margin: 1.1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .experience-points li {
+    color: #74788f;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.95rem, 1.3vw, 1.08rem);
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  .experience-points li::before {
+    content: ">";
+    color: #8b5cf6;
+    font-weight: 800;
+    margin-right: 0.55rem;
+  }
+
+  .sny-section {
+    min-height: 100svh;
+    background:
+      radial-gradient(
+        circle at 50% 28%,
+        rgba(35, 137, 255, 0.24),
+        transparent 28rem
+      ),
+      radial-gradient(
+        circle at 7% 48%,
+        rgba(139, 92, 246, 0.15),
+        transparent 30rem
+      ),
+      #04050f;
+    color: #d7d5df;
+    padding: clamp(5rem, 9vw, 7rem) 0;
+    scroll-margin-top: 4rem;
+    transition: opacity 700ms ease;
+  }
+
+  .sny-shell {
+    width: var(--site-column);
+    margin: 0 auto;
+  }
+
+  .sny-header {
+    text-align: center;
+    padding-bottom: clamp(2.2rem, 4.2vw, 3rem);
+    border-bottom: 1px solid #12152f;
+  }
+
+  .sny-header h2 {
+    margin: 0;
+    color: #5ba6ff;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(3.1rem, 7.2vw, 5rem);
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    line-height: 0.98;
+  }
+
+  .sny-header p {
+    max-width: 34rem;
+    margin: clamp(1rem, 2vw, 1.4rem) auto 0;
+    color: #737896;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(1rem, 1.4vw, 1.12rem);
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  .sny-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.4vw, 1rem);
+    margin-top: clamp(1.8rem, 3.2vw, 2.4rem);
+  }
+
+  .sny-stat-card {
+    border: 1px solid #161a38;
+    border-radius: 8px;
+    background: rgba(10, 11, 29, 0.74);
+    padding: clamp(1.35rem, 2.3vw, 1.85rem) 1rem;
+    text-align: center;
+  }
+
+  .sny-stat-value {
+    margin: 0;
+    color: #5ba6ff;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(2.3rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .sny-stat-label {
+    margin: 0.9rem 0 0;
+    color: #646b89;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.9rem, 1.1vw, 0.98rem);
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .sny-services {
+    margin-top: clamp(2.3rem, 4.4vw, 3.4rem);
+  }
+
+  .sny-services h3 {
+    margin: clamp(1rem, 2.3vw, 1.5rem) 0 0;
+    color: #dedce7;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(3.3rem, 8vw, 5.7rem);
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 0.95;
+  }
+
+  .sny-services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.85rem, 1.8vw, 1.2rem);
+    margin-top: clamp(1.3rem, 2.2vw, 1.7rem);
+  }
+
+  .sny-service-card {
+    border: 1px solid #161a38;
+    border-radius: 8px;
+    background: rgba(10, 11, 29, 0.74);
+    padding: clamp(1.2rem, 2vw, 1.6rem);
+  }
+
+  .sny-service-icon {
+    display: inline-flex;
+    width: 1.55rem;
+    aspect-ratio: 1;
+    align-items: center;
+    color: #8b5cf6;
+  }
+
+  .sny-service-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .sny-service-card h4 {
+    margin: 0.95rem 0 0;
+    color: #d5d8e8;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(1rem, 1.4vw, 1.16rem);
+    font-weight: 800;
+    line-height: 1.35;
+  }
+
+  .sny-service-card p {
+    margin: 0.8rem 0 0;
+    color: #747b97;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.96rem, 1.25vw, 1.06rem);
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  .sny-team {
+    margin-top: clamp(2.8rem, 5vw, 3.8rem);
+  }
+
+  .sny-team h3 {
+    margin: clamp(1rem, 2.3vw, 1.5rem) 0 0;
+    color: #dedce7;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(3.3rem, 8vw, 5.7rem);
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 0.95;
+  }
+
+  .sny-founders-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.85rem, 1.8vw, 1.2rem);
+    margin-top: clamp(1.3rem, 2.2vw, 1.7rem);
+  }
+
+  .sny-founder-card {
+    border: 1px solid #161a38;
+    border-radius: 8px;
+    background: rgba(10, 11, 29, 0.74);
+    padding: clamp(1.2rem, 2vw, 1.6rem);
+  }
+
+  .sny-founder-card h4 {
+    margin: 0;
+    color: #a78bfa;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(1.25rem, 1.8vw, 1.62rem);
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .sny-founder-school {
+    margin: 0.62rem 0 0;
+    color: #d5d8e8;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(1rem, 1.4vw, 1.18rem);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .sny-founder-card p {
+    margin: 0.8rem 0 0;
+    color: #747b97;
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.96rem, 1.25vw, 1.06rem);
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
   .landing-enter:hover,
   .landing-enter:focus-visible {
     color: #fff;
@@ -728,6 +1520,40 @@ const researchEntries = loadResearchEntries();
       letter-spacing: 0.22em;
     }
 
+    .about-kicker {
+      letter-spacing: 0.24em;
+    }
+
+    .about-content {
+      grid-template-columns: 1fr;
+      justify-items: start;
+      gap: clamp(1.2rem, 3vw, 1.7rem);
+      margin-top: 1.4rem;
+    }
+
+    .about-image-wrapper {
+      width: clamp(14rem, 55vw, 18rem);
+      border-radius: 12px;
+    }
+
+    .about-text {
+      text-align: left;
+      gap: 1rem;
+    }
+
+    .about-title {
+      margin-top: 0.8rem;
+    }
+
+    .about-tags {
+      gap: 0.55rem;
+    }
+
+    .about-tags span {
+      font-size: 0.95rem;
+      padding: 0.62rem 0.95rem;
+    }
+
     .home-section {
       min-height: calc(100svh - 7rem);
       padding: 3rem 0 5.5rem;
@@ -760,6 +1586,43 @@ const researchEntries = loadResearchEntries();
     .research-header h2 {
       font-size: clamp(2.8rem, 14vw, 4.2rem);
     }
+
+    .experience-header h2 {
+      font-size: clamp(2.8rem, 14vw, 4.2rem);
+    }
+
+    .experience-timeline {
+      padding-left: 0.95rem;
+      margin-top: 1.9rem;
+    }
+
+    .experience-item {
+      padding: 1.05rem;
+    }
+
+    .experience-item::before {
+      left: -0.25rem;
+      width: 0.4rem;
+      top: 1.08rem;
+    }
+
+    .sny-header h2,
+    .sny-services h3,
+    .sny-team h3 {
+      font-size: clamp(2.8rem, 14vw, 4.2rem);
+    }
+
+    .sny-stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .sny-services-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .sny-founders-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -770,6 +1633,12 @@ const researchEntries = loadResearchEntries();
     .landing-domain,
     .landing-enter {
       animation: none;
+    }
+
+    .experience-item {
+      opacity: 1;
+      transform: none;
+      transition: none;
     }
   }
 </style>

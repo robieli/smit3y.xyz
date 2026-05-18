@@ -6,6 +6,10 @@
   font-family: Inconsolata, monospace;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: Inconsolata, monospace;
 }
@@ -335,5 +339,11 @@ body {
   .section-dots a {
     width: 0.58rem;
     border-width: 1px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
