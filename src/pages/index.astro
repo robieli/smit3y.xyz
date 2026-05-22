@@ -104,7 +104,6 @@ const snyFounders = [
     </div>
   </section>
   <section id="home" class="home-section" aria-label="Home">
-    <canvas class="hero-particles" aria-hidden="true"></canvas>
     <div class="hero-content">
       <p class="hero-kicker">
         EQUITY RESEARCH <span aria-hidden="true">·</span> CRYPTO INFRASTRUCTURE
@@ -347,164 +346,7 @@ const snyFounders = [
 
     enterButton?.addEventListener("click", enterSite);
 
-    const particleCanvas =
-      document.querySelector<HTMLCanvasElement>(".hero-particles");
-    const heroSection = document.querySelector<HTMLElement>(".home-section");
-    const particleContext = particleCanvas?.getContext("2d");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const particleCount = 62;
-    const particles = Array.from({ length: particleCount }, (_, index) => ({
-      angle: (Math.PI * 2 * ((index * 37) % particleCount)) / particleCount,
-      radius: 0.28 + ((index * 41) % 100) / 100,
-      size: 18 + ((index * 23) % 46),
-      phase: ((index * 29) % 100) / 100,
-    }));
-
-    let canvasWidth = 0;
-    let canvasHeight = 0;
-    let deviceScale = 1;
-    let particleAnimationFrame = 0;
-
-    const clamp = (value: number, min: number, max: number) =>
-      Math.min(Math.max(value, min), max);
-
-    const getHeroScrollProgress = () => {
-      if (!heroSection) return 0;
-
-      const rect = heroSection.getBoundingClientRect();
-      const progress =
-        -rect.top / Math.max(rect.height - window.innerHeight, 1);
-      return clamp(progress, 0, 1);
-    };
-
-    const resizeParticleCanvas = () => {
-      if (!particleCanvas || !particleContext) return;
-
-      const rect = particleCanvas.getBoundingClientRect();
-      deviceScale = Math.min(window.devicePixelRatio || 1, 2);
-      canvasWidth = rect.width;
-      canvasHeight = rect.height;
-      particleCanvas.width = Math.floor(canvasWidth * deviceScale);
-      particleCanvas.height = Math.floor(canvasHeight * deviceScale);
-      particleContext.setTransform(deviceScale, 0, 0, deviceScale, 0, 0);
-    };
-
-    const drawParticles = (time: number) => {
-      if (!particleCanvas || !particleContext || reduceMotion.matches) return;
-
-      const progress = getHeroScrollProgress();
-      const centerX = canvasWidth / 2;
-      const centerY = canvasHeight * 0.47;
-      const baseRadius = Math.min(canvasWidth, canvasHeight) * 0.16;
-      const expansion = 1 + progress * 1.45;
-      const rotation = time * 0.00035;
-
-      particleContext.clearRect(0, 0, canvasWidth, canvasHeight);
-
-      const fieldGradient = particleContext.createRadialGradient(
-        centerX,
-        centerY,
-        baseRadius * 0.2,
-        centerX,
-        centerY,
-        baseRadius * (2.35 + progress * 1.1),
-      );
-      fieldGradient.addColorStop(0, "rgba(255, 255, 255, 0.34)");
-      fieldGradient.addColorStop(0.28, "rgba(210, 209, 223, 0.24)");
-      fieldGradient.addColorStop(0.64, "rgba(128, 124, 145, 0.15)");
-      fieldGradient.addColorStop(1, "rgba(8, 9, 19, 0)");
-
-      particleContext.fillStyle = fieldGradient;
-      particleContext.beginPath();
-      particleContext.ellipse(
-        centerX,
-        centerY,
-        baseRadius * (3.2 + progress * 1.1),
-        baseRadius * (1.72 + progress * 0.42),
-        0,
-        0,
-        Math.PI * 2,
-      );
-      particleContext.fill();
-
-      particleContext.save();
-      particleContext.globalCompositeOperation = "screen";
-      particleContext.filter = `blur(${Math.max(18, baseRadius * 0.18)}px)`;
-
-      for (const particle of particles) {
-        const wobble = Math.sin(time * 0.00018 + particle.phase * Math.PI * 2);
-        const angle = particle.angle + wobble * 0.08;
-        const radius = baseRadius * (0.55 + particle.radius * 2.25) * expansion;
-        const x = centerX + Math.cos(angle) * radius;
-        const y = centerY + Math.sin(angle) * radius * 0.52;
-        const alpha = clamp(
-          0.08 + particle.phase * 0.08 - progress * 0.02,
-          0.05,
-          0.16,
-        );
-        const glow = particleContext.createRadialGradient(
-          x,
-          y,
-          0,
-          x,
-          y,
-          particle.size,
-        );
-
-        glow.addColorStop(0, `rgba(255, 255, 255, ${alpha})`);
-        glow.addColorStop(0.45, `rgba(160, 155, 178, ${alpha * 0.66})`);
-        glow.addColorStop(1, "rgba(160, 155, 178, 0)");
-
-        particleContext.beginPath();
-        particleContext.fillStyle = glow;
-        particleContext.arc(x, y, particle.size, 0, Math.PI * 2);
-        particleContext.fill();
-      }
-
-      particleContext.restore();
-
-      const sphereRadius = baseRadius * 0.42;
-      const sphereX = centerX + Math.cos(rotation) * sphereRadius * 0.11;
-      const sphereY = centerY + Math.sin(rotation * 1.3) * sphereRadius * 0.08;
-      const sphereGradient = particleContext.createRadialGradient(
-        sphereX - sphereRadius * 0.32,
-        sphereY - sphereRadius * 0.32,
-        sphereRadius * 0.08,
-        sphereX,
-        sphereY,
-        sphereRadius,
-      );
-
-      sphereGradient.addColorStop(0, "rgba(255, 255, 255, 0.38)");
-      sphereGradient.addColorStop(0.38, "rgba(180, 178, 196, 0.22)");
-      sphereGradient.addColorStop(0.72, "rgba(92, 88, 112, 0.16)");
-      sphereGradient.addColorStop(1, "rgba(20, 18, 32, 0)");
-
-      particleContext.fillStyle = sphereGradient;
-      particleContext.beginPath();
-      particleContext.arc(sphereX, sphereY, sphereRadius, 0, Math.PI * 2);
-      particleContext.fill();
-
-      particleAnimationFrame = window.requestAnimationFrame(drawParticles);
-    };
-
-    if (particleCanvas && particleContext) {
-      resizeParticleCanvas();
-      window.addEventListener("resize", resizeParticleCanvas);
-
-      if (!reduceMotion.matches) {
-        particleAnimationFrame = window.requestAnimationFrame(drawParticles);
-      }
-
-      reduceMotion.addEventListener("change", () => {
-        window.cancelAnimationFrame(particleAnimationFrame);
-        particleContext.clearRect(0, 0, canvasWidth, canvasHeight);
-
-        if (!reduceMotion.matches) {
-          particleAnimationFrame = window.requestAnimationFrame(drawParticles);
-        }
-      });
-    }
 
     const experienceItems = Array.from(
       document.querySelectorAll<HTMLElement>(".experience-item"),
@@ -694,24 +536,6 @@ const snyFounders = [
     color: #5f6070;
     padding: clamp(4rem, 8vw, 6.5rem) 0 clamp(5.5rem, 10vw, 8rem);
     transition: opacity 700ms ease;
-  }
-
-  .hero-particles {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    width: 100%;
-    height: 100%;
-    mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      #000 11%,
-      #000 64%,
-      rgba(0, 0, 0, 0.65) 78%,
-      transparent 100%
-    );
-    opacity: 0.95;
-    pointer-events: none;
   }
 
   .hero-content {
