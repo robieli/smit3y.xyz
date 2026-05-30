@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { loadResearchEntries } from "../lib/research";
 import smit3yImage from "../assets/smit3y.jpg";
+import GlobeMesh from "../components/GlobeMesh.astro";
 
 const researchEntries = loadResearchEntries();
 const featuredResearchEntries = researchEntries.slice(0, 6);
@@ -90,20 +91,24 @@ const snyFounders = [
   <section class="landing-screen" aria-label="Smit3y landing page">
     <div class="landing-content">
       <h1 class="landing-title">SMIT3Y</h1>
-      <div class="landing-rule" aria-hidden="true"></div>
-      <p class="landing-primary">
-        EQUITY RESEARCH <span aria-hidden="true">·</span> CRYPTO INFRASTRUCTURE
-        <span aria-hidden="true">·</span> FINANCIAL ANALYSIS
-      </p>
-      <p class="landing-secondary">
-        UNIVERSITY OF MICHIGAN <span aria-hidden="true">·</span> ECONOMICS & PSYCHOLOGY
-      </p>
       <button class="landing-enter" type="button" aria-label="Enter smit3y.xyz">
         ENTER <span aria-hidden="true">→</span>
       </button>
     </div>
   </section>
   <section id="home" class="home-section" aria-label="Home">
+    <div class="hero-backdrop" aria-hidden="true">
+      <div class="hero-backdrop-globe">
+        <GlobeMesh
+          size={420}
+          lineCount={18}
+          color="#7F77DD"
+          backOpacityPct={18}
+          tiltXDeg={12}
+          autoSpin={true}
+        />
+      </div>
+    </div>
     <div class="hero-content">
       <p class="hero-kicker">
         EQUITY RESEARCH <span aria-hidden="true">·</span> CRYPTO INFRASTRUCTURE
@@ -143,7 +148,7 @@ const snyFounders = [
             recruitment.
           </p>
           <p class="about-paragraph">
-            Samuel combines rigorous market analysis with a student’s
+            Samuel combines rigorous market analysis with a student's
             perspective to break down the most pivotal intersection of our
             generation, AI and crypto. You can also catch Samuel in the gym,
             playing basketball, or attempting to learn the electric guitar.
@@ -390,7 +395,33 @@ const snyFounders = [
 
 <style>
   :global(body) {
-    background: #000;
+    background:
+      radial-gradient(
+        circle at 12% 12%,
+        var(--glow-6),
+        transparent 32rem
+      ),
+      radial-gradient(
+        circle at 90% 8%,
+        var(--glow-7),
+        transparent 34rem
+      ),
+      radial-gradient(
+        circle at 6% 40%,
+        var(--glow-1),
+        transparent 36rem
+      ),
+      radial-gradient(
+        circle at 92% 52%,
+        var(--glow-4),
+        transparent 32rem
+      ),
+      radial-gradient(
+        circle at 50% 78%,
+        var(--glow-5),
+        transparent 30rem
+      ),
+      var(--bg-1);
   }
 
   :global(body:not(.site-entered)) {
@@ -423,8 +454,8 @@ const snyFounders = [
     display: grid;
     place-items: center;
     overflow: hidden;
-    background: #000;
-    color: #fff;
+    background: var(--bg-0);
+    color: var(--text-bright);
     padding: clamp(2rem, 5vw, 4rem);
     transition:
       opacity 700ms ease,
@@ -446,16 +477,13 @@ const snyFounders = [
   }
 
   .landing-title,
-  .landing-rule,
-  .landing-primary,
-  .landing-secondary,
   .landing-enter {
     animation: landing-reveal 900ms ease-out both;
   }
 
   .landing-title {
     margin: 0;
-    color: #f8f8f8;
+    color: var(--text-landing);
     font-family: Inconsolata, monospace;
     font-size: clamp(3.8rem, 13vw, 8.5rem);
     font-weight: 900;
@@ -463,55 +491,11 @@ const snyFounders = [
     line-height: 0.78;
   }
 
-  .landing-rule {
-    width: min(7.5rem, 28vw);
-    height: 1px;
-    margin-top: clamp(2.8rem, 6vw, 4rem);
-    background: linear-gradient(90deg, transparent, #444, transparent);
-    animation-delay: 180ms;
-  }
-
-  .landing-primary {
-    max-width: 56rem;
-    margin: clamp(2.5rem, 5.5vw, 4.2rem) 0 0;
-    color: #777;
-    font-family: Inconsolata, monospace;
-    font-size: clamp(1rem, 1.8vw, 1.25rem);
-    font-weight: 500;
-    letter-spacing: 0.32em;
-    line-height: 1.9;
-    text-transform: uppercase;
-    animation-delay: 320ms;
-  }
-
-  .landing-secondary {
-    margin: clamp(1.2rem, 3vw, 1.6rem) 0 0;
-    color: #515151;
-    font-family: Inconsolata, monospace;
-    font-size: clamp(0.82rem, 1.35vw, 1rem);
-    font-weight: 500;
-    letter-spacing: 0.35em;
-    line-height: 1.75;
-    text-transform: uppercase;
-    animation-delay: 460ms;
-  }
-
-  .landing-domain {
-    margin: clamp(1.4rem, 3vw, 1.9rem) 0 0;
-    color: #151515;
-    font-family: Inconsolata, monospace;
-    font-size: 0.82rem;
-    font-weight: 600;
-    letter-spacing: 0.28em;
-    line-height: 1;
-    animation-delay: 600ms;
-  }
-
   .landing-enter {
     border: 0;
-    margin-top: clamp(1.4rem, 3vw, 1.8rem);
+    margin-top: clamp(2.8rem, 6vw, 4rem);
     background: transparent;
-    color: #8d8d8d;
+    color: var(--text-muted);
     cursor: pointer;
     font-family: Inconsolata, monospace;
     font-size: clamp(0.88rem, 1.4vw, 1rem);
@@ -522,7 +506,18 @@ const snyFounders = [
     transition:
       color 180ms ease,
       transform 180ms ease;
-    animation-delay: 740ms;
+    animation-delay: 300ms;
+  }
+
+  .landing-enter:hover,
+  .landing-enter:focus-visible {
+    color: var(--text-bright);
+    transform: translateY(-2px);
+  }
+
+  .landing-enter:focus-visible {
+    outline: 1px solid var(--text-outline);
+    outline-offset: 0.6rem;
   }
 
   .home-section {
@@ -532,10 +527,41 @@ const snyFounders = [
     overflow: hidden;
     place-items: center;
     scroll-margin-top: 0;
-    background: #000;
-    color: #5f6070;
+    background: transparent;
+    color: var(--text-dim);
     padding: clamp(4rem, 8vw, 6.5rem) 0 clamp(5.5rem, 10vw, 8rem);
     transition: opacity 700ms ease;
+  }
+
+  .hero-backdrop {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 0;
+    mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 1) 52%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 1) 52%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+
+  .hero-backdrop-globe {
+    opacity: 0.45;
+  }
+
+  .hero-backdrop #globe-wrap {
+    padding: 0;
+    gap: 0;
   }
 
   .hero-content {
@@ -559,14 +585,14 @@ const snyFounders = [
 
   .hero-kicker {
     margin: 0;
-    color: #8b5cf6;
+    color: var(--accent);
     font-size: clamp(0.78rem, 1.35vw, 1.1rem);
   }
 
   .hero-title {
     display: inline-block;
     margin: clamp(1.6rem, 3.5vw, 2.4rem) 0 0;
-    background: linear-gradient(100deg, #8791ff 7%, #5ea1f2 48%, #17bfd1 92%);
+    background: var(--gradient-hero);
     background-clip: text;
     color: transparent;
     font-family: Inconsolata, monospace;
@@ -579,7 +605,7 @@ const snyFounders = [
 
   .hero-subtitle {
     margin: clamp(2.1rem, 4vw, 3rem) 0 0;
-    color: #787789;
+    color: var(--text-sub);
     font-size: clamp(0.9rem, 1.5vw, 1.18rem);
   }
 
@@ -596,9 +622,9 @@ const snyFounders = [
     min-width: min(100%, 10.8rem);
     align-items: center;
     justify-content: center;
-    border: 1px solid #31294d;
+    border: 1px solid var(--border-6);
     border-radius: 4px;
-    color: #868393;
+    color: var(--text-hero-action);
     font-size: clamp(0.78rem, 1.15vw, 0.98rem);
     min-height: 3rem;
     padding: 0.88rem 1.55rem;
@@ -612,26 +638,26 @@ const snyFounders = [
 
   .hero-action:hover,
   .hero-action:focus-visible {
-    color: #fff;
+    color: var(--text-bright);
     transform: translateY(-2px);
   }
 
   .hero-action:focus-visible,
   .scroll-cue:focus-visible {
-    outline: 1px solid #8b5cf6;
+    outline: 1px solid var(--accent);
     outline-offset: 0.35rem;
   }
 
   .hero-action-primary {
-    border-color: #8b5cf6;
-    background: #8b5cf6;
+    border-color: var(--accent);
+    background: var(--accent);
     color: #fff;
   }
 
   .hero-action-secondary:hover,
   .hero-action-secondary:focus-visible {
-    border-color: #6d5f91;
-    background: #100d1b;
+    border-color: var(--border-hero-hover);
+    background: var(--bg-hero-hover);
   }
 
   .scroll-cue {
@@ -643,7 +669,7 @@ const snyFounders = [
     flex-direction: column;
     align-items: center;
     gap: 0.45rem;
-    color: #242332;
+    color: var(--text-cue);
     font-size: clamp(0.72rem, 1vw, 0.9rem);
     text-decoration: none;
     transform: translateX(-50%);
@@ -652,7 +678,7 @@ const snyFounders = [
 
   .scroll-cue:hover,
   .scroll-cue:focus-visible {
-    color: #5d586f;
+    color: var(--text-cue-hover);
   }
 
   .content-section p {
@@ -665,19 +691,8 @@ const snyFounders = [
 
   .about-section {
     min-height: 100svh;
-    background:
-      radial-gradient(
-        circle at 5% 45%,
-        rgba(139, 92, 246, 0.2),
-        transparent 35rem
-      ),
-      radial-gradient(
-        circle at 95% 35%,
-        rgba(30, 90, 228, 0.12),
-        transparent 24rem
-      ),
-      #04050f;
-    color: #5f6070;
+    background: transparent;
+    color: var(--text-dim);
     padding: clamp(4.5rem, 8vw, 6.8rem) 0;
     scroll-margin-top: 4rem;
     transition: opacity 700ms ease;
@@ -690,7 +705,7 @@ const snyFounders = [
 
   .about-kicker {
     margin: 0;
-    color: #8b5cf6;
+    color: var(--accent);
     font-family: Inconsolata, monospace;
     font-size: clamp(0.9rem, 1.3vw, 1.12rem);
     font-weight: 800;
@@ -711,11 +726,11 @@ const snyFounders = [
     position: relative;
     width: clamp(16.5rem, 28vw, 22rem);
     aspect-ratio: 1;
-    border: 1px solid #161837;
+    border: 1px solid var(--border-3);
     border-radius: 12px;
-    background: #05061a;
+    background: var(--bg-img);
     overflow: hidden;
-    box-shadow: 0 0 0 1px rgba(96, 75, 167, 0.22);
+    box-shadow: 0 0 0 1px var(--border-img);
   }
 
   .about-image {
@@ -733,7 +748,7 @@ const snyFounders = [
 
   .about-title {
     margin: clamp(1.2rem, 2.8vw, 2rem) 0 0;
-    color: #e7e8f1;
+    color: var(--text-heading);
     font-family: Inconsolata, monospace;
     font-size: clamp(3.3rem, 8vw, 5.7rem);
     font-weight: 800;
@@ -744,7 +759,7 @@ const snyFounders = [
   .about-paragraph {
     margin: 0;
     max-width: 38rem;
-    color: #87879b;
+    color: var(--text-sub);
     font-family: Inconsolata, monospace;
     font-size: clamp(1rem, 1.6vw, 1.24rem);
     font-weight: 600;
@@ -752,7 +767,7 @@ const snyFounders = [
   }
 
   .about-paragraph-lead {
-    color: #d7d8e5;
+    color: var(--text-lead);
   }
 
   .about-tags {
@@ -763,10 +778,10 @@ const snyFounders = [
   }
 
   .about-tags span {
-    border: 1px solid #1b1f44;
+    border: 1px solid var(--border-4);
     border-radius: 999px;
-    background: rgba(17, 19, 47, 0.78);
-    color: #8587a2;
+    background: var(--bg-tag);
+    color: var(--text-sub);
     font-family: Inconsolata, monospace;
     font-size: clamp(0.95rem, 1.2vw, 1.1rem);
     font-weight: 600;
@@ -784,21 +799,18 @@ const snyFounders = [
 
   .about-tags span:hover {
     transform: translateY(-3px);
-    box-shadow:
-      0 8px 20px rgba(0, 0, 0, 0.35),
-      0 0 0 1px rgba(139, 92, 246, 0.25),
-      0 0 16px rgba(139, 92, 246, 0.08);
-    border-color: #2a224a;
-    background: rgba(27, 19, 47, 0.88);
-    color: #c4b5fd;
+    box-shadow: var(--shadow-tag);
+    border-color: var(--border-tag-hover);
+    background: var(--bg-tag-hover);
+    color: var(--text-hover-tag);
   }
 
   .content-section {
     display: grid;
     min-height: 72svh;
     place-items: center;
-    background: #000;
-    color: #5f6070;
+    background: transparent;
+    color: var(--text-dim);
     padding: clamp(3rem, 8vw, 6rem) 0;
     scroll-margin-top: 4rem;
     transition: opacity 700ms ease;
@@ -806,14 +818,8 @@ const snyFounders = [
 
   .research-section {
     min-height: 100svh;
-    background:
-      radial-gradient(
-        circle at 92% 8%,
-        rgba(139, 92, 246, 0.08),
-        transparent 32rem
-      ),
-      #000;
-    color: #d7d5df;
+    background: transparent;
+    color: var(--text-body);
     padding: clamp(5rem, 9vw, 7rem) 0;
     scroll-margin-top: 4rem;
     transition: opacity 700ms ease;
@@ -827,7 +833,7 @@ const snyFounders = [
 
   .section-kicker {
     margin: 0;
-    color: #8b5cf6;
+    color: var(--accent);
     font-family: Inconsolata, monospace;
     font-size: clamp(0.9rem, 1.3vw, 1.12rem);
     font-weight: 800;
@@ -838,7 +844,7 @@ const snyFounders = [
 
   .research-header h2 {
     margin: clamp(1.2rem, 2.8vw, 2rem) 0 0;
-    color: #dedce7;
+    color: var(--text-title);
     font-family: Inconsolata, monospace;
     font-size: clamp(3.3rem, 8vw, 5.7rem);
     font-weight: 800;
@@ -847,9 +853,8 @@ const snyFounders = [
   }
 
   .research-header > p:last-child {
-    /*max-width: 58rem;*/
     margin: clamp(1.1rem, 2vw, 1.5rem) 0 0;
-    color: #7f7b90;
+    color: var(--text-sub);
     font-family: Inconsolata, monospace;
     font-size: clamp(1rem, 1.6vw, 1.24rem);
     font-weight: 600;
@@ -871,9 +876,9 @@ const snyFounders = [
   }
 
   .research-see-all {
-    border: 1px solid #201a3b;
+    border: 1px solid var(--border-5);
     border-radius: 4px;
-    color: #8d879b;
+    color: var(--text-sub);
     font-family: Inconsolata, monospace;
     font-size: clamp(0.95rem, 1.25vw, 1.02rem);
     font-weight: 800;
@@ -890,13 +895,13 @@ const snyFounders = [
 
   .research-see-all:hover,
   .research-see-all:focus-visible {
-    border-color: #8b5cf6;
-    background: rgba(28, 22, 52, 0.72);
-    color: #c4b5fd;
+    border-color: var(--accent);
+    background: var(--bg-card);
+    color: var(--accent-lighter);
   }
 
   .research-see-all:focus-visible {
-    outline: 1px solid #8b5cf6;
+    outline: 1px solid var(--accent);
     outline-offset: 0.35rem;
   }
 
@@ -905,9 +910,9 @@ const snyFounders = [
     display: flex;
     min-height: 13.2rem;
     flex-direction: column;
-    border: 1px solid #15142d;
+    border: 1px solid var(--border-1);
     border-radius: 8px;
-    background: rgba(10, 10, 28, 0.72);
+    background: var(--bg-card);
     color: inherit;
     padding: clamp(1.7rem, 3vw, 2.15rem);
     text-decoration: none;
@@ -919,18 +924,18 @@ const snyFounders = [
 
   .research-card:hover,
   .research-card:focus-visible {
-    border-color: #33265d;
-    background: rgba(15, 13, 36, 0.92);
+    border-color: var(--border-tag-hover);
+    background: var(--bg-card-hover);
     transform: translateY(-2px);
   }
 
   .research-card:focus-visible {
-    outline: 1px solid #8b5cf6;
+    outline: 1px solid var(--accent);
     outline-offset: 0.35rem;
   }
 
   .research-card-label {
-    color: #a78bfa;
+    color: var(--accent-light);
     font-family: Inconsolata, monospace;
     font-size: clamp(1.55rem, 2.7vw, 2rem);
     font-weight: 900;
@@ -940,7 +945,7 @@ const snyFounders = [
 
   .research-card-title {
     margin-top: 1.35rem;
-    color: #d7d5df;
+    color: var(--text-body);
     font-family: Inconsolata, monospace;
     font-size: clamp(1rem, 1.5vw, 1.2rem);
     font-weight: 800;
@@ -949,7 +954,7 @@ const snyFounders = [
 
   .research-card-summary {
     margin-top: 1rem;
-    color: #7f7b90;
+    color: var(--text-sub);
     font-family: Inconsolata, monospace;
     font-size: clamp(0.95rem, 1.35vw, 1.12rem);
     font-weight: 600;
@@ -959,7 +964,7 @@ const snyFounders = [
   .research-card-arrow {
     align-self: flex-end;
     margin-top: auto;
-    color: #8b5cf6;
+    color: var(--accent);
     font-family: Inconsolata, monospace;
     font-size: 1.1rem;
     font-weight: 900;
@@ -968,19 +973,8 @@ const snyFounders = [
 
   .experience-section {
     min-height: 100svh;
-    background:
-      radial-gradient(
-        circle at 8% 46%,
-        rgba(139, 92, 246, 0.16),
-        transparent 34rem
-      ),
-      radial-gradient(
-        circle at 94% 55%,
-        rgba(35, 137, 255, 0.1),
-        transparent 30rem
-      ),
-      #04050f;
-    color: #d7d5df;
+    background: transparent;
+    color: var(--text-body);
     padding: clamp(5rem, 9vw, 7rem) 0;
     scroll-margin-top: 4rem;
     transition: opacity 700ms ease;
@@ -993,7 +987,7 @@ const snyFounders = [
 
   .experience-header h2 {
     margin: clamp(1.2rem, 2.8vw, 2rem) 0 0;
-    color: #dedce7;
+    color: var(--text-title);
     font-family: Inconsolata, monospace;
     font-size: clamp(3.3rem, 8vw, 5.7rem);
     font-weight: 800;
@@ -1016,19 +1010,14 @@ const snyFounders = [
     bottom: 0;
     left: 0;
     width: 1px;
-    background: linear-gradient(
-      180deg,
-      rgba(139, 92, 246, 0.95) 0%,
-      rgba(35, 137, 255, 0.9) 48%,
-      rgba(12, 17, 44, 0.18) 100%
-    );
+    background: var(--gradient-timeline);
   }
 
   .experience-item {
     position: relative;
-    border: 1px solid #15142d;
+    border: 1px solid var(--border-1);
     border-radius: 8px;
-    background: rgba(10, 10, 28, 0.72);
+    background: var(--bg-card);
     padding: clamp(1.4rem, 2.4vw, 1.85rem);
     opacity: 0;
     transform: translateX(-3.2rem);
@@ -1044,10 +1033,10 @@ const snyFounders = [
     left: calc(clamp(1.2rem, 2.1vw, 1.55rem) * -1 - 0.32rem);
     width: 0.45rem;
     aspect-ratio: 1;
-    border: 1px solid #8b5cf6;
+    border: 1px solid var(--accent);
     border-radius: 999px;
-    background: #8b5cf6;
-    box-shadow: 0 0 0 6px rgba(11, 12, 29, 0.95);
+    background: var(--accent);
+    box-shadow: 0 0 0 6px var(--shadow-dot-ring);
   }
 
   .experience-item.is-visible {
@@ -1057,7 +1046,7 @@ const snyFounders = [
 
   .experience-period {
     margin: 0;
-    color: #525675;
+    color: var(--text-period);
     font-family: Inconsolata, monospace;
     font-size: clamp(0.86rem, 1.1vw, 1rem);
     font-weight: 800;
@@ -1068,7 +1057,7 @@ const snyFounders = [
 
   .experience-role {
     margin: 0.8rem 0 0;
-    color: #dcdeea;
+    color: var(--text-lead);
     font-family: Inconsolata, monospace;
     font-size: clamp(1.25rem, 2vw, 1.55rem);
     font-weight: 800;
@@ -1077,7 +1066,7 @@ const snyFounders = [
 
   .experience-organization {
     margin: 0.45rem 0 0;
-    color: #8b5cf6;
+    color: var(--accent);
     font-family: Inconsolata, monospace;
     font-size: clamp(1rem, 1.55vw, 1.22rem);
     font-weight: 700;
@@ -1093,7 +1082,7 @@ const snyFounders = [
   }
 
   .experience-points li {
-    color: #74788f;
+    color: var(--text-sub);
     font-family: Inconsolata, monospace;
     font-size: clamp(0.95rem, 1.3vw, 1.08rem);
     font-weight: 600;
@@ -1102,26 +1091,15 @@ const snyFounders = [
 
   .experience-points li::before {
     content: ">";
-    color: #8b5cf6;
+    color: var(--accent);
     font-weight: 800;
     margin-right: 0.55rem;
   }
 
   .sny-section {
     min-height: 100svh;
-    background:
-      radial-gradient(
-        circle at 50% 28%,
-        rgba(35, 137, 255, 0.24),
-        transparent 28rem
-      ),
-      radial-gradient(
-        circle at 7% 48%,
-        rgba(139, 92, 246, 0.15),
-        transparent 30rem
-      ),
-      #04050f;
-    color: #d7d5df;
+    background: transparent;
+    color: var(--text-body);
     padding: clamp(5rem, 9vw, 7rem) 0;
     scroll-margin-top: 4rem;
     transition: opacity 700ms ease;
@@ -1135,12 +1113,12 @@ const snyFounders = [
   .sny-header {
     text-align: center;
     padding-bottom: clamp(2.2rem, 4.2vw, 3rem);
-    border-bottom: 1px solid #12152f;
+    border-bottom: 1px solid var(--section-div);
   }
 
   .sny-header h2 {
     margin: 0;
-    color: #5ba6ff;
+    color: var(--accent-blue);
     font-family: Inconsolata, monospace;
     font-size: clamp(3.1rem, 7.2vw, 5rem);
     font-weight: 800;
@@ -1151,7 +1129,7 @@ const snyFounders = [
   .sny-header p {
     max-width: 34rem;
     margin: clamp(1rem, 2vw, 1.4rem) auto 0;
-    color: #737896;
+    color: var(--text-dim);
     font-family: Inconsolata, monospace;
     font-size: clamp(1rem, 1.4vw, 1.12rem);
     font-weight: 600;
@@ -1166,16 +1144,16 @@ const snyFounders = [
   }
 
   .sny-stat-card {
-    border: 1px solid #161a38;
+    border: 1px solid var(--border-2);
     border-radius: 8px;
-    background: rgba(10, 11, 29, 0.74);
+    background: var(--bg-card-alt);
     padding: clamp(1.35rem, 2.3vw, 1.85rem) 1rem;
     text-align: center;
   }
 
   .sny-stat-value {
     margin: 0;
-    color: #5ba6ff;
+    color: var(--accent-blue);
     font-family: Inconsolata, monospace;
     font-size: clamp(2.3rem, 4vw, 3rem);
     font-weight: 900;
@@ -1184,7 +1162,7 @@ const snyFounders = [
 
   .sny-stat-label {
     margin: 0.9rem 0 0;
-    color: #646b89;
+    color: var(--text-dim);
     font-family: Inconsolata, monospace;
     font-size: clamp(0.9rem, 1.1vw, 0.98rem);
     font-weight: 800;
@@ -1199,7 +1177,7 @@ const snyFounders = [
 
   .sny-services h3 {
     margin: clamp(1rem, 2.3vw, 1.5rem) 0 0;
-    color: #dedce7;
+    color: var(--text-title);
     font-family: Inconsolata, monospace;
     font-size: clamp(3.3rem, 8vw, 5.7rem);
     font-weight: 800;
@@ -1215,9 +1193,9 @@ const snyFounders = [
   }
 
   .sny-service-card {
-    border: 1px solid #161a38;
+    border: 1px solid var(--border-2);
     border-radius: 8px;
-    background: rgba(10, 11, 29, 0.74);
+    background: var(--bg-card-alt);
     padding: clamp(1.2rem, 2vw, 1.6rem);
   }
 
@@ -1226,7 +1204,7 @@ const snyFounders = [
     width: 1.55rem;
     aspect-ratio: 1;
     align-items: center;
-    color: #8b5cf6;
+    color: var(--accent);
   }
 
   .sny-service-icon svg {
@@ -1236,7 +1214,7 @@ const snyFounders = [
 
   .sny-service-card h4 {
     margin: 0.95rem 0 0;
-    color: #d5d8e8;
+    color: var(--text-lead);
     font-family: Inconsolata, monospace;
     font-size: clamp(1rem, 1.4vw, 1.16rem);
     font-weight: 800;
@@ -1245,7 +1223,7 @@ const snyFounders = [
 
   .sny-service-card p {
     margin: 0.8rem 0 0;
-    color: #747b97;
+    color: var(--text-sub);
     font-family: Inconsolata, monospace;
     font-size: clamp(0.96rem, 1.25vw, 1.06rem);
     font-weight: 600;
@@ -1258,7 +1236,7 @@ const snyFounders = [
 
   .sny-team h3 {
     margin: clamp(1rem, 2.3vw, 1.5rem) 0 0;
-    color: #dedce7;
+    color: var(--text-title);
     font-family: Inconsolata, monospace;
     font-size: clamp(3.3rem, 8vw, 5.7rem);
     font-weight: 800;
@@ -1274,15 +1252,15 @@ const snyFounders = [
   }
 
   .sny-founder-card {
-    border: 1px solid #161a38;
+    border: 1px solid var(--border-2);
     border-radius: 8px;
-    background: rgba(10, 11, 29, 0.74);
+    background: var(--bg-card-alt);
     padding: clamp(1.2rem, 2vw, 1.6rem);
   }
 
   .sny-founder-card h4 {
     margin: 0;
-    color: #a78bfa;
+    color: var(--accent-light);
     font-family: Inconsolata, monospace;
     font-size: clamp(1.25rem, 1.8vw, 1.62rem);
     font-weight: 800;
@@ -1291,7 +1269,7 @@ const snyFounders = [
 
   .sny-founder-school {
     margin: 0.62rem 0 0;
-    color: #d5d8e8;
+    color: var(--text-lead);
     font-family: Inconsolata, monospace;
     font-size: clamp(1rem, 1.4vw, 1.18rem);
     font-weight: 600;
@@ -1300,22 +1278,11 @@ const snyFounders = [
 
   .sny-founder-card p {
     margin: 0.8rem 0 0;
-    color: #747b97;
+    color: var(--text-sub);
     font-family: Inconsolata, monospace;
     font-size: clamp(0.96rem, 1.25vw, 1.06rem);
     font-weight: 600;
     line-height: 1.45;
-  }
-
-  .landing-enter:hover,
-  .landing-enter:focus-visible {
-    color: #fff;
-    transform: translateY(-2px);
-  }
-
-  .landing-enter:focus-visible {
-    outline: 1px solid #777;
-    outline-offset: 0.6rem;
   }
 
   @keyframes landing-reveal {
@@ -1337,11 +1304,6 @@ const snyFounders = [
 
     .landing-title {
       font-size: clamp(3.4rem, 18vw, 5.8rem);
-    }
-
-    .landing-primary,
-    .landing-secondary {
-      letter-spacing: 0.22em;
     }
 
     .about-kicker {
@@ -1451,10 +1413,6 @@ const snyFounders = [
 
   @media (prefers-reduced-motion: reduce) {
     .landing-title,
-    .landing-rule,
-    .landing-primary,
-    .landing-secondary,
-    .landing-domain,
     .landing-enter {
       animation: none;
     }
