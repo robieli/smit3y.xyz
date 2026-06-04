@@ -15,43 +15,55 @@ export const GET: APIRoute = async () => {
   const now = Date.now();
 
   if (cache && now - cache.timestamp < CACHE_TTL_MS) {
-    return new Response(JSON.stringify(cache.data), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "public, s-maxage=14400",
+    return new Response(
+      JSON.stringify({ data: cache.data, lastUpdated: new Date(cache.timestamp).toISOString() }),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "public, s-maxage=14400",
+        },
       },
-    });
+    );
   }
 
   try {
     const data = await provider.fetch();
     cache = { data, timestamp: now };
 
-    return new Response(JSON.stringify(data), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "public, s-maxage=14400",
+    return new Response(
+      JSON.stringify({ data, lastUpdated: new Date(now).toISOString() }),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "public, s-maxage=14400",
+        },
       },
-    });
+    );
   } catch {
     if (cache) {
-      return new Response(JSON.stringify(cache.data), {
+      return new Response(
+        JSON.stringify({ data: cache.data, lastUpdated: new Date(cache.timestamp).toISOString() }),
+        {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+            "Cache-Control": "public, s-maxage=600",
+          },
+        },
+      );
+    }
+
+    return new Response(
+      JSON.stringify({ data: fallbackItems, lastUpdated: null }),
+      {
         status: 200,
         headers: {
           "Content-Type": "application/json",
           "Cache-Control": "public, s-maxage=600",
         },
-      });
-    }
-
-    return new Response(JSON.stringify(fallbackItems), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "public, s-maxage=600",
       },
-    });
+    );
   }
 };
