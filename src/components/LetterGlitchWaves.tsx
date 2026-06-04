@@ -23,6 +23,12 @@ interface Props {
   waveWavelength?: number;
   waveWobble?: boolean;
   waveAngleDeg?: number;
+  waveOrganic?: boolean;
+  waveThicknessVariation?: number;
+  waveOctaves?: number;
+  waveActivityBoost?: number;
+  waveSurge?: boolean;
+  waveSoftEdge?: number;
 }
 
 const DEFAULT_COLORS = ["#8791ff", "#5ea1f2", "#17bfd1"];
@@ -100,6 +106,12 @@ const LetterGlitch = ({
   waveWavelength = 560,
   waveWobble = true,
   waveAngleDeg = 20,
+  waveOrganic = true,
+  waveThicknessVariation = 0.5,
+  waveOctaves = 3,
+  waveActivityBoost = 3,
+  waveSurge = true,
+  waveSoftEdge = 0.6,
 }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationRef = useRef<number | null>(null);
@@ -116,6 +128,10 @@ const LetterGlitch = ({
   const visibleRef = useRef(true);
   const colorsRef = useRef<string[]>(DEFAULT_COLORS);
   const dirtyRef = useRef(true);
+  const minDistCacheRef = useRef<Float32Array | null>(null);
+  const thicknessTableRef = useRef<Float32Array | null>(null);
+  const weightsRef = useRef<Float32Array | null>(null);
+  const surgeUntilRef = useRef(0);
   const [bgColor, setBgColor] = useState("#000000");
   const [ready, setReady] = useState(false);
 
@@ -152,6 +168,8 @@ const LetterGlitch = ({
       targetRgb: pickRandomRgb(),
       colorProgress: 1,
     }));
+    minDistCacheRef.current = new Float32Array(totalLetters).fill(1e9);
+    weightsRef.current = new Float32Array(totalLetters);
     dirtyRef.current = true;
   };
 
@@ -184,6 +202,7 @@ const LetterGlitch = ({
     const uMax = cosT * (columns - 1) * charWidth;
     const tableSize = Math.max(2, Math.ceil(uMax - uMin) + 2);
     perturbTableRef.current = new Float32Array(tableSize);
+    thicknessTableRef.current = new Float32Array(tableSize);
     uMinRef.current = Math.floor(uMin);
 
     wrapLengthRef.current =
@@ -216,33 +235,70 @@ const LetterGlitch = ({
     const sinT = Math.sin(thetaRad);
     const cosT = Math.cos(thetaRad);
 
+    const tElapsed = mountTimeRef.current > 0
+      ? (performance.now() - mountTimeRef.current) / 1000
+      : 0;
+
     const centers: number[] = [];
     for (let k = 0; k < n; k++) {
-      centers.push((offset + k * segment) % wrap);
+      const drift = waveOrganic
+        ? 30 * Math.sin(tElapsed * 0.13 + k * 1.7)
+        : 0;
+      centers.push(((offset + k * segment + drift) % wrap + wrap) % wrap);
     }
 
     const perturbTable = perturbTableRef.current;
+    const thicknessTable = thicknessTableRef.current;
     const uMinRounded = uMinRef.current;
     const tableSize = perturbTable ? perturbTable.length : 0;
+    const minDistCache = minDistCacheRef.current;
+
+    const wavelength = Math.max(50, waveWavelength);
+    const twoPi = Math.PI * 2;
 
     if (curvature > 0 && perturbTable) {
-      const wavelength = Math.max(50, waveWavelength);
-      const twoPi = Math.PI * 2;
-      const phase1 = waveWobble && mountTimeRef.current > 0
-        ? 0.37 * (performance.now() - mountTimeRef.current) / 1000
-        : 0;
-      const phase2 = waveWobble && mountTimeRef.current > 0
-        ? 0.51 * (performance.now() - mountTimeRef.current) / 1000
-        : 0;
-      for (let ui = 0; ui < tableSize; ui++) {
-        const u = uMinRounded + ui;
-        perturbTable[ui] =
-          curvature *
-          (Math.sin((twoPi * u) / wavelength + phase1) +
-            0.4 * Math.sin((twoPi * u) / (wavelength * 0.59) + 1.3 + phase2));
+      if (waveOrganic) {
+        const octaves = Math.max(1, Math.min(4, Math.floor(waveOctaves)));
+        const ratios = [1.0, 2.3, 4.7, 8.1];
+        const amps = [1.0, 0.5, 0.25, 0.125];
+        const phaseRates = [0.27, 0.41, 0.63, 0.51];
+        const wobblePhase = waveWobble ? tElapsed : 0;
+        for (let ui = 0; ui < tableSize; ui++) {
+          const u = uMinRounded + ui;
+          let sum = 0;
+          for (let o = 0; o < octaves; o++) {
+            const wl = wavelength / ratios[o];
+            sum += amps[o] * Math.sin((twoPi * u) / wl + o * 1.3 + wobblePhase * phaseRates[o]);
+          }
+          perturbTable[ui] = curvature * sum;
+        }
+      } else {
+        const phase1 = waveWobble && tElapsed > 0 ? 0.37 * tElapsed : 0;
+        const phase2 = waveWobble && tElapsed > 0 ? 0.51 * tElapsed : 0;
+        for (let ui = 0; ui < tableSize; ui++) {
+          const u = uMinRounded + ui;
+          perturbTable[ui] =
+            curvature *
+            (Math.sin((twoPi * u) / wavelength + phase1) +
+              0.4 * Math.sin((twoPi * u) / (wavelength * 0.59) + 1.3 + phase2));
+        }
       }
     } else if (perturbTable) {
       perturbTable.fill(0);
+    }
+
+    if (waveOrganic && thicknessTable && tableSize > 0) {
+      const variation = Math.max(0, Math.min(1, waveThicknessVariation));
+      const wobblePhase = waveWobble ? tElapsed : 0;
+      for (let ui = 0; ui < tableSize; ui++) {
+        const u = uMinRounded + ui;
+        const noise =
+          0.5 * Math.sin((twoPi * u) / (wavelength * 1.7) + wobblePhase * 0.19) +
+          0.5 * Math.sin((twoPi * u) / (wavelength * 0.71) + 1.7 + wobblePhase * 0.43);
+        thicknessTable[ui] = 1 + variation * noise;
+      }
+    } else if (thicknessTable) {
+      thicknessTable.fill(1);
     }
 
     for (let i = 0; i < items.length; i++) {
@@ -269,9 +325,19 @@ const LetterGlitch = ({
         if (d < minDist) minDist = d;
       }
 
-      if (minDist >= bandHalf) continue;
+      if (minDistCache && i < minDistCache.length) {
+        minDistCache[i] = minDist < 1e9 ? minDist : 1e9;
+      }
 
-      const alpha = smoothstep(bandHalf, 0, minDist);
+      const thicknessFactor =
+        waveOrganic && thicknessTable && uIdx >= 0 && uIdx < tableSize
+          ? thicknessTable[uIdx]
+          : 1;
+      const effectiveBandHalf = bandHalf * thicknessFactor;
+      const fadeBandHalf = effectiveBandHalf * (1 + waveSoftEdge);
+      if (minDist >= fadeBandHalf) continue;
+
+      const alpha = smoothstep(fadeBandHalf, 0, minDist);
       if (alpha <= 0.01) continue;
 
       ctx.globalAlpha = alpha;
@@ -285,21 +351,58 @@ const LetterGlitch = ({
   const updateLetters = () => {
     if (!letters.current || letters.current.length === 0) return;
 
-    const updateCount = Math.max(1, Math.floor(letters.current.length * 0.015));
+    const items = letters.current;
+    const updateCount = Math.max(1, Math.floor(items.length * 0.015));
+    const minDistCache = minDistCacheRef.current;
+    const weights = weightsRef.current;
+    const bandHalf = waveBandThickness;
+    const boost = Math.max(1, waveActivityBoost);
 
-    for (let i = 0; i < updateCount; i++) {
-      const index = Math.floor(Math.random() * letters.current.length);
-      const letter = letters.current[index];
-      if (!letter) continue;
-
+    const mutateAtIndex = (idx: number) => {
+      const letter = items[idx];
+      if (!letter) return;
       letter.char = getRandomChar();
       letter.targetRgb = pickRandomRgb();
-
       if (!smooth) {
         letter.rgb = letter.targetRgb;
         letter.colorProgress = 1;
       } else {
         letter.colorProgress = 0;
+      }
+    };
+
+    if (
+      waveOrganic &&
+      boost > 1 &&
+      minDistCache &&
+      weights &&
+      minDistCache.length === items.length
+    ) {
+      const bandThreshold = bandHalf * 1.5;
+      let total = 0;
+      for (let i = 0; i < items.length; i++) {
+        const md = minDistCache[i];
+        const proximity = md < bandThreshold ? smoothstep(bandThreshold, 0, md) : 0;
+        const w = 1 + (boost - 1) * proximity;
+        total += w;
+        weights[i] = total;
+      }
+
+      for (let p = 0; p < updateCount; p++) {
+        const r = Math.random() * total;
+        let lo = 0;
+        let hi = items.length - 1;
+        while (lo < hi) {
+          const mid = (lo + hi) >> 1;
+          if (weights[mid] < r) lo = mid + 1;
+          else hi = mid;
+        }
+        mutateAtIndex(lo);
+      }
+    } else {
+      for (let i = 0; i < updateCount; i++) {
+        const index = Math.floor(Math.random() * items.length);
+        mutateAtIndex(index);
       }
     }
     dirtyRef.current = true;
@@ -339,8 +442,29 @@ const LetterGlitch = ({
 
     const wrap = wrapLengthRef.current;
     if (wrap > 0 && dt > 0) {
+      let effectiveSpeed = waveSpeed;
+
+      if (waveOrganic) {
+        const tElapsed = mountTimeRef.current > 0
+          ? performance.now() - mountTimeRef.current
+          : 0;
+        const wander =
+          0.5 * Math.sin(tElapsed * 0.00021) +
+          0.3 * Math.sin(tElapsed * 0.00073);
+        effectiveSpeed = waveSpeed * (1 + 0.4 * wander);
+
+        if (waveSurge) {
+          if (now < surgeUntilRef.current) {
+            effectiveSpeed *= 3;
+          } else if (Math.random() < 0.004) {
+            surgeUntilRef.current = now + 80 + Math.random() * 70;
+            effectiveSpeed *= 3;
+          }
+        }
+      }
+
       waveOffsetRef.current =
-        (waveOffsetRef.current + waveSpeed * wrap * dt) % wrap;
+        (waveOffsetRef.current + effectiveSpeed * wrap * dt) % wrap;
     }
 
     if (now - lastGlitchTime.current >= glitchSpeed) {
@@ -461,7 +585,7 @@ const LetterGlitch = ({
       document.removeEventListener("astro:before-swap", onBeforeSwap);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [glitchSpeed, smooth, waveCount, waveSpeed, waveBandThickness, waveCurvature, waveWavelength, waveWobble, waveAngleDeg]);
+  }, [glitchSpeed, smooth, waveCount, waveSpeed, waveBandThickness, waveCurvature, waveWavelength, waveWobble, waveAngleDeg, waveOrganic, waveThicknessVariation, waveOctaves, waveActivityBoost, waveSurge, waveSoftEdge]);
 
   const containerStyle: React.CSSProperties = {
     position: "absolute",
