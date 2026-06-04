@@ -401,7 +401,11 @@ const LetterGlitch = ({
     const root = document.documentElement;
     const themeObserver = new MutationObserver((mutations) => {
       for (const m of mutations) {
-        if (m.attributeName === "data-theme") {
+        if (
+          m.attributeName === "data-theme" ||
+          m.attributeName === "data-palette" ||
+          m.attributeName === "style"
+        ) {
           colorsRef.current = readThemeColors();
           setBgColor(readBgGlitch());
           letters.current.forEach((l) => {
@@ -414,7 +418,10 @@ const LetterGlitch = ({
         }
       }
     });
-    themeObserver.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    themeObserver.observe(root, {
+      attributes: true,
+      attributeFilter: ["data-theme", "data-palette", "style"],
+    });
 
     const intersection = new IntersectionObserver(
       (entries) => {

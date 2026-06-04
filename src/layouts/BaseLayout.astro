@@ -22,11 +22,25 @@ const { title, fullBleed = false, showChrome = true } = Astro.props;
     <title>{title}</title>
     <script is:inline>
       (function () {
+        var html = document.documentElement;
         var t = localStorage.getItem("theme");
-        if (t === "light" || t === "dark") {
-          if (t === "light") document.documentElement.setAttribute("data-theme", "light");
-        } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
-          document.documentElement.setAttribute("data-theme", "light");
+        if (t === "light") html.setAttribute("data-theme", "light");
+        else if (t !== "dark" && window.matchMedia("(prefers-color-scheme: light)").matches) {
+          html.setAttribute("data-theme", "light");
+        }
+        var p = localStorage.getItem("palette");
+        if (p && p !== "midnight") html.setAttribute("data-palette", p);
+        if (p === "custom") {
+          try {
+            var c = JSON.parse(localStorage.getItem("custom-palette") || "{}");
+            if (c.accent && c.g1 && c.g2 && c.g3) {
+              var s = html.style;
+              s.setProperty("--c-accent", c.accent);
+              s.setProperty("--c-g1", c.g1);
+              s.setProperty("--c-g2", c.g2);
+              s.setProperty("--c-g3", c.g3);
+            }
+          } catch (e) {}
         }
       })();
     </script>
