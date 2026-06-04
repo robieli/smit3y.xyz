@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { loadResearchEntries } from "../lib/research";
 import smit3yImage from "../assets/smit3y.jpg";
-import GlobeMesh from "../components/GlobeMesh.astro";
+import LetterGlitch from "../components/LetterGlitch.tsx";
 
 const researchEntries = loadResearchEntries();
 const featuredResearchEntries = researchEntries.slice(0, 6);
@@ -90,24 +90,22 @@ const snyFounders = [
 <BaseLayout title="smit3y.xyz" fullBleed={true}>
 <section id="home" class="home-section" aria-label="Home">
     <div class="hero-backdrop" aria-hidden="true">
-      <div class="hero-backdrop-globe">
-        <GlobeMesh
-          size={420}
-          lineCount={18}
-          color="#7F77DD"
-          backOpacityPct={18}
-          tiltXDeg={12}
-          autoSpin={true}
-        />
-      </div>
+      <LetterGlitch
+        client:load
+        glitchSpeed={50}
+        centerVignette={false}
+        outerVignette={false}
+        smooth={true}
+      />
+      <div class="hero-fade-bottom" />
     </div>
     <div class="hero-content">
       <p class="hero-kicker">
-        EQUITY RESEARCH <span aria-hidden="true">·</span> CRYPTO INFRASTRUCTURE
+        <span class="hero-text-chip">EQUITY RESEARCH <span aria-hidden="true">·</span> CRYPTO INFRASTRUCTURE</span>
       </p>
       <h1 class="hero-title">SMIT3Y</h1>
       <p class="hero-subtitle">
-        FINANCIAL ANALYSIS <span aria-hidden="true">·</span> UNIVERSITY OF MICHIGAN
+        <span class="hero-text-chip">FINANCIAL ANALYSIS <span aria-hidden="true">·</span> UNIVERSITY OF MICHIGAN</span>
       </p>
       <div class="hero-actions" aria-label="Featured actions">
         <a class="hero-action hero-action-primary" href="#research">
@@ -425,27 +423,20 @@ const snyFounders = [
     justify-content: center;
     pointer-events: none;
     z-index: 0;
-    mask-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 1) 52%,
-      rgba(0, 0, 0, 0) 100%
-    );
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 1) 52%,
-      rgba(0, 0, 0, 0) 100%
-    );
+    background: var(--bg-glitch);
   }
 
-  .hero-backdrop-globe {
-    opacity: 0.45;
-  }
-
-  .hero-backdrop #globe-wrap {
-    padding: 0;
-    gap: 0;
+  .hero-fade-bottom {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 55%,
+      var(--hero-fade-color) 100%
+    );
+    z-index: 1;
   }
 
   .hero-content {
@@ -471,6 +462,13 @@ const snyFounders = [
     margin: 0;
     color: var(--accent);
     font-size: clamp(0.78rem, 1.35vw, 1.1rem);
+  }
+
+  .hero-text-chip {
+    display: inline-block;
+    background: var(--bg-glitch);
+    padding: 0.45em 0.9em;
+    border-radius: 0.35rem;
   }
 
   .hero-title {
@@ -536,6 +534,10 @@ const snyFounders = [
     border-color: var(--accent);
     background: var(--accent);
     color: #fff;
+  }
+
+  .hero-action-secondary {
+    background: var(--bg-glitch);
   }
 
   .hero-action-secondary:hover,

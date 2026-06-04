@@ -70,6 +70,13 @@
   --accent-lighter: #c4b5fd;
   --accent-blue: #5ba6ff;
 
+  --g1: #8791ff;
+  --g2: #5ea1f2;
+  --g3: #17bfd1;
+
+  --bg-glitch: #000000;
+  --hero-fade-color: #000000;
+
   --gradient-hero: linear-gradient(
     100deg,
     #8791ff 7%,
@@ -152,6 +159,13 @@
   --accent-light: #8b5cf6;
   --accent-lighter: #a78bfa;
   --accent-blue: #3b82f6;
+
+  --g1: #6366f1;
+  --g2: #4f8ff7;
+  --g3: #0ea5c9;
+
+  --bg-glitch: #f7f8fc;
+  --hero-fade-color: #f7f8fc;
 
   --gradient-hero: linear-gradient(
     100deg,
