@@ -362,6 +362,10 @@ body {
   font-weight: 900;
 }
 
+.market-change.is-negative {
+  color: #ef4444;
+}
+
 @keyframes market-ticker-scroll {
   from {
     transform: translateX(0);

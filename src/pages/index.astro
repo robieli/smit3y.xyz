@@ -88,15 +88,7 @@ const snyFounders = [
 ---
 
 <BaseLayout title="smit3y.xyz" fullBleed={true}>
-  <section class="landing-screen" aria-label="Smit3y landing page">
-    <div class="landing-content">
-      <h1 class="landing-title">SMIT3Y</h1>
-      <button class="landing-enter" type="button" aria-label="Enter smit3y.xyz">
-        ENTER <span aria-hidden="true">→</span>
-      </button>
-    </div>
-  </section>
-  <section id="home" class="home-section" aria-label="Home">
+<section id="home" class="home-section" aria-label="Home">
     <div class="hero-backdrop" aria-hidden="true">
       <div class="hero-backdrop-globe">
         <GlobeMesh
@@ -338,19 +330,6 @@ const snyFounders = [
   </section>
 
   <script>
-    const enterButton = document.querySelector(".landing-enter");
-    const landingScreen = document.querySelector(".landing-screen");
-    const body = document.body;
-
-    const enterSite = () => {
-      body.classList.add("site-entered");
-      window.setTimeout(() => {
-        landingScreen?.setAttribute("hidden", "");
-      }, 700);
-    };
-
-    enterButton?.addEventListener("click", enterSite);
-
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const experienceItems = Array.from(
@@ -424,101 +403,6 @@ const snyFounders = [
       var(--bg-1);
   }
 
-  :global(body:not(.site-entered)) {
-    overflow: hidden;
-  }
-
-  :global(body:not(.site-entered) .site-chrome),
-  :global(body:not(.site-entered) .site-footer),
-  :global(body:not(.site-entered) .section-dots),
-  :global(body:not(.site-entered) .home-section),
-  :global(body:not(.site-entered) .research-section),
-  :global(body:not(.site-entered) .content-section) {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  :global(body.site-entered .site-chrome),
-  :global(body.site-entered .site-footer),
-  :global(body.site-entered .section-dots),
-  :global(body.site-entered .home-section),
-  :global(body.site-entered .research-section),
-  :global(body.site-entered .content-section) {
-    opacity: 1;
-  }
-
-  .landing-screen {
-    position: fixed;
-    inset: 0;
-    z-index: 20;
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-    background: var(--bg-0);
-    color: var(--text-bright);
-    padding: clamp(2rem, 5vw, 4rem);
-    transition:
-      opacity 700ms ease,
-      visibility 700ms ease;
-  }
-
-  :global(body.site-entered) .landing-screen {
-    visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .landing-content {
-    display: flex;
-    width: min(100%, 58rem);
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .landing-title,
-  .landing-enter {
-    animation: landing-reveal 900ms ease-out both;
-  }
-
-  .landing-title {
-    margin: 0;
-    color: var(--text-landing);
-    font-family: Inconsolata, monospace;
-    font-size: clamp(3.8rem, 13vw, 8.5rem);
-    font-weight: 900;
-    letter-spacing: 0;
-    line-height: 0.78;
-  }
-
-  .landing-enter {
-    border: 0;
-    margin-top: clamp(2.8rem, 6vw, 4rem);
-    background: transparent;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-family: Inconsolata, monospace;
-    font-size: clamp(0.88rem, 1.4vw, 1rem);
-    font-weight: 600;
-    letter-spacing: 0.35em;
-    line-height: 1;
-    text-transform: uppercase;
-    transition:
-      color 180ms ease,
-      transform 180ms ease;
-    animation-delay: 300ms;
-  }
-
-  .landing-enter:hover,
-  .landing-enter:focus-visible {
-    color: var(--text-bright);
-    transform: translateY(-2px);
-  }
-
-  .landing-enter:focus-visible {
-    outline: 1px solid var(--text-outline);
-    outline-offset: 0.6rem;
-  }
 
   .home-section {
     position: relative;
@@ -1285,28 +1169,8 @@ const snyFounders = [
     line-height: 1.45;
   }
 
-  @keyframes landing-reveal {
-    from {
-      opacity: 0;
-      transform: translateY(1.25rem);
-    }
 
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media (max-width: 700px) {
-    .landing-screen {
-      padding: 2rem 1.2rem;
-    }
-
-    .landing-title {
-      font-size: clamp(3.4rem, 18vw, 5.8rem);
-    }
-
-    .about-kicker {
+  @media (max-width: 700px) {    .about-kicker {
       letter-spacing: 0.24em;
     }
 
@@ -1412,11 +1276,6 @@ const snyFounders = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .landing-title,
-    .landing-enter {
-      animation: none;
-    }
-
     .experience-item {
       opacity: 1;
       transform: none;
