@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { loadResearchEntries } from "../lib/research";
 import smit3yImage from "../assets/smit3y.jpg";
-import LetterGlitch from "../components/LetterGlitch.tsx";
+import LetterGlitch from "../components/LetterGlitchWaves.tsx";
 
 const researchEntries = loadResearchEntries();
 const featuredResearchEntries = researchEntries.slice(0, 6);
@@ -88,7 +88,7 @@ const snyFounders = [
 ---
 
 <BaseLayout title="smit3y.xyz" fullBleed={true}>
-<section id="home" class="home-section" aria-label="Home">
+  <section id="home" class="home-section" aria-label="Home">
     <div class="hero-backdrop" aria-hidden="true">
       <LetterGlitch
         client:load
@@ -96,16 +96,22 @@ const snyFounders = [
         centerVignette={false}
         outerVignette={false}
         smooth={true}
+        waveCurvature={15}
+        waveWavelength={600}
       />
-      <div class="hero-fade-bottom" />
+      <div class="hero-fade-bottom"></div>
     </div>
     <div class="hero-content">
       <p class="hero-kicker">
-        <span class="hero-text-chip">EQUITY RESEARCH <span aria-hidden="true">·</span> CRYPTO INFRASTRUCTURE</span>
+        <span class="hero-text-chip"
+          >EQUITY RESEARCH <span aria-hidden="true">·</span> CRYPTO INFRASTRUCTURE</span
+        >
       </p>
       <h1 class="hero-title">SMIT3Y</h1>
       <p class="hero-subtitle">
-        <span class="hero-text-chip">FINANCIAL ANALYSIS <span aria-hidden="true">·</span> UNIVERSITY OF MICHIGAN</span>
+        <span class="hero-text-chip"
+          >FINANCIAL ANALYSIS <span aria-hidden="true">·</span> UNIVERSITY OF MICHIGAN</span
+        >
       </p>
       <div class="hero-actions" aria-label="Featured actions">
         <a class="hero-action hero-action-primary" href="#research">
@@ -253,14 +259,14 @@ const snyFounders = [
                         stroke-width="1.8"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                      ></path>
+                      />
                       <path
                         d="M6.5 10.5a5.5 5.5 0 0 0 11 0M12 16v4M9 20h6"
                         stroke="currentColor"
                         stroke-width="1.8"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                      ></path>
+                      />
                     </svg>
                   )}
                   {service.icon === "pen" && (
@@ -271,14 +277,14 @@ const snyFounders = [
                         stroke-width="1.8"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                      ></path>
+                      />
                       <path
                         d="m13 6 3 3M4 20l4-4"
                         stroke="currentColor"
                         stroke-width="1.8"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                      ></path>
+                      />
                     </svg>
                   )}
                   {service.icon === "target" && (
@@ -289,15 +295,15 @@ const snyFounders = [
                         r="8"
                         stroke="currentColor"
                         stroke-width="1.8"
-                      ></circle>
+                      />
                       <circle
                         cx="12"
                         cy="12"
                         r="4"
                         stroke="currentColor"
                         stroke-width="1.8"
-                      ></circle>
-                      <circle cx="12" cy="12" r="1.2" fill="currentColor"></circle>
+                      />
+                      <circle cx="12" cy="12" r="1.2" fill="currentColor" />
                     </svg>
                   )}
                 </span>
@@ -373,34 +379,13 @@ const snyFounders = [
 <style>
   :global(body) {
     background:
-      radial-gradient(
-        circle at 12% 12%,
-        var(--glow-6),
-        transparent 32rem
-      ),
-      radial-gradient(
-        circle at 90% 8%,
-        var(--glow-7),
-        transparent 34rem
-      ),
-      radial-gradient(
-        circle at 6% 40%,
-        var(--glow-1),
-        transparent 36rem
-      ),
-      radial-gradient(
-        circle at 92% 52%,
-        var(--glow-4),
-        transparent 32rem
-      ),
-      radial-gradient(
-        circle at 50% 78%,
-        var(--glow-5),
-        transparent 30rem
-      ),
+      radial-gradient(circle at 12% 12%, var(--glow-6), transparent 32rem),
+      radial-gradient(circle at 90% 8%, var(--glow-7), transparent 34rem),
+      radial-gradient(circle at 6% 40%, var(--glow-1), transparent 36rem),
+      radial-gradient(circle at 92% 52%, var(--glow-4), transparent 32rem),
+      radial-gradient(circle at 50% 78%, var(--glow-5), transparent 30rem),
       var(--bg-1);
   }
-
 
   .home-section {
     position: relative;
@@ -1171,8 +1156,8 @@ const snyFounders = [
     line-height: 1.45;
   }
 
-
-  @media (max-width: 700px) {    .about-kicker {
+  @media (max-width: 700px) {
+    .about-kicker {
       letter-spacing: 0.24em;
     }
 
