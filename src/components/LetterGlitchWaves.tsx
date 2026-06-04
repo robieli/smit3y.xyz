@@ -29,6 +29,7 @@ interface Props {
   waveActivityBoost?: number;
   waveSurge?: boolean;
   waveSoftEdge?: number;
+  waveCoreRatio?: number;
 }
 
 const DEFAULT_COLORS = ["#8791ff", "#5ea1f2", "#17bfd1"];
@@ -112,6 +113,7 @@ const LetterGlitch = ({
   waveActivityBoost = 3,
   waveSurge = true,
   waveSoftEdge = 0.6,
+  waveCoreRatio = 0.5,
 }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationRef = useRef<number | null>(null);
@@ -333,11 +335,18 @@ const LetterGlitch = ({
         waveOrganic && thicknessTable && uIdx >= 0 && uIdx < tableSize
           ? thicknessTable[uIdx]
           : 1;
-      const effectiveBandHalf = bandHalf * thicknessFactor;
-      const fadeBandHalf = effectiveBandHalf * (1 + waveSoftEdge);
-      if (minDist >= fadeBandHalf) continue;
+      const coreHalf = bandHalf * waveCoreRatio;
+      const fadeBandHalf =
+        bandHalf * thicknessFactor * (1 + waveSoftEdge);
+      const effectiveFadeHalf = Math.max(fadeBandHalf, coreHalf * 1.01);
+      if (minDist >= effectiveFadeHalf) continue;
 
-      const alpha = smoothstep(fadeBandHalf, 0, minDist);
+      let alpha: number;
+      if (minDist <= coreHalf) {
+        alpha = 1;
+      } else {
+        alpha = smoothstep(effectiveFadeHalf, coreHalf, minDist);
+      }
       if (alpha <= 0.01) continue;
 
       ctx.globalAlpha = alpha;
@@ -585,7 +594,7 @@ const LetterGlitch = ({
       document.removeEventListener("astro:before-swap", onBeforeSwap);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [glitchSpeed, smooth, waveCount, waveSpeed, waveBandThickness, waveCurvature, waveWavelength, waveWobble, waveAngleDeg, waveOrganic, waveThicknessVariation, waveOctaves, waveActivityBoost, waveSurge, waveSoftEdge]);
+  }, [glitchSpeed, smooth, waveCount, waveSpeed, waveBandThickness, waveCurvature, waveWavelength, waveWobble, waveAngleDeg, waveOrganic, waveThicknessVariation, waveOctaves, waveActivityBoost, waveSurge, waveSoftEdge, waveCoreRatio]);
 
   const containerStyle: React.CSSProperties = {
     position: "absolute",
