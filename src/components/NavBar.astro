@@ -43,12 +43,12 @@ const tickerItems = fallbackItems;
             </svg>
           </button>
           <div class="palette-popover" role="menu" aria-label="Color themes" hidden>
-            <button class="palette-option" type="button" role="menuitemradio" data-palette-choice="midnight" aria-checked="true">
+            <button class="palette-option" type="button" role="menuitemradio" data-palette-choice="midnight" aria-checked="false">
               <span class="palette-swatch palette-swatch-midnight" aria-hidden="true"></span>
               <span class="palette-option-name">Midnight</span>
               <svg class="palette-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </button>
-            <button class="palette-option" type="button" role="menuitemradio" data-palette-choice="solar" aria-checked="false">
+            <button class="palette-option" type="button" role="menuitemradio" data-palette-choice="solar" aria-checked="true">
               <span class="palette-swatch palette-swatch-solar" aria-hidden="true"></span>
               <span class="palette-option-name">Solar</span>
               <svg class="palette-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -442,7 +442,7 @@ const tickerItems = fallbackItems;
 
   // Initial UI sync (the palette attribute + inline styles are already
   // applied by the no-flash script in BaseLayout.astro).
-  const initialPalette = (localStorage.getItem("palette") || "midnight") as Palette;
+  const initialPalette = (localStorage.getItem("palette") || "solar") as Palette;
   syncChecked(initialPalette);
   if (initialPalette === "custom") syncCustomInputs(readCustom());
 </script>

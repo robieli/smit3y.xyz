@@ -29,7 +29,8 @@ const { title, fullBleed = false, showChrome = true } = Astro.props;
           html.setAttribute("data-theme", "light");
         }
         var p = localStorage.getItem("palette");
-        if (p && p !== "midnight") html.setAttribute("data-palette", p);
+        if (!p) html.setAttribute("data-palette", "solar");
+        else if (p !== "midnight") html.setAttribute("data-palette", p);
         if (p === "custom") {
           try {
             var c = JSON.parse(localStorage.getItem("custom-palette") || "{}");
