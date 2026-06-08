@@ -373,7 +373,7 @@ const snyFounders = [
     background:
       radial-gradient(circle at 12% 12%, var(--glow-6), transparent 32rem),
       radial-gradient(circle at 90% 8%, var(--glow-7), transparent 34rem),
-      radial-gradient(circle at 6% 40%, var(--glow-1), transparent 36rem),
+      radial-gradient(circle at 6% 32%, var(--glow-1), transparent 36rem),
       radial-gradient(circle at 92% 52%, var(--glow-4), transparent 32rem),
       radial-gradient(circle at 50% 78%, var(--glow-5), transparent 30rem),
       var(--bg-1);
@@ -532,12 +532,25 @@ const snyFounders = [
   }
 
   .about-section {
+    position: relative;
     min-height: 100svh;
     background: transparent;
     color: var(--text-dim);
     padding: clamp(4.5rem, 8vw, 6.8rem) 0;
     scroll-margin-top: 4rem;
     transition: opacity 700ms ease;
+  }
+
+  .about-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 18rem;
+    background: linear-gradient(to bottom, var(--bg-1), transparent);
+    pointer-events: none;
+    z-index: 0;
   }
 
   .about-shell {
