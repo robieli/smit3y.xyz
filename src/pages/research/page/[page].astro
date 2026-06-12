@@ -118,15 +118,15 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
 
 <style>
   :global(body) {
-    background: #000;
+    background: var(--bg-0);
   }
 
   .research-list-page {
     min-height: 100svh;
     background:
-      radial-gradient(circle at 92% 8%, rgba(139, 92, 246, 0.08), transparent 32rem),
-      #000;
-    color: #d7d5df;
+      radial-gradient(circle at 92% 8%, var(--glow-7), transparent 32rem),
+      var(--bg-0);
+    color: var(--text-body);
     padding: clamp(5rem, 9vw, 7rem) 0;
   }
 
@@ -139,7 +139,7 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
 
   .section-kicker {
     margin: 0;
-    color: #8b5cf6;
+    color: var(--accent);
     font-size: clamp(0.9rem, 1.3vw, 1.12rem);
     font-weight: 800;
     letter-spacing: 0.35em;
@@ -149,7 +149,7 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
 
   .research-list-header h1 {
     margin: clamp(1.2rem, 2.8vw, 2rem) 0 0;
-    color: #dedce7;
+    color: var(--text-title);
     font-size: clamp(3.3rem, 8vw, 5.7rem);
     font-weight: 800;
     line-height: 0.95;
@@ -158,7 +158,7 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
   .research-list-header > p:last-child {
     max-width: 38rem;
     margin: clamp(1.1rem, 2vw, 1.5rem) 0 0;
-    color: #7f7b90;
+    color: var(--text-sub);
     font-size: clamp(1rem, 1.6vw, 1.24rem);
     font-weight: 600;
     line-height: 1.55;
@@ -175,9 +175,9 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
     display: flex;
     min-height: 14rem;
     flex-direction: column;
-    border: 1px solid #15142d;
+    border: 1px solid var(--border-1);
     border-radius: 8px;
-    background: rgba(10, 10, 28, 0.72);
+    background: var(--bg-card);
     color: inherit;
     padding: clamp(1.7rem, 3vw, 2.15rem);
     text-decoration: none;
@@ -189,18 +189,18 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
 
   .research-list-card:hover,
   .research-list-card:focus-visible {
-    border-color: #33265d;
-    background: rgba(15, 13, 36, 0.92);
+    border-color: var(--border-6);
+    background: var(--bg-card-hover);
     transform: translateY(-2px);
   }
 
   .research-list-card:focus-visible {
-    outline: 1px solid #8b5cf6;
+    outline: 1px solid var(--accent);
     outline-offset: 0.35rem;
   }
 
   .research-card-label {
-    color: #a78bfa;
+    color: var(--accent-light);
     font-size: clamp(1.55rem, 2.7vw, 2rem);
     font-weight: 900;
     line-height: 1;
@@ -208,7 +208,7 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
 
   .research-card-title {
     margin-top: 1.35rem;
-    color: #d7d5df;
+    color: var(--text-body);
     font-size: clamp(1rem, 1.5vw, 1.2rem);
     font-weight: 800;
     line-height: 1.35;
@@ -216,7 +216,7 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
 
   .research-card-summary {
     margin-top: 1rem;
-    color: #7f7b90;
+    color: var(--text-sub);
     font-size: clamp(0.95rem, 1.35vw, 1.12rem);
     font-weight: 600;
     line-height: 1.4;
@@ -224,7 +224,7 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
 
   .research-card-date {
     margin-top: 1.5rem;
-    color: #555164;
+    color: var(--text-period);
     font-size: 0.95rem;
     font-weight: 700;
   }
@@ -232,7 +232,7 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
   .research-card-arrow {
     align-self: flex-end;
     margin-top: auto;
-    color: #8b5cf6;
+    color: var(--accent);
     font-size: 1.1rem;
     font-weight: 900;
   }
@@ -246,9 +246,9 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
   }
 
   .research-pagination a {
-    border: 1px solid #201a3b;
+    border: 1px solid var(--border-5);
     border-radius: 4px;
-    color: #8d879b;
+    color: var(--text-nav);
     font-size: 0.95rem;
     font-weight: 800;
     padding: 0.52rem 0.72rem;
@@ -258,8 +258,8 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
   .research-pagination a:hover,
   .research-pagination a:focus-visible,
   .research-pagination a.is-active {
-    border-color: #8b5cf6;
-    color: #a78bfa;
+    border-color: var(--accent);
+    color: var(--accent-light);
   }
 
   @media (max-width: 700px) {
