@@ -36,9 +36,6 @@ const pageHref = (page: number) =>
               {entry.stockLabel || entry.title.split(" ")[0]}
             </span>
             <span class="research-card-title">{entry.title}</span>
-            {entry.summary && (
-              <span class="research-card-summary">{entry.summary}</span>
-            )}
             <span class="research-card-date">
               {entry.date
                 ? new Date(entry.date).toLocaleDateString("en-US", {
@@ -169,14 +166,6 @@ const pageHref = (page: number) =>
     font-size: clamp(1rem, 1.5vw, 1.2rem);
     font-weight: 800;
     line-height: 1.35;
-  }
-
-  .research-card-summary {
-    margin-top: 1rem;
-    color: var(--text-sub);
-    font-size: clamp(0.95rem, 1.35vw, 1.12rem);
-    font-weight: 600;
-    line-height: 1.4;
   }
 
   .research-card-date {
