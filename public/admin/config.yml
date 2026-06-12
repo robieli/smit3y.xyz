@@ -26,4 +26,3 @@ collections:
           time_format: false,
         }
       - { label: "PDF", name: "pdf", widget: "file" }
-      - { label: "Summary", name: "summary", widget: "text", required: false }

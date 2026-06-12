@@ -4,7 +4,6 @@ export type ResearchModule = {
     stockLabel?: string;
     date?: string;
     pdf?: string;
-    summary?: string;
   };
 };
 
@@ -14,7 +13,6 @@ export type ResearchEntry = {
   title: string;
   date: string;
   pdf: string;
-  summary?: string;
 };
 
 export const RESEARCH_PAGE_SIZE = 10;
@@ -41,7 +39,6 @@ export const loadResearchEntries = (): ResearchEntry[] => {
         title: fm.title?.trim() || slug,
         date: fm.date?.trim() || "",
         pdf: fm.pdf?.trim() || "",
-        summary: fm.summary?.trim() || "",
       };
     })
     .sort((a, b) => getDateValue(b.date) - getDateValue(a.date));
