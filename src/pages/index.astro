@@ -2,19 +2,25 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { loadResearchEntries } from "../lib/research";
 import smit3yImage from "../assets/smit3y.jpg";
-import GlobeMesh from "../components/GlobeMesh.astro";
+import LetterGlitch from "../components/LetterGlitchWaves.tsx";
 
 const researchEntries = loadResearchEntries();
 const featuredResearchEntries = researchEntries.slice(0, 6);
 const experienceEntries = [
   {
+    period: "PRESENT",
+    role: "Sales, Trading & Prime Brokerage Intern",
+    organization: "Coinbase",
+    bullets: [
+      "Working closely on navigating sales, custodial, and staking requests from clients inspired to get involved with the digital asset space",
+    ],
+  },
+  {
     period: "SUMMER 2025",
     role: "Wealth Management Intern",
-    organization: "Local Wealth Management Firm - San Diego, CA",
+    organization: "Dyer Wealth Management - San Diego, CA",
     bullets: [
-      "Assisted in portfolio construction and client advisory across equity and fixed-income allocations",
-      "Conducted market research and financial analysis to support investment recommendations",
-      "Gained hands-on experience with institutional trading platforms and client relationship management",
+      "Assisted in portfolio construction, backtesting financial models and algorithms, and client advisory across equity and fixed-income allocations.",
     ],
   },
   {
@@ -22,8 +28,7 @@ const experienceEntries = [
     role: "Practice Player",
     organization: "University of Michigan Women's Basketball",
     bullets: [
-      "Selected as a practice player to train with Division I athletes, developing team-oriented discipline",
-      "Contributed to game preparation through simulation of opponent strategies and play execution",
+      "Selected as a practice player to train with the University of Michigan's Division I basketball team, making me a further fan of the WNBA and women's college basketball",
     ],
   },
   {
@@ -31,8 +36,8 @@ const experienceEntries = [
     role: "Co-Founder",
     organization: "S&Y Scholars - College Consulting",
     bullets: [
-      "Co-founded a peer-to-peer college admissions consulting service helping families navigate recruitment and strategy",
-      "Provided essay editing, interview prep, and application strategy to high school students",
+      "Co-founded a peer-to-peer college admissions consulting service helping families navigate recruitment and strategy.",
+      "Read more on how you can use our services below",
       "Winner of the 2023 New York Times College Essay Challenge",
     ],
   },
@@ -88,27 +93,23 @@ const snyFounders = [
 ---
 
 <BaseLayout title="smit3y.xyz" fullBleed={true}>
-<section id="home" class="home-section" aria-label="Home">
+  <section id="home" class="home-section" aria-label="Home">
     <div class="hero-backdrop" aria-hidden="true">
-      <div class="hero-backdrop-globe">
-        <GlobeMesh
-          size={420}
-          lineCount={18}
-          color="#7F77DD"
-          backOpacityPct={18}
-          tiltXDeg={12}
-          autoSpin={true}
-        />
-      </div>
+      <LetterGlitch
+        client:load
+        glitchSpeed={50}
+        centerVignette={false}
+        outerVignette={false}
+        smooth={true}
+        waveCurvature={50}
+        waveWavelength={1400}
+        waveBandThickness={200}
+        waveAngleDeg={55}
+      />
+      <div class="hero-fade-bottom"></div>
     </div>
     <div class="hero-content">
-      <p class="hero-kicker">
-        EQUITY RESEARCH <span aria-hidden="true">·</span> CRYPTO INFRASTRUCTURE
-      </p>
-      <h1 class="hero-title">SMIT3Y</h1>
-      <p class="hero-subtitle">
-        FINANCIAL ANALYSIS <span aria-hidden="true">·</span> UNIVERSITY OF MICHIGAN
-      </p>
+      <h1 class="hero-title">SMIT3Y.XYZ</h1>
       <div class="hero-actions" aria-label="Featured actions">
         <a class="hero-action hero-action-primary" href="#research">
           VIEW RESEARCH <span aria-hidden="true">→</span>
@@ -126,33 +127,54 @@ const snyFounders = [
       <p class="about-kicker">// ABOUT</p>
       <h2 class="about-title">Who I Am</h2>
       <div class="about-content">
-        <div class="about-image-wrapper">
-          <img src={smit3yImage.src} alt="Eli Robinson" class="about-image" />
+        <div class="about-aside">
+          <div class="about-image-wrapper">
+            <img src={smit3yImage.src} alt="Eli Robinson" class="about-image" />
+          </div>
+          <div class="about-extras">
+            <p class="about-snapshot">Here is a snapshot of who I am:</p>
+            <div class="about-tags" aria-label="Focus areas">
+              <span>Equity Research</span>
+              <span>Bitcoin Mining</span>
+              <span>DeFi & Blockchain</span>
+              <span>SaaS Valuations</span>
+              <span>Financial Modeling</span>
+              <span>Quantitative Finance</span>
+            </div>
+          </div>
         </div>
         <div class="about-text">
           <p class="about-paragraph about-paragraph-lead">
-            Samuel Andres Smith is an incoming senior at the University of
-            Michigan who writes, researches, and builds at the intersection of
-            digital assets and traditional finance. Currently a Sales, Trading,
-            and Prime Brokerage intern at Coinbase, he produces investor-focused
-            equity and tokenomic reports while mentoring peers through SNY
-            Scholars — a student-led program helping families navigate college
-            recruitment.
+            I am a builder, basketball player, and researcher based out of New
+            York City.
           </p>
           <p class="about-paragraph">
-            Samuel combines rigorous market analysis with a student's
-            perspective to break down the most pivotal intersection of our
-            generation, AI and crypto. You can also catch Samuel in the gym,
-            playing basketball, or attempting to learn the electric guitar.
+            My passion lies in studying digital assets, macro trends, finding
+            gems amongst equities, and debating with friends about our
+            ever-moving world.
           </p>
-          <div class="about-tags" aria-label="Focus areas">
-            <span>Equity Research</span>
-            <span>Bitcoin Mining</span>
-            <span>DeFi & Blockchain</span>
-            <span>SaaS Valuations</span>
-            <span>Financial Modeling</span>
-            <span>Quantitative Finance</span>
-          </div>
+          <p class="about-paragraph">
+            I study Economics and Psychology at the University of Michigan,
+            Class of 2027.
+          </p>
+          <p class="about-paragraph">
+            I have lived in San Diego (where I am from) — Cairo, Egypt —
+            Singapore — Chengdu, China — and Ann Arbor, Michigan.
+          </p>
+          <p class="about-paragraph">
+            I am an avid Cavaliers fan, an annoying Michigan sports fan, an
+            enormous Chinatown eater, a bigger podcast listener, and an aspiring
+            runner.
+          </p>
+          <p class="about-paragraph">
+            Doing research is what I find joy in, and participating in the most
+            competitive probability game known as the United States Capital
+            Markets is what I find myself doing most of the week.
+          </p>
+          <p class="about-paragraph">
+            My close friends call me Smitty, and that is where I have derived
+            the name for this website.
+          </p>
         </div>
       </div>
     </div>
@@ -162,14 +184,9 @@ const snyFounders = [
       <p class="section-kicker">// RESEARCH</p>
       <h2>Investment Theses</h2>
       <p>
-        My research portfolio spans equity analyses and tokenomic studies
-        written through an investor lens. I attempt to combine market data,
-        trends I see coming to fruition in my lifetime, and academic literature
-        to produce concise reports that inform investment decisions and
-        classroom learning — aimed at peers, funders, and practitioners seeking
-        clear, actionable analysis. I spend many nights and weekends researching
-        the next best beneficiary of our AI boom. You can find some of these
-        beneficiaries below.
+        I like to research beaten-down equities, trends I believe in and am
+        invested in, digital assets, and decentralized finance. My work is
+        published below:
       </p>
     </div>
     <div class="research-grid">
@@ -206,7 +223,9 @@ const snyFounders = [
             <article class="experience-item">
               <p class="experience-period">{entry.period}</p>
               <h3 class="experience-role">{entry.role}</h3>
-              <p class="experience-organization">{entry.organization}</p>
+              {entry.organization && (
+                <p class="experience-organization">{entry.organization}</p>
+              )}
               <ul class="experience-points">
                 {entry.bullets.map((point) => (
                   <li>{point}</li>
@@ -255,14 +274,14 @@ const snyFounders = [
                         stroke-width="1.8"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                      ></path>
+                      />
                       <path
                         d="M6.5 10.5a5.5 5.5 0 0 0 11 0M12 16v4M9 20h6"
                         stroke="currentColor"
                         stroke-width="1.8"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                      ></path>
+                      />
                     </svg>
                   )}
                   {service.icon === "pen" && (
@@ -273,14 +292,14 @@ const snyFounders = [
                         stroke-width="1.8"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                      ></path>
+                      />
                       <path
                         d="m13 6 3 3M4 20l4-4"
                         stroke="currentColor"
                         stroke-width="1.8"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                      ></path>
+                      />
                     </svg>
                   )}
                   {service.icon === "target" && (
@@ -291,15 +310,15 @@ const snyFounders = [
                         r="8"
                         stroke="currentColor"
                         stroke-width="1.8"
-                      ></circle>
+                      />
                       <circle
                         cx="12"
                         cy="12"
                         r="4"
                         stroke="currentColor"
                         stroke-width="1.8"
-                      ></circle>
-                      <circle cx="12" cy="12" r="1.2" fill="currentColor"></circle>
+                      />
+                      <circle cx="12" cy="12" r="1.2" fill="currentColor" />
                     </svg>
                   )}
                 </span>
@@ -375,34 +394,13 @@ const snyFounders = [
 <style>
   :global(body) {
     background:
-      radial-gradient(
-        circle at 12% 12%,
-        var(--glow-6),
-        transparent 32rem
-      ),
-      radial-gradient(
-        circle at 90% 8%,
-        var(--glow-7),
-        transparent 34rem
-      ),
-      radial-gradient(
-        circle at 6% 40%,
-        var(--glow-1),
-        transparent 36rem
-      ),
-      radial-gradient(
-        circle at 92% 52%,
-        var(--glow-4),
-        transparent 32rem
-      ),
-      radial-gradient(
-        circle at 50% 78%,
-        var(--glow-5),
-        transparent 30rem
-      ),
+      radial-gradient(circle at 12% 12%, var(--glow-6), transparent 32rem),
+      radial-gradient(circle at 90% 8%, var(--glow-7), transparent 34rem),
+      radial-gradient(circle at 6% 32%, var(--glow-1), transparent 36rem),
+      radial-gradient(circle at 92% 52%, var(--glow-4), transparent 32rem),
+      radial-gradient(circle at 50% 78%, var(--glow-5), transparent 30rem),
       var(--bg-1);
   }
-
 
   .home-section {
     position: relative;
@@ -425,27 +423,20 @@ const snyFounders = [
     justify-content: center;
     pointer-events: none;
     z-index: 0;
-    mask-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 1) 52%,
-      rgba(0, 0, 0, 0) 100%
-    );
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 1) 52%,
-      rgba(0, 0, 0, 0) 100%
-    );
+    background: var(--bg-glitch);
   }
 
-  .hero-backdrop-globe {
-    opacity: 0.45;
-  }
-
-  .hero-backdrop #globe-wrap {
-    padding: 0;
-    gap: 0;
+  .hero-fade-bottom {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 55%,
+      var(--hero-fade-color) 100%
+    );
+    z-index: 1;
   }
 
   .hero-content {
@@ -456,8 +447,6 @@ const snyFounders = [
     text-align: center;
   }
 
-  .hero-kicker,
-  .hero-subtitle,
   .hero-action,
   .scroll-cue {
     font-family: Inconsolata, monospace;
@@ -465,12 +454,6 @@ const snyFounders = [
     letter-spacing: 0.35em;
     line-height: 1.3;
     text-transform: uppercase;
-  }
-
-  .hero-kicker {
-    margin: 0;
-    color: var(--accent);
-    font-size: clamp(0.78rem, 1.35vw, 1.1rem);
   }
 
   .hero-title {
@@ -485,12 +468,6 @@ const snyFounders = [
     letter-spacing: 0;
     line-height: 0.95;
     padding-bottom: 0.08em;
-  }
-
-  .hero-subtitle {
-    margin: clamp(2.1rem, 4vw, 3rem) 0 0;
-    color: var(--text-sub);
-    font-size: clamp(0.9rem, 1.5vw, 1.18rem);
   }
 
   .hero-actions {
@@ -538,6 +515,10 @@ const snyFounders = [
     color: #fff;
   }
 
+  .hero-action-secondary {
+    background: var(--bg-glitch);
+  }
+
   .hero-action-secondary:hover,
   .hero-action-secondary:focus-visible {
     border-color: var(--border-hero-hover);
@@ -574,12 +555,25 @@ const snyFounders = [
   }
 
   .about-section {
+    position: relative;
     min-height: 100svh;
     background: transparent;
     color: var(--text-dim);
     padding: clamp(4.5rem, 8vw, 6.8rem) 0;
     scroll-margin-top: 4rem;
     transition: opacity 700ms ease;
+  }
+
+  .about-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 18rem;
+    background: linear-gradient(to bottom, var(--bg-1), transparent);
+    pointer-events: none;
+    z-index: 0;
   }
 
   .about-shell {
@@ -604,6 +598,19 @@ const snyFounders = [
     gap: clamp(2.2rem, 4.8vw, 4.4rem);
     align-items: flex-start;
     margin-top: clamp(2.2rem, 4vw, 3.2rem);
+  }
+
+  .about-aside {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.2rem, 2.1vw, 1.8rem);
+    width: clamp(22rem, 34vw, 24rem);
+  }
+
+  .about-extras {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.2rem, 2.1vw, 1.8rem);
   }
 
   .about-image-wrapper {
@@ -652,6 +659,15 @@ const snyFounders = [
 
   .about-paragraph-lead {
     color: var(--text-lead);
+  }
+
+  .about-snapshot {
+    margin: 0;
+    color: var(--text-lead);
+    font-family: Inconsolata, monospace;
+    font-size: clamp(1rem, 1.6vw, 1.24rem);
+    font-weight: 600;
+    line-height: 1.55;
   }
 
   .about-tags {
@@ -1169,8 +1185,8 @@ const snyFounders = [
     line-height: 1.45;
   }
 
-
-  @media (max-width: 700px) {    .about-kicker {
+  @media (max-width: 700px) {
+    .about-kicker {
       letter-spacing: 0.24em;
     }
 
@@ -1181,12 +1197,23 @@ const snyFounders = [
       margin-top: 1.4rem;
     }
 
+    .about-aside {
+      display: contents;
+    }
+
     .about-image-wrapper {
+      order: 1;
       width: clamp(14rem, 55vw, 18rem);
       border-radius: 12px;
     }
 
+    .about-extras {
+      order: 3;
+      width: 100%;
+    }
+
     .about-text {
+      order: 2;
       text-align: left;
       gap: 1rem;
     }
@@ -1209,8 +1236,6 @@ const snyFounders = [
       padding: 3rem 0 5.5rem;
     }
 
-    .hero-kicker,
-    .hero-subtitle,
     .hero-action,
     .scroll-cue {
       letter-spacing: 0.22em;

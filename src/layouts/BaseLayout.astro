@@ -22,11 +22,11 @@ const { title, fullBleed = false, showChrome = true } = Astro.props;
     <title>{title}</title>
     <script is:inline>
       (function () {
+        var html = document.documentElement;
         var t = localStorage.getItem("theme");
-        if (t === "light" || t === "dark") {
-          if (t === "light") document.documentElement.setAttribute("data-theme", "light");
-        } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
-          document.documentElement.setAttribute("data-theme", "light");
+        if (t === "light") html.setAttribute("data-theme", "light");
+        else if (t !== "dark" && window.matchMedia("(prefers-color-scheme: light)").matches) {
+          html.setAttribute("data-theme", "light");
         }
       })();
     </script>
