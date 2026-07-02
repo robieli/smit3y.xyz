@@ -1,0 +1,187 @@
+---
+import { Image } from "astro:assets";
+import basketball from "../assets/basketball.jpeg";
+import coinbase from "../assets/coinbase.png";
+import desert from "../assets/desert.jpeg";
+import radio from "../assets/radio.jpeg";
+
+const slides = [
+  { src: basketball, alt: "Eli playing basketball" },
+  { src: coinbase, alt: "Eli at Coinbase" },
+  { src: desert, alt: "Eli in the desert" },
+  { src: radio, alt: "Eli on the radio" },
+];
+---
+
+<div class="about-carousel">
+  <div class="embla" data-embla>
+    <div class="embla__viewport">
+      <div class="embla__container">
+        {
+          slides.map((slide) => (
+            <div class="embla__slide">
+              <Image
+                class="embla__img"
+                src={slide.src}
+                alt={slide.alt}
+                widths={[400, 800]}
+                sizes="(max-width: 700px) 60vw, 22rem"
+                loading="lazy"
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+    <button class="embla__btn embla__btn--prev" type="button" aria-label="Previous image">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </button>
+    <button class="embla__btn embla__btn--next" type="button" aria-label="Next image">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  import EmblaCarousel from "embla-carousel";
+  import Autoplay from "embla-carousel-autoplay";
+
+  document.querySelectorAll<HTMLElement>("[data-embla]").forEach((root) => {
+    const viewport = root.querySelector<HTMLElement>(".embla__viewport");
+    if (!viewport) return;
+
+    const embla = EmblaCarousel(viewport, { loop: true }, [
+      Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true }),
+    ]);
+
+    root
+      .querySelector(".embla__btn--prev")
+      ?.addEventListener("click", () => embla.scrollPrev());
+    root
+      .querySelector(".embla__btn--next")
+      ?.addEventListener("click", () => embla.scrollNext());
+  });
+</script>
+
+<style>
+  .about-carousel {
+    position: relative;
+    width: clamp(16.5rem, 28vw, 22rem);
+  }
+
+  .embla {
+    position: relative;
+  }
+
+  .embla__viewport {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 1px solid var(--border-3);
+    border-radius: 12px;
+    background: var(--bg-img);
+    box-shadow: 0 0 0 1px var(--border-img);
+  }
+
+  .embla__container {
+    display: flex;
+    height: 100%;
+    touch-action: pan-y pinch-zoom;
+  }
+
+  .embla__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    height: 100%;
+  }
+
+  .embla__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .embla__btn {
+    position: absolute;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    padding: 0;
+    transform: translateY(-50%);
+    border: 1px solid var(--border-4);
+    border-radius: 999px;
+    background: var(--bg-tag);
+    color: var(--text-sub);
+    cursor: pointer;
+    opacity: 0;
+    transition:
+      transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      opacity 240ms ease,
+      box-shadow 280ms ease,
+      border-color 280ms ease,
+      background-color 280ms ease,
+      color 280ms ease;
+    will-change: transform, opacity;
+  }
+
+  .embla__btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .embla__btn--prev {
+    left: 0.6rem;
+  }
+
+  .embla__btn--next {
+    right: 0.6rem;
+  }
+
+  .about-carousel:hover .embla__btn,
+  .about-carousel:focus-within .embla__btn {
+    opacity: 1;
+  }
+
+  .embla__btn:hover {
+    border-color: var(--border-tag-hover);
+    background: var(--bg-tag-hover);
+    color: var(--text-hover-tag);
+    box-shadow: var(--shadow-tag);
+  }
+
+  .embla__btn--prev:hover {
+    transform: translateY(-50%) translateX(-2px);
+  }
+
+  .embla__btn--next:hover {
+    transform: translateY(-50%) translateX(2px);
+  }
+
+  .embla__btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    opacity: 1;
+  }
+
+  /* Touch devices lack hover: keep the controls visible. */
+  @media (hover: none) {
+    .embla__btn {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .about-carousel {
+      order: 2;
+      width: 100%;
+      max-width: clamp(14rem, 55vw, 18rem);
+    }
+  }
+</style>

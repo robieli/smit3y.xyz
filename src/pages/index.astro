@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { loadResearchEntries } from "../lib/research";
 import smit3yImage from "../assets/smit3y.jpg";
 import LetterGlitch from "../components/LetterGlitchWaves.tsx";
+import AboutCarousel from "../components/AboutCarousel.astro";
 
 const researchEntries = loadResearchEntries();
 const featuredResearchEntries = researchEntries.slice(0, 6);
@@ -131,6 +132,7 @@ const snyFounders = [
           <div class="about-image-wrapper">
             <img src={smit3yImage.src} alt="Eli Robinson" class="about-image" />
           </div>
+          <AboutCarousel />
           <div class="about-extras">
             <p class="about-snapshot">Here is a snapshot of who I am:</p>
             <div class="about-tags" aria-label="Focus areas">
@@ -1198,12 +1200,12 @@ const snyFounders = [
     }
 
     .about-extras {
-      order: 3;
+      order: 4;
       width: 100%;
     }
 
     .about-text {
-      order: 2;
+      order: 3;
       text-align: left;
       gap: 1rem;
     }
