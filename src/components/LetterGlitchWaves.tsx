@@ -134,6 +134,7 @@ const LetterGlitch = ({
   const thicknessTableRef = useRef<Float32Array | null>(null);
   const weightsRef = useRef<Float32Array | null>(null);
   const surgeUntilRef = useRef(0);
+  const viewportScaleRef = useRef(1);
   const [bgColor, setBgColor] = useState("#000000");
   const [ready, setReady] = useState(false);
 
@@ -184,6 +185,15 @@ const LetterGlitch = ({
     const dpr = window.devicePixelRatio || 1;
     const rect = parent.getBoundingClientRect();
 
+    // The wave spacing (segment = wrapLength / waveCount) scales with the
+    // viewport, but the band geometry is authored in absolute pixels tuned for
+    // desktop. On narrow viewports the fixed-size bands overlap and fill the
+    // whole screen, erasing the dark gaps between waves. Scale the geometry
+    // down below a reference width so the bands stay proportional to the
+    // spacing and the desktop look carries over to mobile.
+    const viewportScale = Math.max(0.42, Math.min(1, rect.width / 1200));
+    viewportScaleRef.current = viewportScale;
+
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
 
@@ -210,7 +220,7 @@ const LetterGlitch = ({
     wrapLengthRef.current =
       sinT * rect.width +
       cosT * rect.height +
-      2 * Math.max(0, waveCurvature);
+      2 * Math.max(0, waveCurvature * viewportScale);
   };
 
   const drawLetters = () => {
@@ -228,10 +238,11 @@ const LetterGlitch = ({
     const items = letters.current;
     const wrap = wrapLengthRef.current;
     const offset = waveOffsetRef.current;
-    const bandHalf = waveBandThickness;
+    const scale = viewportScaleRef.current;
+    const bandHalf = waveBandThickness * scale;
     const n = waveCount;
     const segment = wrap / n;
-    const curvature = Math.max(0, waveCurvature);
+    const curvature = Math.max(0, waveCurvature * scale);
 
     const thetaRad = (waveAngleDeg * Math.PI) / 180;
     const sinT = Math.sin(thetaRad);
@@ -244,7 +255,7 @@ const LetterGlitch = ({
     const centers: number[] = [];
     for (let k = 0; k < n; k++) {
       const drift = waveOrganic
-        ? 30 * Math.sin(tElapsed * 0.13 + k * 1.7)
+        ? 30 * scale * Math.sin(tElapsed * 0.13 + k * 1.7)
         : 0;
       centers.push(((offset + k * segment + drift) % wrap + wrap) % wrap);
     }
@@ -255,7 +266,7 @@ const LetterGlitch = ({
     const tableSize = perturbTable ? perturbTable.length : 0;
     const minDistCache = minDistCacheRef.current;
 
-    const wavelength = Math.max(50, waveWavelength);
+    const wavelength = Math.max(50, waveWavelength * scale);
     const twoPi = Math.PI * 2;
 
     if (curvature > 0 && perturbTable) {
@@ -364,7 +375,7 @@ const LetterGlitch = ({
     const updateCount = Math.max(1, Math.floor(items.length * 0.015));
     const minDistCache = minDistCacheRef.current;
     const weights = weightsRef.current;
-    const bandHalf = waveBandThickness;
+    const bandHalf = waveBandThickness * viewportScaleRef.current;
     const boost = Math.max(1, waveActivityBoost);
 
     const mutateAtIndex = (idx: number) => {
