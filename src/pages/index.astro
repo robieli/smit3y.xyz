@@ -133,17 +133,6 @@ const snyFounders = [
             <img src={smit3yImage.src} alt="Eli Robinson" class="about-image" />
           </div>
           <AboutCarousel />
-          <div class="about-extras">
-            <p class="about-snapshot">Here is a snapshot of who I am:</p>
-            <div class="about-tags" aria-label="Focus areas">
-              <span>Equity Research</span>
-              <span>Bitcoin Mining</span>
-              <span>DeFi & Blockchain</span>
-              <span>SaaS Valuations</span>
-              <span>Financial Modeling</span>
-              <span>Quantitative Finance</span>
-            </div>
-          </div>
         </div>
         <div class="about-text">
           <p class="about-paragraph about-paragraph-lead">
@@ -608,12 +597,6 @@ const snyFounders = [
     width: clamp(22rem, 34vw, 24rem);
   }
 
-  .about-extras {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(1.2rem, 2.1vw, 1.8rem);
-  }
-
   .about-image-wrapper {
     position: relative;
     width: clamp(16.5rem, 28vw, 22rem);
@@ -660,50 +643,6 @@ const snyFounders = [
 
   .about-paragraph-lead {
     color: var(--text-lead);
-  }
-
-  .about-snapshot {
-    margin: 0;
-    color: var(--text-lead);
-    font-family: Inconsolata, monospace;
-    font-size: clamp(1rem, 1.6vw, 1.24rem);
-    font-weight: 600;
-    line-height: 1.55;
-  }
-
-  .about-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.7rem;
-    margin-top: 0.3rem;
-  }
-
-  .about-tags span {
-    border: 1px solid var(--border-4);
-    border-radius: 999px;
-    background: var(--bg-tag);
-    color: var(--text-sub);
-    font-family: Inconsolata, monospace;
-    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
-    font-weight: 600;
-    line-height: 1;
-    padding: 0.65rem 1rem;
-    cursor: default;
-    transition:
-      transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1),
-      box-shadow 280ms ease,
-      border-color 280ms ease,
-      background-color 280ms ease,
-      color 280ms ease;
-    will-change: transform, box-shadow;
-  }
-
-  .about-tags span:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-tag);
-    border-color: var(--border-tag-hover);
-    background: var(--bg-tag-hover);
-    color: var(--text-hover-tag);
   }
 
   .content-section {
@@ -1199,11 +1138,6 @@ const snyFounders = [
       border-radius: 12px;
     }
 
-    .about-extras {
-      order: 4;
-      width: 100%;
-    }
-
     .about-text {
       order: 3;
       text-align: left;
@@ -1212,15 +1146,6 @@ const snyFounders = [
 
     .about-title {
       margin-top: 0.8rem;
-    }
-
-    .about-tags {
-      gap: 0.55rem;
-    }
-
-    .about-tags span {
-      font-size: 0.95rem;
-      padding: 0.62rem 0.95rem;
     }
 
     .home-section {
