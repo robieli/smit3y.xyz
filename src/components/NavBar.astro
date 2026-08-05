@@ -468,12 +468,18 @@ const tickerItems = fallbackItems;
     const magneticEls = Array.from(document.querySelectorAll<HTMLElement>(".magnetic"));
 
     for (const el of magneticEls) {
-      const strength = 0.35;
+      // Small elements (nav links, buttons) want a strong, snappy pull;
+      // large ones (the hero title) need a much gentler one or the offset
+      // gets huge near the edges. Override per-element via data attrs.
+      const strength = parseFloat(el.dataset.magneticStrength ?? "0.35");
+      const maxOffset = parseFloat(el.dataset.magneticMax ?? "24");
 
       el.addEventListener("mousemove", (e) => {
         const rect = el.getBoundingClientRect();
-        const mx = (e.clientX - rect.left - rect.width / 2) * strength;
-        const my = (e.clientY - rect.top - rect.height / 2) * strength;
+        const rawX = (e.clientX - rect.left - rect.width / 2) * strength;
+        const rawY = (e.clientY - rect.top - rect.height / 2) * strength;
+        const mx = Math.max(-maxOffset, Math.min(maxOffset, rawX));
+        const my = Math.max(-maxOffset, Math.min(maxOffset, rawY));
         el.style.setProperty("--mx", `${mx}px`);
         el.style.setProperty("--my", `${my}px`);
       });

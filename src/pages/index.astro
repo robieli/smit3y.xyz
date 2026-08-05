@@ -108,7 +108,13 @@ const snyFounders = [
     </div>
     <div class="hero-content">
       <p class="hero-typewriter" aria-hidden="true" data-typewriter="&gt; whoami"></p>
-      <h1 class="hero-title" id="hero-title" aria-label={heroTitle}>
+      <h1
+        class="hero-title magnetic"
+        id="hero-title"
+        aria-label={heroTitle}
+        data-magnetic-strength="0.16"
+        data-magnetic-max="32"
+      >
         <span aria-hidden="true">
           {
             heroTitle.split("").map((ch, i) => (
