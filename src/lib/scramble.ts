@@ -1,0 +1,77 @@
+const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+const STEP_MS = 40;
+const MAX_ITERATIONS = 6;
+
+const randomChar = () => CHARSET[Math.floor(Math.random() * CHARSET.length)];
+
+/** Sets each letter to a random character (in place — no reflow), for a
+ * pre-jumbled resting state (e.g. before the first decode). Whitespace
+ * letters are left alone so word gaps don't fill in with junk. */
+export function jumbleLetters(letters: HTMLElement[]) {
+  for (const letterEl of letters) {
+    const final = letterEl.dataset.char ?? "";
+    if (!final.trim()) continue;
+    letterEl.textContent = randomChar();
+  }
+}
+
+/** Wraps an element's text into per-letter spans, returning them in order. */
+export function wrapLetters(el: HTMLElement): HTMLElement[] {
+  const text = el.textContent ?? "";
+  el.textContent = "";
+
+  const wrapper = document.createElement("span");
+  wrapper.setAttribute("aria-hidden", "true");
+
+  const letters: HTMLElement[] = [];
+  for (const ch of text) {
+    const span = document.createElement("span");
+    span.className = "scramble-letter";
+    span.dataset.char = ch;
+    span.textContent = ch;
+    wrapper.appendChild(span);
+    letters.push(span);
+  }
+
+  el.appendChild(wrapper);
+  return letters;
+}
+
+/** Wires up a hover-triggered scramble/decode animation across `letters`.
+ * `onComplete` (if given) fires once, after the full sequence settles. */
+export function scrambleOnHover(
+  trigger: HTMLElement,
+  letters: HTMLElement[],
+  onComplete?: () => void,
+) {
+  let scrambling = false;
+
+  const scrambleLetter = (letterEl: HTMLElement, delay: number) => {
+    const final = letterEl.dataset.char ?? "";
+    if (!final.trim()) return;
+    let iterations = 0;
+
+    setTimeout(() => {
+      const interval = setInterval(() => {
+        if (iterations >= MAX_ITERATIONS) {
+          letterEl.textContent = final;
+          clearInterval(interval);
+          return;
+        }
+        letterEl.textContent = randomChar();
+        iterations += 1;
+      }, STEP_MS);
+    }, delay);
+  };
+
+  trigger.addEventListener("mouseenter", () => {
+    if (scrambling) return;
+    scrambling = true;
+    letters.forEach((letterEl, i) => scrambleLetter(letterEl, i * STEP_MS));
+    const totalTime = letters.length * STEP_MS + MAX_ITERATIONS * STEP_MS + 80;
+    setTimeout(() => {
+      scrambling = false;
+      onComplete?.();
+    }, totalTime);
+  });
+}

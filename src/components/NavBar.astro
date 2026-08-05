@@ -10,11 +10,11 @@ const tickerItems = fallbackItems;
       <span>smit3y.xyz</span>
     </a>
     <nav class="site-nav" aria-label="Primary navigation">
-      <a class="is-active" href="/#home" aria-current="page">Home</a>
-      <a href="/#about">About</a>
-      <a href="/#research">Research</a>
-      <a href="/#experience">Experience</a>
-      <a href="/#sny">S&amp;Y</a>
+      <a class="is-active magnetic" href="/#home" aria-current="page">Home</a>
+      <a class="magnetic" href="/#about">About</a>
+      <a class="magnetic" href="/#research">Research</a>
+      <a class="magnetic" href="/#experience">Experience</a>
+      <a class="magnetic" href="/#sny">S&amp;Y</a>
       <div class="nav-controls">
         <button class="theme-toggle" type="button" aria-label="Toggle light/dark theme">
           <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -445,4 +445,182 @@ const tickerItems = fallbackItems;
   const initialPalette = (localStorage.getItem("palette") || "solar") as Palette;
   syncChecked(initialPalette);
   if (initialPalette === "custom") syncCustomInputs(readCustom());
+</script>
+
+<script>
+  import { wrapLetters, scrambleOnHover } from "../lib/scramble";
+
+  // Magnetic hover: nudges any .magnetic element toward the cursor within
+  // its bounds, eased back to rest on leave. Site-wide (nav links, hero
+  // buttons, etc. all just need the .magnetic class).
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  // Scramble/decode on hover for the primary nav links.
+  if (!reduceMotion.matches) {
+    const navLinks = Array.from(document.querySelectorAll<HTMLElement>(".site-nav a"));
+    for (const link of navLinks) {
+      const letters = wrapLetters(link);
+      scrambleOnHover(link, letters);
+    }
+  }
+
+  if (!reduceMotion.matches) {
+    const magneticEls = Array.from(document.querySelectorAll<HTMLElement>(".magnetic"));
+
+    for (const el of magneticEls) {
+      const strength = 0.35;
+
+      el.addEventListener("mousemove", (e) => {
+        const rect = el.getBoundingClientRect();
+        const mx = (e.clientX - rect.left - rect.width / 2) * strength;
+        const my = (e.clientY - rect.top - rect.height / 2) * strength;
+        el.style.setProperty("--mx", `${mx}px`);
+        el.style.setProperty("--my", `${my}px`);
+      });
+
+      el.addEventListener("mouseleave", () => {
+        el.style.setProperty("--mx", "0px");
+        el.style.setProperty("--my", "0px");
+      });
+    }
+  }
+
+  // Glow card: tracks the cursor across .glow-card elements and exposes
+  // the position as --gx/--gy percentages for a radial-gradient in CSS.
+  const glowCards = Array.from(document.querySelectorAll<HTMLElement>(".glow-card"));
+
+  for (const card of glowCards) {
+    card.addEventListener("mousemove", (e) => {
+      const rect = card.getBoundingClientRect();
+      const gx = ((e.clientX - rect.left) / rect.width) * 100;
+      const gy = ((e.clientY - rect.top) / rect.height) * 100;
+      card.style.setProperty("--gx", `${gx}%`);
+      card.style.setProperty("--gy", `${gy}%`);
+    });
+  }
+
+  // Cursor trail: a fading comet streak drawn on <canvas>, following the
+  // mouse across the whole site. Skipped on touch devices (no real mouse)
+  // and when the user prefers reduced motion.
+  const canFinePointer = window.matchMedia("(pointer: fine)").matches;
+  const trailCanvas = document.querySelector<HTMLCanvasElement>(".cursor-trail");
+
+  if (trailCanvas && canFinePointer && !reduceMotion.matches) {
+    const ctx = trailCanvas.getContext("2d");
+
+    if (ctx) {
+      const resize = () => {
+        const dpr = window.devicePixelRatio || 1;
+        trailCanvas.width = window.innerWidth * dpr;
+        trailCanvas.height = window.innerHeight * dpr;
+        trailCanvas.style.width = `${window.innerWidth}px`;
+        trailCanvas.style.height = `${window.innerHeight}px`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+      resize();
+      window.addEventListener("resize", resize);
+
+      type Point = { x: number; y: number; t: number };
+      let points: Point[] = [];
+      let rafId = 0;
+      const maxAge = 520;
+      const ease = 0.3;
+
+      // The trail follows an eased "chase" point rather than the raw
+      // cursor, so it glides and lags slightly instead of snapping to
+      // each mousemove sample — this is what makes it feel fluid.
+      let targetX = 0;
+      let targetY = 0;
+      let curX = 0;
+      let curY = 0;
+      let hasTarget = false;
+
+      const accentColor = () =>
+        getComputedStyle(document.documentElement).getPropertyValue("--accent-light").trim() ||
+        "#a78bfa";
+
+      const draw = (now: number) => {
+        curX += (targetX - curX) * ease;
+        curY += (targetY - curY) * ease;
+        points.push({ x: curX, y: curY, t: now });
+        points = points.filter((p) => now - p.t < maxAge);
+        ctx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+
+        if (points.length > 2) {
+          const color = accentColor();
+          ctx.lineCap = "round";
+          ctx.shadowColor = color;
+          ctx.shadowBlur = 16;
+          ctx.strokeStyle = color;
+
+          // Midpoint smoothing: each segment is a quadratic curve through
+          // the midpoints of its neighbors, so the path bends smoothly
+          // through every sample instead of kinking at each point.
+          for (let i = 1; i < points.length - 1; i += 1) {
+            const p0 = points[i - 1];
+            const p1 = points[i];
+            const p2 = points[i + 1];
+            const midA = { x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2 };
+            const midB = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+            const age = (now - p1.t) / maxAge;
+            const alpha = Math.max(0, 1 - age);
+            ctx.globalAlpha = alpha * 0.85;
+            ctx.lineWidth = Math.max(0.5, 6 * (1 - age));
+            ctx.beginPath();
+            ctx.moveTo(midA.x, midA.y);
+            ctx.quadraticCurveTo(p1.x, p1.y, midB.x, midB.y);
+            ctx.stroke();
+          }
+          ctx.globalAlpha = 1;
+        }
+
+        const stillChasing = Math.hypot(targetX - curX, targetY - curY) > 0.4;
+        rafId = points.length > 0 || stillChasing ? requestAnimationFrame(draw) : 0;
+      };
+
+      window.addEventListener(
+        "mousemove",
+        (e) => {
+          targetX = e.clientX;
+          targetY = e.clientY;
+          if (!hasTarget) {
+            curX = targetX;
+            curY = targetY;
+            hasTarget = true;
+          }
+          if (!rafId) rafId = requestAnimationFrame(draw);
+        },
+        { passive: true },
+      );
+
+      reduceMotion.addEventListener("change", () => {
+        if (!reduceMotion.matches) return;
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+        points = [];
+        ctx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+      });
+    }
+  }
+
+  // Scroll progress bar: native CSS scroll-timeline drives this in
+  // Chrome/Edge (see .scroll-progress in global.css). Everywhere else,
+  // fall back to a scroll-position calculation setting the same
+  // --scroll-progress custom property the CSS reads for its transform.
+  const supportsScrollTimeline =
+    "CSS" in window && CSS.supports("animation-timeline: scroll()");
+
+  if (!supportsScrollTimeline) {
+    const progressEl = document.querySelector<HTMLElement>(".scroll-progress");
+    if (progressEl) {
+      const updateProgress = () => {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollable > 0 ? window.scrollY / scrollable : 0;
+        progressEl.style.setProperty("--scroll-progress", String(Math.min(1, Math.max(0, progress))));
+      };
+      updateProgress();
+      window.addEventListener("scroll", updateProgress, { passive: true });
+      window.addEventListener("resize", updateProgress);
+    }
+  }
 </script>

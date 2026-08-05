@@ -47,6 +47,10 @@ const { title, fullBleed = false, showChrome = true } = Astro.props;
     </script>
   </head>
   <body class="flex min-h-screen flex-col">
+    <div class="blueprint-grid" aria-hidden="true"></div>
+    <div class="scroll-progress" aria-hidden="true"></div>
+    <div class="grain-overlay" aria-hidden="true"></div>
+    <canvas class="cursor-trail" aria-hidden="true"></canvas>
     {showChrome && <NavBar />}
     <main
       class={fullBleed

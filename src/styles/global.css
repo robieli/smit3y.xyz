@@ -194,6 +194,48 @@ body {
   font-family: Inconsolata, monospace;
 }
 
+/* ============================================================
+   Scroll progress bar — thin accent line across the very top of
+   the viewport, filling as the page scrolls. Driven by native
+   CSS scroll-timeline where supported (Chrome/Edge); JS in
+   NavBar.astro drives --scroll-progress as a fallback elsewhere.
+   ============================================================ */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  width: 100%;
+  height: 3px;
+  background: var(--gradient-hero);
+  transform: scaleX(var(--scroll-progress, 0));
+  transform-origin: left;
+  pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: scroll-progress-fill auto linear;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@keyframes scroll-progress-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress {
+    transition: none;
+  }
+}
+
 .site-chrome {
   position: sticky;
   top: 0;
@@ -567,6 +609,194 @@ body {
   .section-dots a {
     width: 0.58rem;
     border-width: 1px;
+  }
+}
+
+/* ============================================================
+   Blueprint grid — faint technical grid behind everything, site-
+   wide, evoking schematics/terminal precision. z-index: 0 so it
+   sits behind section content and the number-rain columns (also
+   z-index: 0, but later in DOM so they paint on top).
+   ============================================================ */
+
+.blueprint-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(to right, var(--border-4) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border-4) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ============================================================
+   Grain overlay — subtle film-grain texture over the whole site.
+   Sits above regular content (z-index: auto) but below the
+   sticky site-chrome (z-index: 10) so the nav stays crisp.
+   ============================================================ */
+
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain-overlay {
+    display: none;
+  }
+}
+
+/* ============================================================
+   Cursor trail — comet-style glowing streak that follows the
+   mouse. Drawn on <canvas> by JS in NavBar.astro; this just
+   positions/composites it. Fine-pointer devices only (set via
+   JS, which skips wiring it up on touch devices entirely).
+   ============================================================ */
+
+.cursor-trail {
+  position: fixed;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-trail {
+    display: none;
+  }
+}
+
+/* ============================================================
+   Magnetic hover — nudges an element toward the cursor within
+   its bounds. JS sets --mx/--my (px offsets); this just eases
+   the transform back to rest on mouseleave.
+   ============================================================ */
+
+.magnetic {
+  display: inline-flex;
+  transform: translate(var(--mx, 0), var(--my, 0));
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* ============================================================
+   Glow card — soft radial light that tracks the cursor across
+   a card's surface. JS sets --gx/--gy (percentages) on move.
+   ============================================================ */
+
+.glow-card {
+  position: relative;
+}
+
+.glow-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    260px circle at var(--gx, 50%) var(--gy, 50%),
+    var(--glow-1),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 320ms ease;
+  pointer-events: none;
+}
+
+.glow-card:hover::after {
+  opacity: 1;
+}
+
+.glow-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Kinetic heading words — each word in a heading is its own
+   [data-reveal] element (see index.astro's kineticWords helper), so
+   they cascade in individually on scroll instead of the heading
+   moving as one block. */
+.kinetic-word {
+  display: inline-block;
+  margin-right: 0.26em;
+}
+
+/* ============================================================
+   Scroll reveal — generic fade/rise-in for headings, paragraphs,
+   and card-grid items. JS toggles .is-visible via
+   IntersectionObserver; --i (set inline per item) staggers a
+   group's entrance.
+   ============================================================ */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 640ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 640ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Where supported (Chrome/Edge), drive the same fade/rise directly off
+   scroll position instead of a one-shot IntersectionObserver trigger —
+   JS in index.astro detects this and skips setting up the observer, so
+   only one path runs per browser. Firefox/Safari keep the staggered
+   JS-driven version above.
+
+   Sibling elements at the same scroll position (e.g. words on one line
+   of a heading) would otherwise reveal in perfect sync, since they
+   share an identical view() entry point — shifting animation-range by
+   --i (percent of the element's own cover range) staggers them instead,
+   the same way --i staggers the transition-delay fallback above. */
+@supports (animation-timeline: view()) {
+  [data-reveal] {
+    transition: none;
+    animation: reveal-fade-rise linear both;
+    animation-timeline: view();
+    animation-range: calc(var(--i, 0) * 3%) calc(35% + var(--i, 0) * 3%);
+  }
+}
+
+@keyframes reveal-fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .magnetic {
+    transition: none;
+  }
+
+  .glow-card::after {
+    display: none;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
   }
 }
 

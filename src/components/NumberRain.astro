@@ -1,0 +1,60 @@
+---
+// Waterfall of falling glyphs for the empty side gutters next to a
+// section — same charset/color-palette/glitch mechanics as the hero's
+// LetterGlitchWaves (see GlyphRain.tsx), but scrolling continuously
+// downward in a narrow strip. Absolutely positioned within whatever
+// section renders it (which needs position: relative), so it scrolls
+// with the page like normal content rather than staying fixed.
+import GlyphRain from "./GlyphRain.tsx";
+
+interface Props {
+  side: "left" | "right";
+}
+
+const { side } = Astro.props;
+---
+
+<div class:list={["number-rain", `number-rain--${side}`]} aria-hidden="true">
+  <GlyphRain client:visible fallSpeed={20} glitchSpeed={110} />
+</div>
+
+<style>
+  .number-rain {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: clamp(3rem, 4vw, 3.6rem);
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.32;
+    z-index: 0;
+    mask-image: linear-gradient(to bottom, transparent, black 8%, black 92%, transparent);
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      black 8%,
+      black 92%,
+      transparent
+    );
+  }
+
+  .number-rain--left {
+    left: clamp(0.5rem, 2vw, 1.5rem);
+  }
+
+  .number-rain--right {
+    right: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  @media (max-width: 1300px) {
+    .number-rain {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .number-rain {
+      display: none;
+    }
+  }
+</style>

@@ -4,7 +4,13 @@ import { loadResearchEntries } from "../lib/research";
 import smit3yImage from "../assets/smit3y.jpg";
 import LetterGlitch from "../components/LetterGlitchWaves.tsx";
 import AboutCarousel from "../components/AboutCarousel.astro";
+import NumberRain from "../components/NumberRain.astro";
 
+const heroTitle = "SMIT3Y.XYZ";
+// Splits a heading into words for the kinetic scroll-reveal treatment —
+// each word gets its own [data-reveal] + --i so they cascade in on scroll
+// (reuses the same reveal mechanism as everything else, see global.css).
+const kineticWords = (text: string) => text.split(" ");
 const researchEntries = loadResearchEntries();
 const featuredResearchEntries = researchEntries.slice(0, 6);
 const experienceEntries = [
@@ -12,6 +18,7 @@ const experienceEntries = [
     period: "PRESENT",
     role: "Sales, Trading & Prime Brokerage Intern",
     organization: "Coinbase",
+    organizationUrl: "https://www.coinbase.com",
     bullets: [
       "Working closely on navigating sales, custodial, and staking requests from clients inspired to get involved with the digital asset space",
     ],
@@ -42,20 +49,10 @@ const experienceEntries = [
       "Winner of the 2023 New York Times College Essay Challenge",
     ],
   },
-  {
-    period: "ONGOING",
-    role: "Independent Equity Research Analyst",
-    organization: "Self-Directed Research",
-    bullets: [
-      "Published investment theses covering crypto mining, SaaS, DeFi, and semiconductor sectors",
-      "Built financial models (DCF, comps, scenario analysis) for public equities and digital assets",
-      "Participated in the 2026 Perplexity Computer Student Stock Pitch Competition with a long thesis",
-    ],
-  },
 ];
 const snyStats = [
+  { value: "75%+", label: "Success Rate", detail: "Across every school we applied to together" },
   { value: "37", label: "Schools Applied" },
-  { value: "75%+", label: "Success Rate" },
   { value: "1570", label: "Combined SAT" },
   { value: "4.7", label: "Combined GPA" },
 ];
@@ -110,12 +107,23 @@ const snyFounders = [
       <div class="hero-fade-bottom"></div>
     </div>
     <div class="hero-content">
-      <h1 class="hero-title">SMIT3Y.XYZ</h1>
+      <p class="hero-typewriter" aria-hidden="true" data-typewriter="&gt; whoami"></p>
+      <h1 class="hero-title" id="hero-title" aria-label={heroTitle}>
+        <span aria-hidden="true">
+          {
+            heroTitle.split("").map((ch, i) => (
+              <span class="hero-letter" data-char={ch} style={`--i: ${i}`}>
+                {ch}
+              </span>
+            ))
+          }
+        </span>
+      </h1>
       <div class="hero-actions" aria-label="Featured actions">
-        <a class="hero-action hero-action-primary" href="#research">
+        <a class="hero-action hero-action-primary magnetic" href="#research">
           VIEW RESEARCH <span aria-hidden="true">→</span>
         </a>
-        <a class="hero-action hero-action-secondary" href="#about">ABOUT ME</a>
+        <a class="hero-action hero-action-secondary magnetic" href="#about">ABOUT ME</a>
       </div>
     </div>
     <a class="scroll-cue" href="#about" aria-label="Scroll to about section">
@@ -124,9 +132,19 @@ const snyFounders = [
     </a>
   </section>
   <section id="about" class="about-section" aria-label="About">
+    <NumberRain side="left" />
+    <NumberRain side="right" />
     <div class="about-shell">
-      <p class="about-kicker">// ABOUT</p>
-      <h2 class="about-title">Who I Am</h2>
+      <p class="about-kicker" data-reveal>// ABOUT</p>
+      <h2 class="about-title">
+        {
+          kineticWords("Who Am I").map((word, i) => (
+            <span class="kinetic-word" data-reveal style={`--i: ${i}`}>
+              {word}
+            </span>
+          ))
+        }
+      </h2>
       <div class="about-content">
         <div class="about-aside">
           <div class="about-image-wrapper">
@@ -135,34 +153,34 @@ const snyFounders = [
           <AboutCarousel />
         </div>
         <div class="about-text">
-          <p class="about-paragraph about-paragraph-lead">
+          <p class="about-paragraph about-paragraph-lead" data-reveal style="--i: 0">
             I am a builder, basketball player, and researcher based out of New
             York City.
           </p>
-          <p class="about-paragraph">
+          <p class="about-paragraph" data-reveal style="--i: 1">
             My passion lies in studying digital assets, macro trends, finding
             gems amongst equities, and debating with friends about our
             ever-moving world.
           </p>
-          <p class="about-paragraph">
+          <p class="about-paragraph" data-reveal style="--i: 2">
             I study Economics and Psychology at the University of Michigan,
             Class of 2027.
           </p>
-          <p class="about-paragraph">
+          <p class="about-paragraph" data-reveal style="--i: 3">
             I have lived in San Diego (where I am from) — Cairo, Egypt —
             Singapore — Chengdu, China — and Ann Arbor, Michigan.
           </p>
-          <p class="about-paragraph">
+          <p class="about-paragraph" data-reveal style="--i: 4">
             I am an avid Cavaliers fan, an annoying Michigan sports fan, an
             enormous Chinatown eater, a bigger podcast listener, and an aspiring
             runner.
           </p>
-          <p class="about-paragraph">
+          <p class="about-paragraph" data-reveal style="--i: 5">
             Doing research is what I find joy in, and participating in the most
             competitive probability game known as the United States Capital
             Markets is what I find myself doing most of the week.
           </p>
-          <p class="about-paragraph">
+          <p class="about-paragraph" data-reveal style="--i: 6">
             My close friends call me Smitty, and that is where I have derived
             the name for this website.
           </p>
@@ -171,10 +189,20 @@ const snyFounders = [
     </div>
   </section>
   <section id="research" class="research-section" aria-label="Research">
+    <NumberRain side="left" />
+    <NumberRain side="right" />
     <div class="research-header">
-      <p class="section-kicker">// RESEARCH</p>
-      <h2>Investment Theses</h2>
-      <p>
+      <p class="section-kicker" data-reveal>// RESEARCH</p>
+      <h2>
+        {
+          kineticWords("Investment Theses").map((word, i) => (
+            <span class="kinetic-word" data-reveal style={`--i: ${i}`}>
+              {word}
+            </span>
+          ))
+        }
+      </h2>
+      <p data-reveal style="--i: 2">
         I like to research beaten-down equities, trends I believe in and am
         invested in, digital assets, and decentralized finance. My work is
         published below:
@@ -182,8 +210,13 @@ const snyFounders = [
     </div>
     <div class="research-grid">
       {
-        featuredResearchEntries.map((entry) => (
-          <a class="research-card" href={`/research/${entry.slug}`}>
+        featuredResearchEntries.map((entry, index) => (
+          <a
+            class="research-card glow-card"
+            href={`/research/${entry.slug}`}
+            data-reveal
+            style={`--i: ${index}`}
+          >
             <span class="research-card-label">
               {entry.stockLabel || entry.title.split(" ")[0]}
             </span>
@@ -196,22 +229,42 @@ const snyFounders = [
       }
     </div>
     <div class="research-actions">
-      <a class="research-see-all" href="/research">See All</a>
+      <a class="research-see-all magnetic" href="/research">See All</a>
     </div>
   </section>
   <section id="experience" class="experience-section" aria-label="Experience">
+    <NumberRain side="left" />
+    <NumberRain side="right" />
     <div class="experience-shell">
       <div class="experience-header">
-        <p class="section-kicker">// EXPERIENCE</p>
-        <h2>Where I've Worked</h2>
+        <p class="section-kicker" data-reveal>// EXPERIENCE</p>
+        <h2>
+          {
+            kineticWords("Where I've Worked").map((word, i) => (
+              <span class="kinetic-word" data-reveal style={`--i: ${i}`}>
+                {word}
+              </span>
+            ))
+          }
+        </h2>
       </div>
       <div class="experience-timeline">
         {
           experienceEntries.map((entry) => (
-            <article class="experience-item">
+            <article class="experience-item glow-card">
               <p class="experience-period">{entry.period}</p>
               <h3 class="experience-role">{entry.role}</h3>
-              {entry.organization && (
+              {entry.organization && entry.organizationUrl && (
+                <a
+                  class="experience-organization experience-organization--link"
+                  href={entry.organizationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {entry.organization}
+                </a>
+              )}
+              {entry.organization && !entry.organizationUrl && (
                 <p class="experience-organization">{entry.organization}</p>
               )}
               <ul class="experience-points">
@@ -226,10 +279,20 @@ const snyFounders = [
     </div>
   </section>
   <section id="sny" class="sny-section" aria-label="S and Y Scholars">
+    <NumberRain side="left" />
+    <NumberRain side="right" />
     <div class="sny-shell">
       <header class="sny-header">
-        <h2>S&amp;Y Scholars</h2>
-        <p>
+        <h2>
+          {
+            kineticWords("S&Y Scholars").map((word, i) => (
+              <span class="kinetic-word" data-reveal style={`--i: ${i}`}>
+                {word}
+              </span>
+            ))
+          }
+        </h2>
+        <p data-reveal style="--i: 1">
           Guidance from students who were in your shoes yesterday. Peer-to-peer
           college admissions consulting.
         </p>
@@ -237,22 +300,35 @@ const snyFounders = [
 
       <div class="sny-stats" aria-label="S and Y Scholars results">
         {
-          snyStats.map((stat) => (
-            <article class="sny-stat-card">
-              <p class="sny-stat-value">{stat.value}</p>
+          snyStats.map((stat, index) => (
+            <article
+              class:list={["sny-stat-card", "glow-card", index === 0 && "sny-stat-card--featured"]}
+              data-reveal
+              style={`--i: ${index}`}
+            >
+              <p class="sny-stat-value" data-count={stat.value}>0</p>
               <p class="sny-stat-label">{stat.label}</p>
+              {stat.detail && <p class="sny-stat-detail">{stat.detail}</p>}
             </article>
           ))
         }
       </div>
 
       <div class="sny-services">
-        <p class="section-kicker">// SERVICES</p>
-        <h3>What We Offer</h3>
+        <p class="section-kicker" data-reveal>// SERVICES</p>
+        <h3>
+          {
+            kineticWords("What We Offer").map((word, i) => (
+              <span class="kinetic-word" data-reveal style={`--i: ${i}`}>
+                {word}
+              </span>
+            ))
+          }
+        </h3>
         <div class="sny-services-grid">
           {
-            snyServices.map((service) => (
-              <article class="sny-service-card">
+            snyServices.map((service, index) => (
+              <article class="sny-service-card glow-card" data-reveal style={`--i: ${index}`}>
                 <span class="sny-service-icon" aria-hidden="true">
                   {service.icon === "microphone" && (
                     <svg viewBox="0 0 24 24" fill="none" focusable="false">
@@ -319,12 +395,20 @@ const snyFounders = [
       </div>
 
       <div class="sny-team">
-        <p class="section-kicker">// TEAM</p>
-        <h3>Meet the Founders</h3>
+        <p class="section-kicker" data-reveal>// TEAM</p>
+        <h3>
+          {
+            kineticWords("Meet the Founders").map((word, i) => (
+              <span class="kinetic-word" data-reveal style={`--i: ${i}`}>
+                {word}
+              </span>
+            ))
+          }
+        </h3>
         <div class="sny-founders-grid">
           {
-            snyFounders.map((founder) => (
-              <article class="sny-founder-card">
+            snyFounders.map((founder, index) => (
+              <article class="sny-founder-card glow-card" data-reveal style={`--i: ${index}`}>
                 <h4>{founder.name}</h4>
                 <p class="sny-founder-school">{founder.school}</p>
                 <p>{founder.bio}</p>
@@ -337,6 +421,8 @@ const snyFounders = [
   </section>
 
   <script>
+    import { scrambleOnHover, jumbleLetters } from "../lib/scramble";
+
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const experienceItems = Array.from(
@@ -375,6 +461,147 @@ const snyFounders = [
           revealAllExperienceItems();
         });
       }
+    }
+
+    // Generic scroll reveal for [data-reveal] elements (headings,
+    // paragraphs, card-grid items). --i (set inline per item) staggers
+    // a group's entrance via a CSS transition-delay. Where the browser
+    // supports native scroll-driven animations, the matching
+    // @supports (animation-timeline: view()) rule in global.css drives
+    // this directly off scroll position instead — skip the observer
+    // entirely there so only one reveal mechanism runs.
+    const supportsViewTimeline = "CSS" in window && CSS.supports("animation-timeline: view()");
+    const revealItems = supportsViewTimeline
+      ? []
+      : Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+
+    const revealAll = () => {
+      for (const item of revealItems) item.classList.add("is-visible");
+    };
+
+    if (revealItems.length > 0) {
+      if (reduceMotion.matches || !("IntersectionObserver" in window)) {
+        revealAll();
+      } else {
+        const revealObserver = new IntersectionObserver(
+          (entries, observer) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          },
+          { threshold: 0.2, rootMargin: "0px 0px -8% 0px" },
+        );
+
+        for (const item of revealItems) revealObserver.observe(item);
+
+        reduceMotion.addEventListener("change", () => {
+          if (!reduceMotion.matches) return;
+          revealObserver.disconnect();
+          revealAll();
+        });
+      }
+    }
+
+    // Count-up animation for [data-count] stat values (e.g. "75%+", "4.7").
+    // Parses the leading numeric portion and animates toward it, keeping
+    // the original suffix and decimal precision.
+    const countEls = Array.from(document.querySelectorAll<HTMLElement>("[data-count]"));
+
+    const animateCount = (el: HTMLElement) => {
+      const raw = el.dataset.count ?? "";
+      const match = raw.match(/^([\d.]+)(.*)$/);
+      if (!match) {
+        el.textContent = raw;
+        return;
+      }
+      const [, numStr, suffix] = match;
+      const target = parseFloat(numStr);
+      const decimals = numStr.includes(".") ? numStr.split(".")[1].length : 0;
+      if (reduceMotion.matches || Number.isNaN(target)) {
+        el.textContent = raw;
+        return;
+      }
+
+      const duration = 1200;
+      const start = performance.now();
+
+      const tick = (now: number) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = target * eased;
+        el.textContent = `${value.toFixed(decimals)}${suffix}`;
+        if (progress < 1) requestAnimationFrame(tick);
+      };
+
+      requestAnimationFrame(tick);
+    };
+
+    if (countEls.length > 0) {
+      if (reduceMotion.matches || !("IntersectionObserver" in window)) {
+        for (const el of countEls) el.textContent = el.dataset.count ?? "";
+      } else {
+        const countObserver = new IntersectionObserver(
+          (entries, observer) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              animateCount(entry.target as HTMLElement);
+              observer.unobserve(entry.target);
+            }
+          },
+          { threshold: 0.4 },
+        );
+
+        for (const el of countEls) countObserver.observe(el);
+      }
+    }
+
+    // Typewriter intro line above the hero title.
+    const typewriterEl = document.querySelector<HTMLElement>("[data-typewriter]");
+    if (typewriterEl) {
+      const full = typewriterEl.dataset.typewriter ?? "";
+      if (reduceMotion.matches) {
+        typewriterEl.textContent = full;
+        typewriterEl.classList.add("is-done");
+      } else {
+        typewriterEl.classList.add("is-typing");
+        let i = 0;
+        const step = () => {
+          i += 1;
+          typewriterEl.textContent = full.slice(0, i);
+          if (i < full.length) {
+            setTimeout(step, 34);
+          } else {
+            typewriterEl.classList.remove("is-typing");
+            typewriterEl.classList.add("is-done");
+          }
+        };
+        setTimeout(step, 260);
+      }
+    }
+
+    // Hero title scramble/decode. Starts pre-jumbled (random letters, same
+    // monospace positions — nothing reflows) so it reads as encrypted
+    // until the first hover decodes it, which gets a one-off flourish on
+    // top of the usual settle. Every hover after that just replays the
+    // normal decode (same scrambleOnHover used everywhere else).
+    const heroTitleEl = document.querySelector<HTMLElement>("#hero-title");
+    if (heroTitleEl && !reduceMotion.matches) {
+      const letters = Array.from(heroTitleEl.querySelectorAll<HTMLElement>(".hero-letter"));
+      jumbleLetters(letters);
+
+      let hasUnjumbled = false;
+      scrambleOnHover(heroTitleEl, letters, () => {
+        if (hasUnjumbled) return;
+        hasUnjumbled = true;
+        heroTitleEl.classList.add("hero-title--flourish");
+        heroTitleEl.addEventListener(
+          "animationend",
+          () => heroTitleEl.classList.remove("hero-title--flourish"),
+          { once: true },
+        );
+      });
     }
   </script>
 </BaseLayout>
@@ -444,6 +671,40 @@ const snyFounders = [
     text-transform: uppercase;
   }
 
+  .hero-typewriter {
+    display: inline-block;
+    min-height: 1.4em;
+    margin: 0;
+    color: var(--accent-light);
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  .hero-typewriter.is-typing::after,
+  .hero-typewriter.is-done::after {
+    content: "";
+    display: inline-block;
+    width: 0.55em;
+    height: 1em;
+    margin-left: 0.15em;
+    background: currentColor;
+    vertical-align: -0.15em;
+    animation: hero-caret-blink 1s steps(1) infinite;
+  }
+
+  @keyframes hero-caret-blink {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+
   .hero-title {
     display: inline-block;
     margin: clamp(1.6rem, 3.5vw, 2.4rem) 0 0;
@@ -456,6 +717,26 @@ const snyFounders = [
     letter-spacing: 0;
     line-height: 0.95;
     padding-bottom: 0.08em;
+  }
+
+  /* One-shot celebration when the title decodes for the first time. */
+  .hero-title--flourish {
+    animation: hero-title-flourish 650ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes hero-title-flourish {
+    0% {
+      filter: brightness(1) drop-shadow(0 0 0 transparent);
+      transform: scale(1);
+    }
+    35% {
+      filter: brightness(1.6) drop-shadow(0 0 20px var(--accent));
+      transform: scale(1.03);
+    }
+    100% {
+      filter: brightness(1) drop-shadow(0 0 0 transparent);
+      transform: scale(1);
+    }
   }
 
   .hero-actions {
@@ -544,10 +825,9 @@ const snyFounders = [
 
   .about-section {
     position: relative;
-    min-height: 100svh;
     background: transparent;
     color: var(--text-dim);
-    padding: clamp(4.5rem, 8vw, 6.8rem) 0;
+    padding: clamp(4.5rem, 8vw, 6.8rem) 0 clamp(2rem, 3.6vw, 2.8rem);
     scroll-margin-top: 4rem;
     transition: opacity 700ms ease;
   }
@@ -594,10 +874,11 @@ const snyFounders = [
     display: flex;
     flex-direction: column;
     gap: clamp(1.2rem, 2.1vw, 1.8rem);
-    width: clamp(22rem, 34vw, 24rem);
+    width: clamp(26rem, 42vw, 34rem);
   }
 
   .about-image-wrapper {
+    display: none;
     position: relative;
     width: clamp(16.5rem, 28vw, 22rem);
     aspect-ratio: 1;
@@ -657,10 +938,10 @@ const snyFounders = [
   }
 
   .research-section {
-    min-height: 100svh;
+    position: relative;
     background: transparent;
     color: var(--text-body);
-    padding: clamp(5rem, 9vw, 7rem) 0;
+    padding: clamp(2.4rem, 4.2vw, 3.4rem) 0 clamp(2rem, 3.6vw, 2.8rem);
     scroll-margin-top: 4rem;
     transition: opacity 700ms ease;
   }
@@ -703,7 +984,7 @@ const snyFounders = [
 
   .research-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: clamp(1rem, 2vw, 1.35rem);
     margin-top: clamp(3rem, 6vw, 4.2rem);
   }
@@ -803,10 +1084,10 @@ const snyFounders = [
   }
 
   .experience-section {
-    min-height: 100svh;
+    position: relative;
     background: transparent;
     color: var(--text-body);
-    padding: clamp(5rem, 9vw, 7rem) 0;
+    padding: clamp(2.4rem, 4.2vw, 3.4rem) 0 clamp(2rem, 3.6vw, 2.8rem);
     scroll-margin-top: 4rem;
     transition: opacity 700ms ease;
   }
@@ -829,7 +1110,7 @@ const snyFounders = [
   .experience-timeline {
     position: relative;
     display: grid;
-    gap: clamp(1rem, 2vw, 1.4rem);
+    gap: clamp(0.7rem, 1.4vw, 1rem);
     margin-top: clamp(2.8rem, 5vw, 3.7rem);
     padding-left: clamp(1.2rem, 2.1vw, 1.55rem);
   }
@@ -849,7 +1130,7 @@ const snyFounders = [
     border: 1px solid var(--border-1);
     border-radius: 8px;
     background: var(--bg-card);
-    padding: clamp(1.4rem, 2.4vw, 1.85rem);
+    padding: clamp(1.1rem, 1.9vw, 1.45rem);
     opacity: 0;
     transform: translateX(-3.2rem);
     transition:
@@ -860,7 +1141,7 @@ const snyFounders = [
   .experience-item::before {
     content: "";
     position: absolute;
-    top: clamp(1.35rem, 2.5vw, 1.8rem);
+    top: clamp(1.05rem, 2vw, 1.4rem);
     left: calc(clamp(1.2rem, 2.1vw, 1.55rem) * -1 - 0.32rem);
     width: 0.45rem;
     aspect-ratio: 1;
@@ -887,7 +1168,7 @@ const snyFounders = [
   }
 
   .experience-role {
-    margin: 0.8rem 0 0;
+    margin: 0.55rem 0 0;
     color: var(--text-lead);
     font-family: Inconsolata, monospace;
     font-size: clamp(1.25rem, 2vw, 1.55rem);
@@ -896,7 +1177,8 @@ const snyFounders = [
   }
 
   .experience-organization {
-    margin: 0.45rem 0 0;
+    display: inline-block;
+    margin: 0.3rem 0 0;
     color: var(--accent);
     font-family: Inconsolata, monospace;
     font-size: clamp(1rem, 1.55vw, 1.22rem);
@@ -904,10 +1186,29 @@ const snyFounders = [
     line-height: 1.35;
   }
 
+  .experience-organization--link {
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition:
+      color 180ms ease,
+      border-color 180ms ease;
+  }
+
+  .experience-organization--link:hover,
+  .experience-organization--link:focus-visible {
+    color: var(--accent-light);
+    border-color: currentColor;
+  }
+
+  .experience-organization--link:focus-visible {
+    outline: 1px solid var(--accent);
+    outline-offset: 0.3rem;
+  }
+
   .experience-points {
     display: grid;
-    gap: 0.52rem;
-    margin: 1.1rem 0 0;
+    gap: 0.4rem;
+    margin: 0.8rem 0 0;
     padding: 0;
     list-style: none;
   }
@@ -928,10 +1229,11 @@ const snyFounders = [
   }
 
   .sny-section {
+    position: relative;
     min-height: 100svh;
     background: transparent;
     color: var(--text-body);
-    padding: clamp(5rem, 9vw, 7rem) 0;
+    padding: clamp(2.4rem, 4.2vw, 3.4rem) 0 clamp(5rem, 9vw, 7rem);
     scroll-margin-top: 4rem;
     transition: opacity 700ms ease;
   }
@@ -967,19 +1269,48 @@ const snyFounders = [
     line-height: 1.45;
   }
 
+  /* Bento layout: the featured stat (success rate) takes a 2x2 block,
+     the other three fill the remaining cells at varied sizes. */
   .sny-stats {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: minmax(7.5rem, auto);
     gap: clamp(0.75rem, 1.4vw, 1rem);
     margin-top: clamp(1.8rem, 3.2vw, 2.4rem);
   }
 
   .sny-stat-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     border: 1px solid var(--border-2);
     border-radius: 8px;
     background: var(--bg-card-alt);
     padding: clamp(1.35rem, 2.3vw, 1.85rem) 1rem;
     text-align: center;
+  }
+
+  .sny-stats .sny-stat-card:nth-child(2) {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .sny-stats .sny-stat-card:nth-child(3) {
+    grid-column: 4;
+    grid-row: 1;
+  }
+
+  .sny-stats .sny-stat-card:nth-child(4) {
+    grid-column: 3 / 5;
+    grid-row: 2;
+  }
+
+  .sny-stat-card--featured {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+    border-color: var(--border-tag-hover);
+    background: linear-gradient(160deg, var(--bg-card-hover), var(--bg-card-alt));
+    box-shadow: var(--shadow-tag);
   }
 
   .sny-stat-value {
@@ -991,6 +1322,11 @@ const snyFounders = [
     line-height: 1;
   }
 
+  .sny-stat-card--featured .sny-stat-value {
+    color: var(--accent-light);
+    font-size: clamp(3.6rem, 7vw, 5.2rem);
+  }
+
   .sny-stat-label {
     margin: 0.9rem 0 0;
     color: var(--text-dim);
@@ -1000,6 +1336,22 @@ const snyFounders = [
     letter-spacing: 0.18em;
     line-height: 1.2;
     text-transform: uppercase;
+  }
+
+  .sny-stat-card--featured .sny-stat-label {
+    font-size: clamp(1rem, 1.3vw, 1.1rem);
+  }
+
+  .sny-stat-detail {
+    margin: 0.6rem 0 0;
+    color: var(--text-sub);
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+    font-weight: 600;
+    line-height: 1.4;
+    max-width: 20rem;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .sny-services {
@@ -1133,6 +1485,7 @@ const snyFounders = [
     }
 
     .about-image-wrapper {
+      display: block;
       order: 1;
       width: clamp(14rem, 55vw, 18rem);
       border-radius: 12px;
@@ -1206,6 +1559,23 @@ const snyFounders = [
 
     .sny-stats {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: auto;
+    }
+
+    .sny-stats .sny-stat-card,
+    .sny-stats .sny-stat-card:nth-child(2),
+    .sny-stats .sny-stat-card:nth-child(3),
+    .sny-stats .sny-stat-card:nth-child(4) {
+      grid-column: auto;
+      grid-row: auto;
+    }
+
+    .sny-stat-card--featured {
+      grid-column: 1 / 3;
+    }
+
+    .sny-stat-card--featured .sny-stat-value {
+      font-size: clamp(2.8rem, 10vw, 3.6rem);
     }
 
     .sny-services-grid {
@@ -1222,6 +1592,14 @@ const snyFounders = [
       opacity: 1;
       transform: none;
       transition: none;
+    }
+
+    .hero-typewriter.is-done::after {
+      animation: none;
+    }
+
+    .hero-title--flourish {
+      animation: none;
     }
   }
 </style>
