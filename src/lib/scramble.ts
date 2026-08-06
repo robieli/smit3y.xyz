@@ -37,6 +37,32 @@ export function wrapLetters(el: HTMLElement): HTMLElement[] {
   return letters;
 }
 
+const scrambleLetter = (letterEl: HTMLElement, delay: number) => {
+  const final = letterEl.dataset.char ?? "";
+  if (!final.trim()) return;
+  let iterations = 0;
+
+  setTimeout(() => {
+    const interval = setInterval(() => {
+      if (iterations >= MAX_ITERATIONS) {
+        letterEl.textContent = final;
+        clearInterval(interval);
+        return;
+      }
+      letterEl.textContent = randomChar();
+      iterations += 1;
+    }, STEP_MS);
+  }, delay);
+};
+
+/** Runs the scramble/decode sequence across `letters` once, immediately.
+ * `onComplete` (if given) fires once, after the full sequence settles. */
+export function decodeLetters(letters: HTMLElement[], onComplete?: () => void) {
+  letters.forEach((letterEl, i) => scrambleLetter(letterEl, i * STEP_MS));
+  const totalTime = letters.length * STEP_MS + MAX_ITERATIONS * STEP_MS + 80;
+  setTimeout(() => onComplete?.(), totalTime);
+}
+
 /** Wires up a hover-triggered scramble/decode animation across `letters`.
  * `onComplete` (if given) fires once, after the full sequence settles. */
 export function scrambleOnHover(
@@ -46,32 +72,12 @@ export function scrambleOnHover(
 ) {
   let scrambling = false;
 
-  const scrambleLetter = (letterEl: HTMLElement, delay: number) => {
-    const final = letterEl.dataset.char ?? "";
-    if (!final.trim()) return;
-    let iterations = 0;
-
-    setTimeout(() => {
-      const interval = setInterval(() => {
-        if (iterations >= MAX_ITERATIONS) {
-          letterEl.textContent = final;
-          clearInterval(interval);
-          return;
-        }
-        letterEl.textContent = randomChar();
-        iterations += 1;
-      }, STEP_MS);
-    }, delay);
-  };
-
   trigger.addEventListener("mouseenter", () => {
     if (scrambling) return;
     scrambling = true;
-    letters.forEach((letterEl, i) => scrambleLetter(letterEl, i * STEP_MS));
-    const totalTime = letters.length * STEP_MS + MAX_ITERATIONS * STEP_MS + 80;
-    setTimeout(() => {
+    decodeLetters(letters, () => {
       scrambling = false;
       onComplete?.();
-    }, totalTime);
+    });
   });
 }
