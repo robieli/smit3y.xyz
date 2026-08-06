@@ -51,7 +51,7 @@ const experienceEntries = [
   },
 ];
 const snyStats = [
-  { value: "75%+", label: "Success Rate", detail: "Across every school we applied to together" },
+  { value: "75%+", label: "Success Rate", detail: "Across all schools applied" },
   { value: "37", label: "Schools Applied" },
   { value: "1570", label: "Combined SAT" },
   { value: "4.7", label: "Combined GPA" },
@@ -71,8 +71,7 @@ const snyServices = [
   },
   {
     title: "Application Strategy",
-    description:
-      "Expert advice on school selection, timelines, and standing out. We applied to 37 schools between us.",
+    description: "Expert advice on school selection, timelines, and standing out.",
     icon: "target",
   },
 ];
@@ -80,12 +79,14 @@ const snyFounders = [
   {
     name: "Samuel Smith",
     school: "University of Michigan - Economics & Psychology",
-    bio: "Junior at U of M, practice player on the Women's Basketball team, avid chess player, and winner of the 2023 New York Times College Essay Challenge. Currently interning at a local wealth management firm in San Diego.",
+    bio: "Junior at U of M, practice player on the Women's Basketball team, avid chess player, and winner of the 2023 New York Times College Essay Challenge.",
+    linkedin: "https://www.linkedin.com/in/ssam-smith/",
   },
   {
     name: "Richard Yoon",
     school: "Columbia University - Dual Degree with Sciences Po",
     bio: "Junior at Columbia, spent first two years in Reims, France through the dual-degree program. Avid basketball player, 10+ years of robotics experience, and former Co-President of Mock Trial at La Jolla High.",
+    linkedin: undefined as string | undefined,
   },
 ];
 ---
@@ -439,6 +440,16 @@ const snyFounders = [
                 <h4>{founder.name}</h4>
                 <p class="sny-founder-school">{founder.school}</p>
                 <p>{founder.bio}</p>
+                {founder.linkedin && (
+                  <a
+                    class="sny-founder-linkedin"
+                    href={founder.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer me"
+                  >
+                    LinkedIn <span aria-hidden="true">→</span>
+                  </a>
+                )}
               </article>
             ))
           }
@@ -1347,7 +1358,8 @@ const snyFounders = [
     color: var(--text-dim);
     font-family: Inconsolata, monospace;
     font-size: clamp(1rem, 1.4vw, 1.12rem);
-    font-weight: 600;
+    font-weight: 700;
+    text-transform: capitalize;
     line-height: 1.45;
   }
 
@@ -1548,6 +1560,24 @@ const snyFounders = [
     font-size: clamp(0.96rem, 1.25vw, 1.06rem);
     font-weight: 600;
     line-height: 1.45;
+  }
+
+  .sny-founder-linkedin {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    margin-top: 0.9rem;
+    color: var(--accent-light);
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.9rem, 1.15vw, 0.98rem);
+    font-weight: 700;
+    text-decoration: none;
+    transition: gap 0.2s ease, color 0.2s ease;
+  }
+
+  .sny-founder-linkedin:hover {
+    color: var(--accent-lighter);
+    gap: 0.55em;
   }
 
   @media (max-width: 700px) {
