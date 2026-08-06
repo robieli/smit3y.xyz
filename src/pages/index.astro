@@ -190,6 +190,27 @@ const snyFounders = [
             My close friends call me Smitty, and that is where I have derived
             the name for this website.
           </p>
+          <p class="about-signoff" data-reveal style="--i: 7">
+            <span class="about-signoff__prompt" aria-hidden="true">&gt;</span>
+            <span
+              class="about-signoff__mark magnetic"
+              id="about-signoff"
+              aria-label="smit3y.xyz"
+              data-magnetic-strength="0.3"
+              data-magnetic-max="10"
+            >
+              <span aria-hidden="true">
+                {
+                  "smit3y.xyz".split("").map((ch, i) => (
+                    <span class="about-signoff__letter" data-char={ch} style={`--i: ${i}`}>
+                      {ch}
+                    </span>
+                  ))
+                }
+              </span>
+            </span>
+            <span class="about-signoff__cursor" aria-hidden="true"></span>
+          </p>
         </div>
       </div>
     </div>
@@ -609,6 +630,18 @@ const snyFounders = [
         );
       });
     }
+
+    // Small echo of the hero title at the end of the bio: same
+    // jumble-on-load + decode-on-hover, no flourish (this one's just a
+    // quiet callback, not the big first-impression moment).
+    const signoffEl = document.querySelector<HTMLElement>("#about-signoff");
+    if (signoffEl && !reduceMotion.matches) {
+      const signoffLetters = Array.from(
+        signoffEl.querySelectorAll<HTMLElement>(".about-signoff__letter"),
+      );
+      jumbleLetters(signoffLetters);
+      scrambleOnHover(signoffEl, signoffLetters);
+    }
   </script>
 </BaseLayout>
 
@@ -930,6 +963,49 @@ const snyFounders = [
 
   .about-paragraph-lead {
     color: var(--text-lead);
+  }
+
+  /* Small animated echo of the hero title, signing off the bio. Starts
+     jumbled like the hero and decodes on hover (same scramble machinery,
+     see the script block below) — a little full-circle callback to the
+     top of the page. */
+  .about-signoff {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35em;
+    margin-top: 0.4rem;
+    font-family: Inconsolata, monospace;
+  }
+
+  .about-signoff__prompt {
+    color: var(--text-dim);
+    font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+    font-weight: 700;
+  }
+
+  .about-signoff__mark {
+    display: inline-flex;
+    background: var(--gradient-hero);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-size: clamp(1.15rem, 1.9vw, 1.45rem);
+    font-weight: 800;
+    letter-spacing: 0.01em;
+  }
+
+  .about-signoff__cursor {
+    display: inline-block;
+    width: 0.5em;
+    height: 1em;
+    background: var(--accent-light);
+    animation: hero-caret-blink 1s steps(1) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .about-signoff__cursor {
+      animation: none;
+    }
   }
 
   .content-section {
