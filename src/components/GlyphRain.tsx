@@ -108,7 +108,7 @@ const GlyphRain = ({
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;

@@ -516,7 +516,7 @@ const tickerItems = fallbackItems;
 
     if (ctx) {
       const resize = () => {
-        const dpr = window.devicePixelRatio || 1;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
         trailCanvas.width = window.innerWidth * dpr;
         trailCanvas.height = window.innerHeight * dpr;
         trailCanvas.style.width = `${window.innerWidth}px`;
@@ -529,7 +529,7 @@ const tickerItems = fallbackItems;
       type Point = { x: number; y: number; t: number };
       let points: Point[] = [];
       let rafId = 0;
-      const maxAge = 520;
+      const maxAge = 380;
       const ease = 0.3;
 
       // The trail follows an eased "chase" point rather than the raw
@@ -556,7 +556,7 @@ const tickerItems = fallbackItems;
           const color = accentColor();
           ctx.lineCap = "round";
           ctx.shadowColor = color;
-          ctx.shadowBlur = 16;
+          ctx.shadowBlur = 8;
           ctx.strokeStyle = color;
 
           // Midpoint smoothing: each segment is a quadratic curve through
