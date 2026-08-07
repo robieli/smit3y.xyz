@@ -152,6 +152,38 @@ const snyFounders = [
           ))
         }
       </h2>
+      <div class="about-socials" data-reveal style="--i: 3">
+        <a
+          class="about-social-link magnetic"
+          href="https://www.linkedin.com/in/ssam-smith/"
+          target="_blank"
+          rel="noopener noreferrer me"
+          data-magnetic-strength="0.25"
+          data-magnetic-max="8"
+        >
+          <span class="about-social-link__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor" focusable="false">
+              <path d="M6.94 8.5H3.56V20h3.38V8.5ZM5.25 7c1.12 0 1.87-.75 1.87-1.75C7.12 4.25 6.37 3.5 5.25 3.5 4.13 3.5 3.38 4.25 3.38 5.25 3.38 6.25 4.13 7 5.25 7ZM20.44 20h-3.38v-6.13c0-1.5-.53-2.5-1.87-2.5-1.02 0-1.63.69-1.9 1.35-.1.24-.12.58-.12.92V20h-3.38s.05-10.44 0-11.5h3.38v1.63c.45-.7 1.25-1.7 3.04-1.7 2.22 0 3.88 1.45 3.88 4.56V20Z" />
+            </svg>
+          </span>
+          LinkedIn
+        </a>
+        <a
+          class="about-social-link magnetic"
+          href="https://x.com/ssamsmit"
+          target="_blank"
+          rel="noopener noreferrer me"
+          data-magnetic-strength="0.25"
+          data-magnetic-max="8"
+        >
+          <span class="about-social-link__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor" focusable="false">
+              <path d="M13.6 10.6 20.4 3h-1.9l-5.6 6.6L8.3 3H3l7.1 10.1L3 21h1.9l6-7 5.1 7H21l-7.4-10.4Zm-2.1 2.5-.7-1L5.3 4.4h2.1l4.4 6.3.7 1 5.8 8.2h-2.1l-4.7-6.7Z" />
+            </svg>
+          </span>
+          X
+        </a>
+      </div>
       <div class="about-content">
         <div class="about-aside">
           <div class="about-image-wrapper">
@@ -1017,6 +1049,56 @@ const snyFounders = [
     font-weight: 800;
     letter-spacing: 0;
     line-height: 0.95;
+  }
+
+  .about-socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: clamp(1.2rem, 2.4vw, 1.7rem);
+  }
+
+  .about-social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.58rem 1.05rem;
+    border: 1px solid var(--border-6);
+    border-radius: 999px;
+    background: var(--bg-glitch);
+    color: var(--text-lead);
+    font-family: Inconsolata, monospace;
+    font-size: clamp(0.85rem, 1.1vw, 0.96rem);
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+      border-color 180ms ease,
+      background-color 180ms ease,
+      color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .about-social-link:hover,
+  .about-social-link:focus-visible {
+    border-color: var(--accent);
+    background: var(--bg-hero-hover);
+    color: var(--text-bright);
+    transform: translateY(-2px);
+  }
+
+  .about-social-link:focus-visible {
+    outline: 1px solid var(--accent);
+    outline-offset: 0.35rem;
+  }
+
+  .about-social-link__icon {
+    display: inline-flex;
+    color: var(--accent-light);
+  }
+
+  .about-social-link__icon svg {
+    width: 1.05em;
+    height: 1.05em;
   }
 
   .about-paragraph {
