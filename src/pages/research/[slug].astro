@@ -96,6 +96,13 @@ const { entry } = Astro.props as { entry: ResearchEntry };
     background: var(--bg-0);
   }
 
+  /* The PDF viewer needs a clean, uninterrupted background to read
+     against — hide the site-wide blueprint-grid entirely here rather
+     than just fading it. */
+  :global(.blueprint-grid) {
+    display: none;
+  }
+
   .research-detail-page {
     min-height: 100svh;
     background:

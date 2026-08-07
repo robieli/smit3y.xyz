@@ -118,6 +118,19 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
     background: var(--bg-0);
   }
 
+  /* The site-wide blueprint-grid reads as a flat, harsh graph-paper
+     tile here since this page has no imagery/glows layered over it
+     like the homepage does — fade it into a soft vignette instead. */
+  :global(.blueprint-grid) {
+    opacity: 0.28;
+    mask-image: radial-gradient(ellipse 65% 55% at 50% 0%, #000 35%, transparent 85%);
+    -webkit-mask-image: radial-gradient(
+      ellipse 65% 55% at 50% 0%,
+      #000 35%,
+      transparent 85%
+    );
+  }
+
   .research-list-page {
     min-height: 100svh;
     background:
@@ -163,7 +176,7 @@ const pageNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
 
   .research-list-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: clamp(1rem, 2vw, 1.35rem);
     margin-top: clamp(3rem, 6vw, 4.2rem);
   }
