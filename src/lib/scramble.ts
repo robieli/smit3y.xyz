@@ -37,30 +37,49 @@ export function wrapLetters(el: HTMLElement): HTMLElement[] {
   return letters;
 }
 
-const scrambleLetter = (letterEl: HTMLElement, delay: number) => {
-  const final = letterEl.dataset.char ?? "";
-  if (!final.trim()) return;
-  let iterations = 0;
-
-  setTimeout(() => {
-    const interval = setInterval(() => {
-      if (iterations >= MAX_ITERATIONS) {
-        letterEl.textContent = final;
-        clearInterval(interval);
-        return;
-      }
-      letterEl.textContent = randomChar();
-      iterations += 1;
-    }, STEP_MS);
-  }, delay);
-};
-
-/** Runs the scramble/decode sequence across `letters` once, immediately.
- * `onComplete` (if given) fires once, after the full sequence settles. */
+/** Runs the scramble/decode sequence across `letters` once, immediately,
+ * on a single requestAnimationFrame loop (each letter's stagger/iteration
+ * derived from elapsed time, not its own timer). A pile of independent
+ * setTimeout/setInterval chains — one clock per letter, per iteration —
+ * drifts under any main-thread load (e.g. the hero canvas's own
+ * requestAnimationFrame loop competing for frame time right at page
+ * load) and reads as stutter. One rAF loop stays frame-synced with
+ * everything else instead of fighting it. `onComplete` (if given) fires
+ * once, after the full sequence settles. */
 export function decodeLetters(letters: HTMLElement[], onComplete?: () => void) {
-  letters.forEach((letterEl, i) => scrambleLetter(letterEl, i * STEP_MS));
-  const totalTime = letters.length * STEP_MS + MAX_ITERATIONS * STEP_MS + 80;
-  setTimeout(() => onComplete?.(), totalTime);
+  const startTime = performance.now();
+  const totalDuration = letters.length * STEP_MS + MAX_ITERATIONS * STEP_MS + 80;
+  const lastIteration = new Array(letters.length).fill(-1);
+
+  const frame = (now: number) => {
+    const elapsed = now - startTime;
+
+    for (let idx = 0; idx < letters.length; idx += 1) {
+      const letterEl = letters[idx];
+      const final = letterEl.dataset.char ?? "";
+      if (!final.trim()) continue;
+
+      const localElapsed = elapsed - idx * STEP_MS;
+      if (localElapsed < 0) continue;
+
+      const iteration = Math.min(MAX_ITERATIONS, Math.floor(localElapsed / STEP_MS));
+      if (iteration === lastIteration[idx]) continue;
+      lastIteration[idx] = iteration;
+      letterEl.textContent = iteration >= MAX_ITERATIONS ? final : randomChar();
+    }
+
+    if (elapsed < totalDuration) {
+      requestAnimationFrame(frame);
+    } else {
+      for (const letterEl of letters) {
+        const final = letterEl.dataset.char ?? "";
+        if (final.trim()) letterEl.textContent = final;
+      }
+      onComplete?.();
+    }
+  };
+
+  requestAnimationFrame(frame);
 }
 
 /** Wires up a hover-triggered scramble/decode animation across `letters`.
